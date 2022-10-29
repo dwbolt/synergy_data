@@ -1,0 +1,33 @@
+{
+"headTitle":"Synergy"
+,"heading1": "Synergy Project"
+,"updated": "2022-08-16"
+
+,"lists": {
+  "rows": ["overview","synergy"]
+}
+
+,"node": {
+
+"overview":{
+  "text":[
+     ["h3","","Overview"]
+    ,["load","","/synergyData/home/overview.html"]
+  ]
+
+  ,"u_urls": [
+     ["Todo Lib"    ,"https://docs.google.com/document/d/1LZ41JyJnXhu9CWl594WFrdILSTZqPht79BzTrT3H1WI"]
+  ]
+}
+
+,"synergy":{
+  "text":[
+     ["h3","","What is Synergy"]
+    ,["load","","/synergyData/home/synergy.html"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+}}
