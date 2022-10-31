@@ -1,2 +1,2 @@
 # synergyData
-Synergy Project website data 
+Data for pulic web description Synergy Project

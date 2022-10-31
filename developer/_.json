@@ -1,0 +1,47 @@
+{
+"headTitle":"Dev"
+,"heading1": "Development Home page"
+,"updated": "2022-08-16"
+
+,"lists": {
+  "rows": ["active","started","play"]
+}
+
+,"node": {
+
+"active":{
+  "text":[
+     ["h3","","Active Web sites"]
+    ,["load","","/synergyData/developer/sites.html"]
+  ]
+
+  ,"u_urls": [
+  ]
+
+}
+
+
+,"started":{
+  "text":[
+     ["h3","","Started Dev"]
+  ]
+
+  ,"u_urls": [
+      ["Graph google Doc","https://docs.google.com/document/d/1bqbwrikWXI7igwoChb9o7dLcugvp4eaY2Q8LEZkFHBA/edit"]
+     ,["Orig Dev Page","/appOrig.html"]
+  ]
+
+}
+
+,"play":{
+  "text":[
+     ["h3","","Play"]
+    ,["p","","low level function demo"]
+    ,["p","","get user <a href='/9-play/clientSideCrypto/app.html' target='_blank'>pwdDigest</a>  "]
+    ,["p","","JSON Editor <a href='/9-play/jsonEditor/app.html' target='_blank'>edit</a>  "]
+  ]
+  ,"u_urls": [
+  ]
+}
+
+}}
