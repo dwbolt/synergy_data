@@ -1,0 +1,23 @@
+{
+"headTitle":"Synergy"
+,"heading1": "UT hack4impact"
+,"updated": "2022-11-08"
+
+,"lists": {
+  "rows": ["overview"]
+}
+
+,"node": {
+
+"overview":{
+  "text":[
+     ["h3","","Overview"]
+    ,["load","","/synergyData/hack4impact/overview.html"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+
+}}
