@@ -1,0 +1,52 @@
+{
+"headTitle":"Synergy"
+,"heading1": "Server"
+,"updated": "2022-11-08"
+
+,"lists": {
+  "rows": ["overview","config","logs"]
+}
+
+,"node": {
+
+"overview":{
+  "text":[
+     ["h3","","Server"]
+    ,["p","","Simple node js server start the https with command:<br> node serverHTTPS.js<br><br>The configuraion files are assumed to be one directory up in folder config."]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+,"config":{
+  "text":[
+     ["h3","","Configuration"]
+    ,["h4","","certificates"]
+    ,["p","","The files in this directory support SSL or https. They curretnly come for porkbun.com and must be reinstalled every 3 months."]
+    ,["ol","","<li>domain.cert.pem <li>intermediate.cert.pem <li>private.key.pem <li>public.key.pem"]
+
+    ,["h4","","configHTTP"]
+    ,["p","","usally just redirectors to https, same config sturcture as configHTTPS"]
+
+    ,["h4","","configHTTPS"]
+    ,["p","","<b>_config.json</b><br>This is the main config for server, will point to all domain support files."]
+    ,["p","","<b>??.com</b><br>specifies where server directoerys are located."]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+
+,"logs":{
+  "text":[
+     ["h3","","Logs"]
+    ,["p","","<a href='/logs/app.html' target='_blank'>Logs</a>"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+}}
