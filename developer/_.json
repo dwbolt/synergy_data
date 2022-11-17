@@ -36,7 +36,7 @@
 ,"todo":{
   "text":[
      ["h3","","Work on"]
-    ,["p","","<a href='/9-play/jsonEditor/app.html' target='_blank'>edit</a>  JSON Editor "]
+    ,["p","","<a href='/apps/jsonEditor/app.html' target='_blank'>edit</a>  JSON Editor "]
     ,["p","","<a href='/apps/accounting/app.html' target='_blank'>accounting</a> "]
     ,["p","","<a href='https://drive.google.com/drive/folders/1Dt-ijcle97UDEV3mMqZF1PxHPyMfTM2W' target='_blank'>sync</a> Started, sync mulitply computers"]
     ,["p","","get user <a href='/9-play/clientSideCrypto/app.html' target='_blank'>pwdDigest</a>  "]
