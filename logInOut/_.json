@@ -1,0 +1,21 @@
+{
+"headTitle":"Synergy"
+,"heading1": "Login"
+,"updated": "2023-04-05"
+
+,"lists": {
+  "rows": ["login"]
+}
+
+,"node": {
+
+"login":{
+    "text":[
+        ["","","<p id='loginX'></p>"]
+       ,["p","","We are currently testing new member functions that require login.  This feature is still in deveopment. The newsletter will annoucement when this feature is availalbe to members.  dwb 4/27/2022"]
+       ,["eval","","app.login.buildForm(`loginX`)"]
+    ]
+  }
+}
+
+}

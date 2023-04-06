@@ -1,0 +1,29 @@
+{
+"headTitle":"CAD"
+,"heading1": "SFC CAD Projects"
+,"updated": "2022-06-17"
+
+,"lists": {
+ "rows":["CAD"]
+}
+
+,"node": {
+
+
+"CAD":{
+  "text":[
+    ["p","","bee hive, etc.,BusShelter"]
+    ,["p","","check for errors <a href='/synergyData/CAD/app.html' target='_blank'>app.html</a>"]
+  ]
+
+  ,"u_urls": [
+     ["BusShelter", "https://www.openjscad.xyz/?uri=https://sfcknox.org/synergyData/CAD/BusShelter.js"]
+    ,["Bee Hive " , "https://www.openjscad.xyz/?uri=https://sfcknox.org/synergyData/CAD/BeeHive.js"]
+    ,["Cube", "https://www.openjscad.xyz/?uri=https://sfcknox.org/synergyData/CAD/cube.js"]
+    ,["think " , "https://www.openjscad.xyz/?uri=https://www.thingiverse.com/download:9621819"]
+  ]
+}
+
+
+
+}}
