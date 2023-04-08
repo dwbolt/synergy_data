@@ -3,8 +3,14 @@
 ,"heading1": "Login"
 ,"updated": "2023-04-05"
 
+,"buttons":[
+   {"button":"Login"                   ,"id":"login"  ,"onclick":"app.display(this)"}
+  ,{"button":"Create Login"            ,"id":"userAdd" ,"onclick":"app.display(this)"}
+]
+
 ,"lists": {
-  "rows": ["login"]
+   "login"  : ["login"]
+  ,"userAdd": ["userAdd"]
 }
 
 ,"node": {
@@ -12,10 +18,23 @@
 "login":{
     "text":[
         ["","","<p id='loginX'></p>"]
-       ,["p","","We are currently testing new member functions that require login.  This feature is still in deveopment. The newsletter will annoucement when this feature is availalbe to members.  dwb 4/27/2022"]
+       ,["p","","You may create a login by clicking the."]
        ,["eval","","app.login.buildForm(`loginX`)"]
     ]
   }
-}
 
+  ,"userAdd":{
+    "text":[
+        ["","","<p id='userAddForm'></p>"]
+       ,["p","","Create a login if you are willing to be a beta tester.  "]
+       ,["eval","","app.login.buildFormUserAdd(`userAddForm`)"]
+    ]
+   
+    ,"u_pictures": [
+    ]
+   
+    ,"u_urls": [
+    ] 
+  }
+ }
 }
