@@ -4,13 +4,15 @@
 ,"updated": "2022-08-16"
 
 ,"buttons":[
-   {"button":"Sites"             ,"id":"sites" ,"onclick":"app.display(this)"}
-  ,{"button":"Develope"          ,"id":"dev"   ,"onclick":"app.display(this)"}
-  ,{"button":"Plannning"         ,"id":"plan"  ,"onclick":"app.display(this)"}
+   {"button":"Sites"             ,"id":"sites"  ,"onclick":"app.display(this)"}
+  ,{"button":"Local Server"      ,"id":"server" ,"onclick":"app.display(this)"}
+  ,{"button":"Develope"          ,"id":"dev"    ,"onclick":"app.display(this)"}
+  ,{"button":"Plannning"         ,"id":"plan"   ,"onclick":"app.display(this)"}
 ]
 
 ,"lists": {
    "sites"  : ["sites"]
+  ,"server"  : ["overview","server"]
   ,"dev"    : ["dev"]
   ,"plan"   : ["plan"]
 }
@@ -26,6 +28,26 @@
   ]
 
 }
+
+,"overview":{
+  "text":[
+     ["h3","","Overview"]
+    ,["p","","Runing a local server speeds up developemnt and allows you test locally.  You can test your code by pushing your local version upto the the synergy server.  The public folder is available for view to anyone."]
+    ,["p","","https://synergyBeta/sfcknox.org/user/<b>YOURID</b>/public/...."]
+  ]
+  ,"u_urls": [
+  ]
+}
+
+,"server":{
+  "text":[
+     ["h3","","Setup Local server"]
+    ,["load","","/synergyData/developer/server.html"]
+  ]
+  ,"u_urls": [
+  ]
+}
+
 
 ,"dev":{
   "text":[
