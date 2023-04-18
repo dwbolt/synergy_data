@@ -18,7 +18,7 @@
 "login":{
     "text":[
         ["","","<p id='loginX'></p>"]
-       ,["p","","You may create a login by clicking the."]
+       ,["p","","You may create a login by clicking <a href='/app.html?p=logInOut&b=userAdd' >here</a> or the button above."]
        ,["eval","","app.login.buildForm(`loginX`)"]
     ]
   }
