@@ -9,7 +9,7 @@
 ]
 
 ,"lists": {
-   "login"  : ["login"]
+   "login"  : ["demo","login"]
   ,"userAdd": ["userAdd"]
 }
 
@@ -17,10 +17,23 @@
 
 "login":{
     "text":[
-        ["","","<p id='loginX'></p>"]
-       ,["p","","You may create a login by clicking the."]
+        ["" ,"" ,"<p id='loginX'></p>"]
+       ,["p","","<a href='/app.html?p=logInOut&b=userAdd'>Create your own login</a>"]
        ,["eval","","app.login.buildForm(`loginX`)"]
+       ,["eval","","document.getElementById('userName').value='demo';document.getElementById('password').value='demo' "]
     ]
+  }
+
+  ,"demo":{
+    "text":[
+       ["p","","You can use the Demo accout to play with the system.  The data is the demo account can be changed by anyone using the demo account. Create an account if you want your data to be persistant"]
+    ]
+   
+    ,"u_pictures": [
+    ]
+   
+    ,"u_urls": [
+    ] 
   }
 
   ,"userAdd":{
