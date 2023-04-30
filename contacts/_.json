@@ -1,0 +1,24 @@
+{
+"headTitle":"Synergy"
+,"heading1": "Contacts"
+,"updated": "2023-04-30"
+
+,"lists": {
+  "rows": ["contacts"]
+}
+
+,"node": {
+
+"contacts":{
+  "text":[
+     ["h3","","Contacts"]
+    ,["p","","Contacts are stored in you user space"]
+    ,["load","","/synergyData/contacts/script.js"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+
+}}
