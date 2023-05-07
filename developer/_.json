@@ -10,7 +10,7 @@
 
 ,"lists": {
    "sites"  : ["sites"]
-  ,"server"  : ["overview","server"]
+  ,"server"  : ["overview","server","directory"]
   ,"dev"    : ["dev"]
   ,"plan"   : ["plan"]
 }
@@ -36,6 +36,16 @@
     ["hack4impact google Doc","https://docs.google.com/document/d/10hbVE_pz9iCZl90Hi14VQ5jV0j55A7uyJ_wEQcxU20E/edit#"]
   ]
 }
+
+,"directory":{
+  "text":[
+     ["h3","","Directory"]
+    ,["load","","/synergyData/developer/directory.html"]
+  ]
+  ,"u_urls": [
+  ]
+}
+
 
 ,"server":{
   "text":[
