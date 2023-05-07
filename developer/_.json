@@ -6,8 +6,6 @@
 ,"buttons":[
    {"button":"Sites"             ,"id":"sites"  ,"onclick":"app.display(this)"}
   ,{"button":"Local Server"      ,"id":"server" ,"onclick":"app.display(this)"}
-  ,{"button":"Develope"          ,"id":"dev"    ,"onclick":"app.display(this)"}
-  ,{"button":"Plannning"         ,"id":"plan"   ,"onclick":"app.display(this)"}
 ]
 
 ,"lists": {
@@ -32,10 +30,10 @@
 ,"overview":{
   "text":[
      ["h3","","Overview"]
-    ,["p","","Runing a local server speeds up developemnt and allows you test locally.  You can test your code by pushing your local version upto the the synergy server.  The public folder is available for view to anyone."]
-    ,["p","","https://synergyBeta/sfcknox.org/user/<b>YOURID</b>/public/...."]
+    ,["p","","Runing a local server speeds up developemnt and allows you test locally.  You can test your code by pushing your local version upto the the synergy server. "]
   ]
   ,"u_urls": [
+    ["hack4impact google Doc","https://docs.google.com/document/d/10hbVE_pz9iCZl90Hi14VQ5jV0j55A7uyJ_wEQcxU20E/edit#"]
   ]
 }
 
@@ -48,32 +46,6 @@
   ]
 }
 
-
-,"dev":{
-  "text":[
-     ["h3","","Work on"]
-    ,["p","","<a href='/apps/jsonEditor/app.html' target='_blank'>edit</a>  JSON Editor "]
-    ,["p","","<a href='/apps/accounting/app.html' target='_blank'>accounting</a> "]
-    ,["p","","<a href='/apps/sync/app.html'       target='_blank'>sync</a> Started, sync mulitply computers"]
-  ]
-  ,"u_urls": [
-      ["JSON validator","https://jsononline.net/json-validator"]
-      ,["Hack4Impacat Google Folder","https://drive.google.com/drive/folders/1NNajF6V4BtC3usF5LlAQXXZFOAQusCwC"]
-  ]
 }
 
-,"plan":{
-  "text":[
-     ["h3","","Started Dev"]
-  ]
-
-  ,"u_urls": [
-      ["Graph google Doc","https://docs.google.com/document/d/1bqbwrikWXI7igwoChb9o7dLcugvp4eaY2Q8LEZkFHBA/edit"]
-     ,["Orig Dev Page","/appOrig.html"]
-  ]
-
 }
-
-
-
-}}
