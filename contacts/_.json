@@ -12,8 +12,8 @@
 "contacts":{
   "text":[
      ["h3","","Contacts"]
-    ,["p","","Contacts are stored in you user space. <input type='button'  value='call main' onclick='app.contact.main()'>"]
-    ,["class","","/synergyData/contacts/contactsClass.js"]
+    ,["p","","Contacts are stored in you user space. <input type='button'  value='call main' onclick='app.contacts.main()'> <input type='button'  value='call module' onclick='app.contactsM.main()'>"]
+    ,["script","","/synergyData/contacts/contactsClass.js"]
   ]
 
   ,"u_urls": [

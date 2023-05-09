@@ -1,13 +1,13 @@
-class contactClass { 
+class contactsModule { 
 
 constructor(){
 
 }
 
 main(){
-    alert("in contactClass");
+    alert("in contactsModule");
 }
 
 }
 
-app.contact = new contactClass();
+export { contactsModule };

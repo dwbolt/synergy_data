@@ -1,13 +1,16 @@
-class contactClass { 
+import  {contactsModule}   from '/synergyData/contacts/contactsModule.js';
+
+class contactsClass { 
+
 
 constructor(){
-
 }
 
 main(){
-    alert("in contactClass");
+    alert("in contactsClass");
 }
 
 }
 
-app.contact = new contactClass();
+app.contacts  = new contactsClass();
+app.contactsM = new contactsModule();
