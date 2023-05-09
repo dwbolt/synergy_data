@@ -1,13 +1,19 @@
 class contactsModule { 
 
-constructor(){
+constructor(){}
 
+public(){
+    alert("public");
 }
 
-main(){
-    alert("in contactsModule");
+#private(){
+    alert("private");
 }
 
+getPrivate() {
+    this.#private();
 }
+}
+
 
 export { contactsModule };
