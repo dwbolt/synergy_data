@@ -1,0 +1,40 @@
+{
+"headTitle":"Synergy"
+,"heading1": "Data Base"
+,"updated": "2023-05-30"
+
+,"buttons":[
+   {"button":"intro"                ,"id":"intro"   , "onclick":"app.display(this)"}
+  ,{"button":"dataBase"             ,"id":"dataBase", "onclick":"app.display(this)"}
+]
+
+
+,"lists": {
+   "intro"   : ["intro"]
+  ,"dataBase": ["dataBase"]
+}
+
+,"node": {
+
+"intro":{
+  "text":[
+    ["load","","/synergyData/dataBase/intro.html"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+,"dataBase":{
+  "text":[
+     ["","","<div id='dataBaseDOM'>dataBase</div>"]
+    ,["","","<div id='tableUXDOM'>table</div>"]
+    ,["script","","/synergyData/dataBase/dataBaseModule.js"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+
+}}
