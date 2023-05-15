@@ -5,36 +5,66 @@
 
 ,"buttons":[
    {"button":"intro"                ,"id":"intro"   , "onclick":"app.display(this)"}
-  ,{"button":"dataBase"             ,"id":"dataBase", "onclick":"app.display(this)"}
+  ,{"button":"database"             ,"id":"database", "onclick":"app.display(this)"}
 ]
 
 
 ,"lists": {
    "intro"   : ["intro"]
-  ,"dataBase": ["dataBase"]
+  ,"database": ["database","table","record","nextsteps"]
+  ,"import"  : ["import"]
 }
 
 ,"node": {
 
 "intro":{
   "text":[
-    ["load","","/synergyData/dataBase/intro.html"]
+    ["load","","/synergyData/database/intro.html"]
   ]
 
   ,"u_urls": [
   ]
 }
 
-,"dataBase":{
+,"database":{
   "text":[
-     ["","","<div id='dataBaseDOM'>dataBase</div>"]
-    ,["","","<div id='tableUXDOM'>table</div>"]
-    ,["script","","/synergyData/dataBase/dataBaseModule.js"]
+     ["","","import csv file <input type='file' accept='.csv' onchange='app.database.loadLocalCSV(this)'><textarea id='msg'></textarea>"]
+    ,["","","<div id='databaseDOM'>database</div><br>"]
+    ,["","","<input type='button' value='Save'                onclick='app.database.saveDB()'> memory tables to server"]
+    ,["script","","/synergyData/database/databaseModule.js"]
   ]
 
   ,"u_urls": [
   ]
 }
 
+,"table":{
+  "text":[
+    ["","","<div id='tableUXDOM'>table</div>"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+,"record":{
+  "text":[
+    ["","","<div id='record'>Click on table row to disiplay record</div>"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+,"nextsteps":{
+  "text":[
+     ["","","<ol>"]
+    ,["li","","click on row display form"]
+    ,["li","","edit/save/delete form"]
+    ,["","","</ol>"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
 
 }}
