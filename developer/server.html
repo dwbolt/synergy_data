@@ -1,15 +1,16 @@
-
-<p>The first step is to install node.js
-
   <ol>
-    <li>Install node <a href="https://nodejs.org/en" target="_blank">Download newest LTS version (18.16.0 as of 05/05/23) </a></li>
-    <li>node -v  # in a terminal window to make sure node insrtalled </li>
-    <li>Create a folder for your developemnt. Open a termianl session inside the folder you just created.</li>
-    <li>git clone https://github.com/dwbolt/synergyRoot.git  # download local server</li>
-    <li>cd synergyRoot</li>
-    <li>ls -al # to see if clone worked</li>
-    <li>./scripts/_1-Init-synergyRoot   #init git submodules </li>
-    <li>./scripts/_3-HTTP #start server on port 80</li>
+    <li>Install node <a href="https://nodejs.org/en" target="_blank">Download newest LTS version (18.16.0 as of 05/05/23) </a><br>
+      node -v  # in a terminal window to make sure correct version of node is insrtalled</li>
+    <li>Install server<br>
+      a) Create a folder for your developemnt. <br>
+      b) Open a termianl session inside the folder you just created.<br>
+      c) git clone https://github.com/dwbolt/synergyRoot.git  # download local server<br>
+      d) cd synergyRoot</li>
+      e) ls -al # to see if clone worked</li>
+    <li>Bring down submodule repositories<br>
+        ./scripts/_1-Init-synergyRoot   #init git submodules </li>
+    <li>Start server on port 80<br>
+      ./scripts/_3-HTTP #start server on port 80</li>
     <li>test your  <a href="http://synergyalpha.sfcknox.org">local server</a> in your browser</li>
   </ol>
 </p>

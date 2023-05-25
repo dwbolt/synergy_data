@@ -30,7 +30,7 @@
 ,"overview":{
   "text":[
      ["h3","","Overview"]
-    ,["p","","Runing a local server speeds up developemnt and allows you test locally.  You can test your code by pushing your local version upto the the synergy server. "]
+    ,["p","","Runing a local server speeds up developemnt.  Once you have  things working locally you can test on the beta server for peer riews.  The last step is to publishing to the production server. "]
   ]
   ,"u_urls": [
     ["hack4impact google Doc","https://docs.google.com/document/d/10hbVE_pz9iCZl90Hi14VQ5jV0j55A7uyJ_wEQcxU20E/edit#"]
@@ -39,7 +39,7 @@
 
 ,"directory":{
   "text":[
-     ["h3","","Directory"]
+     ["h3","","synergyRoot Directory"]
     ,["load","","/synergyData/developer/directory.html"]
   ]
   ,"u_urls": [

@@ -4,15 +4,15 @@
 ,"updated": "2023-05-30"
 
 ,"buttons":[
-   {"button":"intro"                ,"id":"intro"   , "onclick":"app.display(this)"}
-  ,{"button":"database"             ,"id":"database", "onclick":"app.display(this)"}
+   {"button":"database"             ,"id":"database", "onclick":"app.display(this)"}
+  ,{"button":"intro"                ,"id":"intro"   , "onclick":"app.display(this)"}
+
 ]
 
 
 ,"lists": {
    "intro"   : ["intro"]
-  ,"database": ["database","table","record","nextsteps"]
-  ,"import"  : ["import"]
+  ,"database": ["database","table","record","changes","nextsteps"]
 }
 
 ,"node": {
@@ -28,10 +28,10 @@
 
 ,"database":{
   "text":[
-     ["","","import csv file <input type='file' accept='.csv' onchange='app.database.loadLocalCSV(this)'><textarea id='msg'></textarea>"]
-    ,["","","<div id='databaseDOM'>database</div><br>"]
-    ,["","","<input type='button' value='Save'                onclick='app.database.saveDB()'> memory tables to server"]
-    ,["script","","/synergyData/database/databaseModule.js"]
+     ["","","<div id='databaseDOM'>database</div><br>"]
+    ,["","","<input type='button' value='Save'                    onclick='app.page.saveDB()'> memory tables to server"]
+    ,["","","<br>import csv file <input type='file' accept='.csv' onchange='app.page.loadLocalCSV(this)'><textarea id='msg'></textarea>"]
+    ,["script","","/synergyData/database/pageModule.js"]
   ]
 
   ,"u_urls": [
@@ -49,17 +49,39 @@
 
 ,"record":{
   "text":[
-    ["","","<div id='record'>Click on table row to disiplay record</div>"]
+    ["h3","","Selected Record"]
+    ,["","","<div id='record'></div>"]
+    ,["","","<input type='button' value='New'       onclick='app.page.recordNew()'>  "]
+    ,["","","<input type='button' value='Edit'      onclick='app.page.recordEdit()'> "]
+    ,["","","<input type='button' value='Delete'    onclick='app.page.recordDelete()'> "]
+    ,["","","<input type='button' value='Duplicate' onclick='app.page.recordDuplicate()'> "]
+    ,["","","<input type='button' value='Save'      onclick='app.page.recordSave()'> "]
   ]
 
   ,"u_urls": [
   ]
 }
+
+
+,"changes":{
+  "text":[
+     ["h3","","Memory changes not saved"]
+    ,["","","<input type='button' value='Refress' onclick='app.page.show_changes()'>"]
+    ,["p","","<div id='mchanges'></div>"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
 ,"nextsteps":{
   "text":[
-     ["","","<ol>"]
-    ,["li","","click on row display form"]
-    ,["li","","edit/save/delete form"]
+     ["h3","","Next steps"]
+    ,["","","<ol>"]
+    ,["li","","edit - numbers, dates, money - done - text"]
+    ,["li","","delete - button on form"]
+    ,["li","","edit/new/dup/save/delete button on form"]
+    ,["li","","edit/new/dup/save/delete button on form"]
     ,["","","</ol>"]
   ]
 

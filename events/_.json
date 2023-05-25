@@ -1,0 +1,19 @@
+{
+"headTitle":"SFC Event"
+,"heading1": "SFC Events"
+,"updated": "2023-01-04"
+,"lists": {
+ "rows":["weeks"]
+}
+
+,"node": {
+
+
+"weeks":{
+    "text":[
+       ["","","We are open for calendar events and by appoint.<p id='weeks' class='calendar'>replace with calendar</p>"]
+      ,["eval","","app.calendar.main('weeks')"]
+    ]
+}
+
+}}
