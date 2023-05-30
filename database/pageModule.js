@@ -40,7 +40,7 @@ async main(){ // client side dbUXClass - for a page
 display(DOM) { 
     // user clicked on table, so show it.
     this.tableUX.setColumnFormat(   0, 'onclick="app.page.showForm(this)"');   // assume primary key is 0 -  needs to be done in code
-    this.tableUX.setColumnTransform(0, app.page.displayIndex)
+    this.tableUX.setColumnTransform(0, app.page.displayIndex              );   // // style it like a hyper link so it will get clicked on.
     
     this.tableUX.setModel(this.db,  DOM.value );
     this.tableUX.display();  // display table
@@ -106,7 +106,7 @@ recordEdit(
   const table  = this.tableUX.getModel();  // get tableClass being displayed
   const row    = (this.#edit_type ? 
     table.getRowByIndex(table.get_primary_key(), this.#primary_key_value) :
-    table.bufferGet(0)[1] );  // hard code for one record case 
+    table.bufferGet(0));  // hard code for one record case 
   const header = table.getHeader();
 
   for(var i=0; i<row.length; i++) {
@@ -126,7 +126,9 @@ recordEdit(
 recordSave(){  // client side dbUXClass - for a page
   // save to memory
   const table     = this.tableUX.getModel();  // get tableClass being displayed
-  const  row      = table.getRowByIndex(table.get_primary_key(), this.#primary_key_value);    // get row being displayed
+  const row    = (this.#edit_type ? 
+    table.getRowByIndex(table.get_primary_key(), this.#primary_key_value) :
+    table.bufferGet(0));  // hard code for one record case row being displayed
   const rowEdited = [];
   for(var i=0; i<row.length; i++)  {
       let edit = document.getElementById(`edit-${i}`);

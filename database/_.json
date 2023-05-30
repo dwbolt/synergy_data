@@ -77,9 +77,9 @@
   "text":[
      ["h3","","Next steps"]
     ,["","","<ol>"]
+    ,["li","","new/dup/save/delete button on form"]
     ,["li","","edit - numbers, dates, money - done - text"]
     ,["li","","delete - button on form"]
-    ,["li","","edit/new/dup/save/delete button on form"]
     ,["li","","edit/new/dup/save/delete button on form"]
     ,["","","</ol>"]
   ]
