@@ -1,3 +1,5 @@
+//  database page
+
 import { dbClass     } from '/_lib/db/dbModule.js'      ;
 import { tableClass  } from '/_lib/db/tableModule.js'   ;
 import { csvClass    } from '/_lib/db/csvModule.js'     ;
@@ -10,6 +12,7 @@ class dbUXClass { // client side dbUXClass - for a page
   #url       
   #DOMid
   #primary_key_value
+  #edit_type          // true -> table       false -> buffer
 
 constructor( // client side dbUXClass - for a page
     dir    // user directory that database is in
@@ -70,10 +73,7 @@ async saveDB( // client side dbUXClass - for a page
   // user clicked on save to server button
   ){
   await this.db.save();
-  /*
-  const proxy = new proxyClass();
-  const msg   = await proxy.RESTpost( buffer ,this.url);
-  alert(`save status = ${msg.statusText}`);*/
+  this.show_changes();
 }
 
 
@@ -84,7 +84,10 @@ showForm(  // client side dbUXClass - for a page
 ){
   let html = "<table>";
   const table             = this.tableUX.getModel()  // get tableClass being displayed
-  this.#primary_key_value = parseInt(element.innerText,10); 
+  if (element) {
+    // user clicked on elemnt, remember primary key for other record methodes
+    this.#primary_key_value = parseInt(element.innerText,10); 
+  }
   const  row = table.getRowByIndex(table.get_primary_key(), this.#primary_key_value); 
   const  header = table.getHeader();
   for(var i=0; i<row.length; i++) {
@@ -95,11 +98,17 @@ showForm(  // client side dbUXClass - for a page
 }
 
 
-recordEdit(){// client side dbUXClass - for a page
+recordEdit(
+  edit_type // true -> edit table record    false -> edit buffer record
+){// client side dbUXClass - for a page
+  this.#edit_type = edit_type;
   let html = "<table>";
-  const table = this.tableUX.getModel();  // get tableClass being displayed
-  const  row = table.getRowByIndex(table.get_primary_key(), this.#primary_key_value); 
-  const  header = table.getHeader();
+  const table  = this.tableUX.getModel();  // get tableClass being displayed
+  const row    = (this.#edit_type ? 
+    table.getRowByIndex(table.get_primary_key(), this.#primary_key_value) :
+    table.bufferGet(0)[1] );  // hard code for one record case 
+  const header = table.getHeader();
+
   for(var i=0; i<row.length; i++) {
     if (i === table.get_primary_key()) {
       // do not allow editing of primary key
@@ -117,10 +126,9 @@ recordEdit(){// client side dbUXClass - for a page
 recordSave(){  // client side dbUXClass - for a page
   // save to memory
   const table     = this.tableUX.getModel();  // get tableClass being displayed
-  const  row = table.getRowByIndex(table.get_primary_key(), this.#primary_key_value); 
+  const  row      = table.getRowByIndex(table.get_primary_key(), this.#primary_key_value);    // get row being displayed
   const rowEdited = [];
   for(var i=0; i<row.length; i++)  {
-      // do not allow editing of primary key
       let edit = document.getElementById(`edit-${i}`);
       if (edit) {
         // value input
@@ -128,6 +136,8 @@ recordSave(){  // client side dbUXClass - for a page
       }
   }
   table.save2memory(this.#primary_key_value, rowEdited);
+  this.show_changes();
+  this.showForm();
 }
 
 recordDelete(){// client side dbUXClass - for a page
@@ -135,7 +145,7 @@ recordDelete(){// client side dbUXClass - for a page
 }
 
 
-show_changes (){
+show_changes(){ // client side dbUXClass - for a page
   let html = "";
   const table        = this.tableUX.getModel();  // get tableClass being displayed
   const changes      = table.get_changes();
@@ -145,17 +155,20 @@ show_changes (){
     html += `key=${key}<br>`;
     // show on changed field per line
     let fields = Object.keys(changes[key]);
-    for(var ii=0; ii<primary_keys.length; ii++) {
+    for(var ii=0; ii<fields.length; ii++) {
       html += ` &nbsp;&nbsp;field = ${fields[ii]} &nbsp;&nbsp; obj=${JSON.stringify(changes[key][fields[ii]])}<br>`
     }
   }
   document.getElementById("mchanges").innerHTML = html
 }
 
-recordNew(){// client side dbUXClass - for a page
-  alert("recordNew not implemented yet")
-}
 
+recordNew(){// client side dbUXClass - for a page
+  //
+  const table = this.tableUX.getModel();  // get tableClass being displayed
+  table.bufferCreateEmpty(1);
+  this.recordEdit(false);
+}
 
 recordDuplicate(){// client side dbUXClass - for a page
   alert("recordDuplicate from memery, not implemented yet")

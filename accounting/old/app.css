@@ -1,0 +1,35 @@
+
+
+/* Basic formatting that affects every table on the page by default (unless it's overridden) */
+table {
+	background-color: #EEE;
+	font-size: 13px;
+}
+
+/* Basic formatting that affects every th cell on the page by default (unless it's overridden) */
+th {
+	border-right: 1px solid #DDD;
+	border-bottom: 1px solid #DDD;
+	padding: 3px 5px;
+	background-color: #999;
+	color: #FFF;
+}
+
+/* Basic formatting that affects every td cell on the page by default (unless it's overridden) */
+td {
+	border-right: 1px solid #BBB;
+	border-bottom: 1px solid #BBB;
+	padding: 3px 5px;
+	vertical-align: top;
+}
+
+/* General-purpose formatting for showing that any element contains data which has been changed since last save */
+.changedData {
+	background-color: yellow;
+	fill: yellow !important;
+}
+
+
+.selected {
+	background-color:cyan;
+}

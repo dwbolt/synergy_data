@@ -29,7 +29,6 @@
 ,"database":{
   "text":[
      ["","","<div id='databaseDOM'>database</div><br>"]
-    ,["","","<input type='button' value='Save'                    onclick='app.page.saveDB()'> memory tables to server"]
     ,["","","<br>import csv file <input type='file' accept='.csv' onchange='app.page.loadLocalCSV(this)'><textarea id='msg'></textarea>"]
     ,["script","","/synergyData/database/pageModule.js"]
   ]
@@ -52,7 +51,7 @@
     ["h3","","Selected Record"]
     ,["","","<div id='record'></div>"]
     ,["","","<input type='button' value='New'       onclick='app.page.recordNew()'>  "]
-    ,["","","<input type='button' value='Edit'      onclick='app.page.recordEdit()'> "]
+    ,["","","<input type='button' value='Edit'      onclick='app.page.recordEdit(true)'> "]
     ,["","","<input type='button' value='Delete'    onclick='app.page.recordDelete()'> "]
     ,["","","<input type='button' value='Duplicate' onclick='app.page.recordDuplicate()'> "]
     ,["","","<input type='button' value='Save'      onclick='app.page.recordSave()'> "]
@@ -66,7 +65,7 @@
 ,"changes":{
   "text":[
      ["h3","","Memory changes not saved"]
-    ,["","","<input type='button' value='Refress' onclick='app.page.show_changes()'>"]
+     ,["","","<input type='button' value='Save' onclick='app.page.saveDB()'> memory tables to server"]
     ,["p","","<div id='mchanges'></div>"]
   ]
 

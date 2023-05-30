@@ -1,0 +1,46 @@
+<!-- starts out hidden -->
+<div id="loadYear" style="display:none">
+
+<!-- table selected from application menu -->
+<!-- used for add,edit, dup, selected rows -->
+<div id="buffer">
+<p><b>Transaction Buffer</b>
+<br><input type="button" value="Save"   onclick="app.page.bufferSave()">  to memory
+<br><input type="button" value="Append" onclick="app.page.bufferAppend()"> transaction to memory with new transaction number
+</p>
+<div id="tableBuffer"></div>
+</div>
+
+
+<!-- data in memory for selected table-->
+<p><b>Table In Memory</b><br>
+<input type="button" value="Back" onclick="app.page.searchBack()">
+<input type="button" value="Save to File" onclick="app.page.saveYear()">
+<br>clicking in a row will copy all rows with the same transaction # to the buffer above
+
+<div id="tableDisplay"></div>
+</div>
+
+
+<!-- used to display json data to copy paste into file for save -->
+<div id="jsonDisplay" style="display:none">
+<p><b>Json File</b> to copy paste.  Temp soulition for save<br>
+  <b>fieldA:</b> are the names used to referense fields in the row.  The name convension for prefexes is: <br>
+  s_ -> string   n_  ->number   d_ -> date<br>
+  <textarea id="json"  rows="20" cols="400"></textarea></p>
+</div>
+
+
+<p><b>To Do</b></p>
+
+<ol>
+<li>support more than one set of books
+<li> can only edit Journal data - still using atom to edit reconciled data and Chart of accounts
+</ol>
+
+<p><b>done</b></p>
+<ol>
+<li>2021-06-14 click on row copies all rows with the same transaction number to the buffer<br>
+[append] get next higher transaction number, replace all the rows in the buffer with next higher #, append to end of memory table<br>
+[save] copy from buffer to table memory
+</ol>

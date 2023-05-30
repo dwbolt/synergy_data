@@ -1,0 +1,40 @@
+<!-- table selected from application menu -->
+<!-- used for add,edit, dup, selected rows -->
+
+<div id="details"></div>
+<div id="detailsB"></div>
+<p>editing - data is stored in table memory, buffer memory, add memory, orig memory, change log, and data on server.  You can:</p>
+<ol>
+  <li>dupicate an entire row/rows to buffer memory
+  <li>copy an entire row/rows to buffer  memory
+  <li>add blank row/rows to buffer memory - (hold off on this)
+  <li>delete row/rows - (is not currently supported)
+  <li>update attribute of row in buffer memory
+  <li>save buffer memory to table memory
+  <li>abandon changes in buffer memory
+  <li>save table memory to server
+</ol>
+<p>Load Year copyeis data from server to table memory. Once a user slects records then click on the edit or duplicate buttons</p>
+<ol>
+<li> edit<br>
+  copies all unmodifed rows to orig memory<br>
+  copyies all selected records to buffer<br>
+<li>duplicated<br>
+  copies all selected rows from memory to add buffeff
+  copies all selected records to buffer
+<li> save button on the buffer saves to table memory
+<li> save to server commits all session changes to server
+</ol>
+
+<!-- data in memory for selected table-->
+<!--p><b>Table In Memory</b><br>
+<input type="button" value="Back" onclick="app.page.searchBack()">
+<input type="button" value="Save to File" onclick="app.page.saveYear()">
+<br>clicking on transaction copy all rows with the same transaction # to the buffer above
+</p-->
+
+<!--p><b>Transaction Buffer</b>
+<br><input type="button" value="Save"   onclick="app.page.bufferSave()">  to memory
+<br><input type="button" value="Append" onclick="app.page.bufferAppend()"> transaction to memory with new transaction number
+</p>
+<div id="dbTableBuffer"></div-->

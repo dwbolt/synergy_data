@@ -1,0 +1,36 @@
+<p id="statement">Reconsile account</p>
+
+<table>
+<tr> <td> </td>                 <td>From Statement</td>                   <td>diff</td>                   <td>from journel</td></tr>
+<tr> <td>Beginning Balance</td> <td id="balanceStart" align="right"></td> <td id="balanceStartDiff"></td> <td id="balanceStartJ"></td> </tr>
+<tr> <td colspan="4">&nbsp;</td> </tr>
+
+<tr>
+<td>Deposits/Credits</td>
+<td id="credits"     align="right"></td>
+<td id="creditsDiff" align="right"></td>
+<td id="creditsJ"    align="right" onclick="app.pages.reconcile.displayDetail(app.page.a_credits)"></td>
+</tr>
+<tr><td colspan="4">&nbsp;</td></tr>
+
+<tr>
+<td>Debits</td>
+<td id="debits"      align="right"></td>
+<td id="debitsDiff"  align="right"></td>
+<td id="debitsJ"     align="right" onclick="app.pages.reconcile.displayDetail(app.page.a_debits)"></td>
+</tr>
+<tr><td colspan="4">&nbsp;</td></tr>
+
+<tr><td>Ending Balance</td>
+<td id="balanceEnd"      align="right"></td>
+<td id="balanceEndDiff"  align="right"></td>
+<td id="balanceEndJ"     align="right" onclick="app.pages.reconcile.displayDetail(app.page.a_transactions)"></td>
+</tr>
+</table>
+
+<p><b>Journal Detail</b> click on from Journal total to see detail journal entries that went into the total</p>
+<div id="details"></div>
+<h2>todo</h2>
+<ol>
+<li>calcule debit creit diff on totals so one does not have to manually subtract
+</ol>

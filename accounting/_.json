@@ -1,0 +1,52 @@
+{
+"headTitle":"Synergy"
+,"heading1": "Accounting"
+,"updated": "2023-05-30"
+
+,"buttons":[
+   {"button":"accounting"           ,"id":"accounting", "onclick":"app.display(this)"}
+  ,{"button":"intro"                ,"id":"intro"   , "onclick":"app.display(this)"}
+
+]
+
+
+,"lists": {
+   "intro"   : ["intro"]
+  ,"accounting": ["accounting","nextsteps"]
+}
+
+,"node": {
+
+"intro":{
+  "text":[
+    ["load","","/synergyData/accounting/intro.html"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+,"accounting":{
+  "text":[
+     ["load","","/synergyData/accounting/app.html"]
+    ,["script","","/synergyData/accounting/pageModule.js"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+
+,"nextsteps":{
+  "text":[
+     ["h3","","Next steps"]
+    ,["","","<ol>"]
+    ,["li","","convert to modules"]
+    ,["","","</ol>"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+}}
