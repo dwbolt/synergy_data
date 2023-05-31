@@ -1,16 +1,17 @@
 //  database page
 
 import { dbClass     } from '/_lib/db/dbModule.js'      ;
-import { tableClass  } from '/_lib/db/tableModule.js'   ;
 import { csvClass    } from '/_lib/db/csvModule.js'     ;
-
 import { tableUxClass} from '/_lib/UX/tableUxModule.js' ;
 import { proxyClass  } from '/_lib/proxy/proxyModule.js';
 
 class dbUXClass { // client side dbUXClass - for a page
 
-  #url       
-  #DOMid
+  #url          // points to db json file
+  #url_dir      // directory json file is in
+  #json_db      // loaded file
+  #DOMid_db     // where database is selected
+  #DOMid_table  // where table is selected
   #primary_key_value
   #edit_type          // true -> table       false -> buffer
 
@@ -18,14 +19,13 @@ constructor( // client side dbUXClass - for a page
     dir    // user directory that database is in
    ,DOMid_db     // 
    ,DOMid_table  // 
-){  
-    app.page          = this;   // get access to instance by app.page;
-
+){
+    this.#url_dir     = dir;
     this.#url         = `${dir}/_.json`;  
     this.#DOMid_db    = DOMid_db   ; // where on the page the database interacts with the use
     this.#DOMid_table = DOMid_table; // where on the page the database interacts with the use
 
-    this.db     = new dbClass(     DOMid       ,"app.page.tableUX");
+    this.db     = new dbClass(this.#DOMid_db ,"app.page.tableUX");
     this.proxy  = new proxyClass();
 
     this.tableUX  = new tableUxClass("tableUXDOM","app.page.tableUX");
@@ -35,14 +35,29 @@ constructor( // client side dbUXClass - for a page
 
 
 async main(){ // client side dbUXClass - for a page
-    document.getElementById("footer").innerHTML = ""  ;   // get rid of footer
-    const  =await this.proxy.loadList(this.#DOMid_db + "/_.json");        // get list of databases
+    document.getElementById("footer").innerHTML = ""    ;   // get rid of footer
+    this.#json_db  = await this.proxy.getJSON(this.#url);   // get database file
+    const db       = this.#json_db.meta.databases       ;          
+    const dbkey    = Object.keys(db);
+    let html = `<select size="4" onclick="app.page.select_database(this)">`;
 
-    //await this.db.load(this.#url);                        // load the database
-
-    // display table menu
-    this.db.display_db_menu(this.#DOMid,"app.page.db_display(this)"); // display tables in database
+    // build list of databases to choose
+    for(let i=0; i<dbkey.length; i++ ) {
+      html += `<option value="${dbkey[i]}">${dbkey[i]}</option>`;
+    }
+    document.getElementById(this.#DOMid_db).innerHTML = html +" </select>";
 }
+
+
+async select_database(
+  dom  //
+) {
+  const v = dom.value;
+  await this.db.load(`${this.#url_dir}/${dom.value}/_.json`);                        // load the database
+
+  // display table menu
+  this.db.displayMenu(this.#DOMid_table,"app.page.display(this)"); // display tables in database
+  }
 
 
 display(DOM) { 
@@ -71,7 +86,7 @@ loadLocalCSV( // client side dbUXClass - for a page
       const table  = this.db.tableAdd(element.files[0].name);       // create table and add to db
       const csv     = new csvClass(table);     // create instace of CSV object
       csv.parseCSV(fr.result, "msg");         // parse loaded CSV file and put into table
-      this.db.displayMenu(this.#DOMid,"app.database.load(this)"); // add onclick code
+      this.db.displayMenu(this.#DOMid_db,"app.database.load(this)"); // add onclick code
     };
     fr.readAsText( element.files[0] ); // will only read first file selected
   }
@@ -204,5 +219,5 @@ recordDelete(){// client side dbUXClass - for a page
 export {dbUXClass};
 
 
-new dbUXClass("/users/database","databaseDOM","tableDOM");  // access loggin users database
+app.page = new dbUXClass("/users/database","databaseDOM","tableDOM");  // access loggin users database
 app.page.main();
