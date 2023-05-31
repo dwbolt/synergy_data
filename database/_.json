@@ -28,8 +28,7 @@
 
 ,"database":{
   "text":[
-     ["","","<div id='databaseDOM'>database</div><br>"]
-    ,["","","<br>import csv file <input type='file' accept='.csv' onchange='app.page.loadLocalCSV(this)'><textarea id='msg'></textarea>"]
+     ["load","","/synergyData/database/database.html"]
     ,["script","","/synergyData/database/pageModule.js"]
   ]
 

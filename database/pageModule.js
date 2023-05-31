@@ -18,9 +18,9 @@ constructor( // client side dbUXClass - for a page
     dir    // user directory that database is in
    ,DOMid  // 
 ){  
-    app.page      = this;   // get access to instance by app.contacts;
+    app.page      = this;   // get access to instance by app.page;
 
-    this.#url     = `/users/${dir}/_.json`;  
+    this.#url     = `${dir}/_.json`;  
     this.#DOMid   = DOMid;   // where on the page the database interacts with the use
     this.db       = new dbClass(     DOMid       ,"app.page.tableUX");
     this.tableUX  = new tableUxClass("tableUXDOM","app.page.tableUX");
@@ -31,9 +31,12 @@ constructor( // client side dbUXClass - for a page
 
 async main(){ // client side dbUXClass - for a page
     document.getElementById("footer").innerHTML = ""  ;   // get rid of footer
-    await this.db.load(this.#url);                        // load the database
+    await this.db.loadList(this.#url);        // get list of databases
+
+    //await this.db.load(this.#url);                        // load the database
+
     // display table menu
-    this.db.displayMenu(this.#DOMid,"app.page.display(this)"); // add onclick code
+    this.db.display_db_menu(this.#DOMid,"app.page.db_display(this)"); // display tables in database
 }
 
 
@@ -196,5 +199,5 @@ recordDelete(){// client side dbUXClass - for a page
 export {dbUXClass};
 
 
-new dbUXClass("database/matthew","databaseDOM");  // hardcode database for now, later support multiple databases per user
+new dbUXClass("/users/database","databaseDOM");  // access loggin users database
 app.page.main();
