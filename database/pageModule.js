@@ -16,22 +16,27 @@ class dbUXClass { // client side dbUXClass - for a page
 
 constructor( // client side dbUXClass - for a page
     dir    // user directory that database is in
-   ,DOMid  // 
+   ,DOMid_db     // 
+   ,DOMid_table  // 
 ){  
-    app.page      = this;   // get access to instance by app.page;
+    app.page          = this;   // get access to instance by app.page;
 
-    this.#url     = `${dir}/_.json`;  
-    this.#DOMid   = DOMid;   // where on the page the database interacts with the use
-    this.db       = new dbClass(     DOMid       ,"app.page.tableUX");
+    this.#url         = `${dir}/_.json`;  
+    this.#DOMid_db    = DOMid_db   ; // where on the page the database interacts with the use
+    this.#DOMid_table = DOMid_table; // where on the page the database interacts with the use
+
+    this.db     = new dbClass(     DOMid       ,"app.page.tableUX");
+    this.proxy  = new proxyClass();
+
     this.tableUX  = new tableUxClass("tableUXDOM","app.page.tableUX");
     this.tableUX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download"]);   // ,"groupBy"
     this.tableUX.setRowNumberVisible( false);
-}
+  }
 
 
 async main(){ // client side dbUXClass - for a page
     document.getElementById("footer").innerHTML = ""  ;   // get rid of footer
-    await this.db.loadList(this.#url);        // get list of databases
+    const  =await this.proxy.loadList(this.#DOMid_db + "/_.json");        // get list of databases
 
     //await this.db.load(this.#url);                        // load the database
 
@@ -199,5 +204,5 @@ recordDelete(){// client side dbUXClass - for a page
 export {dbUXClass};
 
 
-new dbUXClass("/users/database","databaseDOM");  // access loggin users database
+new dbUXClass("/users/database","databaseDOM","tableDOM");  // access loggin users database
 app.page.main();
