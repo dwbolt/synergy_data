@@ -209,9 +209,9 @@ recordAdd(){// client side dbUXClass - for a page
   // similar to save, move data from buffer to memory, then save
   const table = this.tableUX.getModel();  // get tableClass being displayed
 
-  table.bufferAppend();
-  this.recordSave();
-  this.tableUX.statusLine();
+  table.bufferAppend();       // move buffer data to table
+  this.recordSave();          // update table data from form
+  this.tableUX.displayData();  //
 }
 
 
@@ -245,7 +245,7 @@ recordDelete(){// client side dbUXClass - for a page
   //
   alert("recordDelete from memery, not implemented yet");
   return;
-  
+
   this.tableUX.delete(this.#primary_key_value);  
 }
 
