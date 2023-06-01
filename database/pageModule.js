@@ -67,6 +67,7 @@ display(DOM) {
     
     this.tableUX.setModel(this.db,  DOM.value );
     this.tableUX.display();  // display table
+    this.buttonsShow("New")
 }
 
 
@@ -105,6 +106,7 @@ async saveDB( // client side dbUXClass - for a page
 showForm(  // client side dbUXClass - for a page
   element // dom element
 ){
+  // showForm
   let html = "<table>";
   const table             = this.tableUX.getModel()  // get tableClass being displayed
   if (element) {
@@ -118,6 +120,9 @@ showForm(  // client side dbUXClass - for a page
   }
   html += "</table>"
   document.getElementById("record").innerHTML = html;
+
+  // show buttons
+  this.buttonsShow("Edit Duplicate Delete Cancel");
 }
 
 
@@ -144,15 +149,16 @@ recordEdit(
   }
   html += "</table>"
   document.getElementById("record").innerHTML = html;
+  this.buttonsShow("Save Cancel");
 }
 
 recordSave(){  // client side dbUXClass - for a page
   // save to memory
-  const table     = this.tableUX.getModel();  // get tableClass being displayed
-  const row    = (this.#edit_type ? 
-    table.getRowByIndex(table.get_primary_key(), this.#primary_key_value) :
-    table.bufferGet(0));  // hard code for one record case row being displayed
+  const table  = this.tableUX.getModel();  // get tableClass being displayed
+  const row    = table.getRowByIndex(table.get_primary_key(), this.#primary_key_value);    
   const rowEdited = [];
+
+  // fill rowEdited with values from edit form
   for(var i=0; i<row.length; i++)  {
       let edit = document.getElementById(`edit-${i}`);
       if (edit) {
@@ -160,10 +166,12 @@ recordSave(){  // client side dbUXClass - for a page
         rowEdited[i] = edit.value;
       }
   }
+
   table.save2memory(this.#primary_key_value, rowEdited);
   this.show_changes();
   this.showForm();
 }
+
 
 recordDelete(){// client side dbUXClass - for a page
   alert("recordDelete from memery, not implemented yet")
@@ -193,26 +201,54 @@ recordNew(){// client side dbUXClass - for a page
   const table = this.tableUX.getModel();  // get tableClass being displayed
   table.bufferCreateEmpty(1);
   this.recordEdit(false);
+  this.buttonsShow("Add Cancel");
 }
+
+
+recordAdd(){// client side dbUXClass - for a page
+  // similar to save, move data from buffer to memory, then save
+  const table = this.tableUX.getModel();  // get tableClass being displayed
+
+  table.bufferAppend();
+  this.recordSave();
+  this.tableUX.statusLine();
+}
+
+
+recordCancel(){// client side dbUXClass - for a page
+  // similar to save, move data from buffer to memory, then save
+  document.getElementById("record").innerHTML = "";
+  this.buttonsShow("New");
+}
+
+
+buttonsShow( // client side dbUXClass - for a page
+  // "New Add  Edit Duplicate Delete Save  Cancel"
+  s_values   // walk through id=Buttons and show all in the list   
+){  // client side dbUXClass - for a page
+  let button = document.getElementById("buttons_record").firstChild;
+  while(button) {
+    button.hidden = (s_values.includes(button.value) ? 
+      false  // show button
+    : true  )// hide button
+    button = button.nextSibling;
+  }
+}
+
 
 recordDuplicate(){// client side dbUXClass - for a page
   alert("recordDuplicate from memery, not implemented yet")
 }
 
 
-
-
 recordDelete(){// client side dbUXClass - for a page
-  alert("recordDelete from memery, not implemented yet")
+  //
+  alert("recordDelete from memery, not implemented yet");
+  return;
+  
+  this.tableUX.delete(this.#primary_key_value);  
 }
 
-
-
-/*prefix # with methods that are private
-#private(){  
-    alert("private");
-}
-*/
 
 }
 

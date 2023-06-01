@@ -38,7 +38,8 @@
 
 ,"table":{
   "text":[
-    ["","","<div id='tableUXDOM'>table</div>"]
+     ["h3","","Selected Table"]
+    ,["","","<div id='tableUXDOM'>table</div>"]
   ]
 
   ,"u_urls": [
@@ -49,11 +50,16 @@
   "text":[
     ["h3","","Selected Record"]
     ,["","","<div id='record'></div>"]
-    ,["","","<input type='button' value='New'       onclick='app.page.recordNew()'>  "]
-    ,["","","<input type='button' value='Edit'      onclick='app.page.recordEdit(true)'> "]
-    ,["","","<input type='button' value='Delete'    onclick='app.page.recordDelete()'> "]
-    ,["","","<input type='button' value='Duplicate' onclick='app.page.recordDuplicate()'> "]
-    ,["","","<input type='button' value='Save'      onclick='app.page.recordSave()'> "]
+    ,["","","<div id='buttons_record'>"]
+    ,["","","<input hidden type='button' value='New'       onclick='app.page.recordNew()'>  "]
+    ,["","","<input hidden type='button' value='Add'       onclick='app.page.recordAdd()'>  "]
+
+    ,["","","<input hidden type='button' value='Edit'      onclick='app.page.recordEdit(true)'> "]
+    ,["","","<input hidden type='button' value='Duplicate' onclick='app.page.recordDuplicate()'> "]
+    ,["","","<input hidden type='button' value='Delete'    onclick='app.page.recordDelete()'> "]
+    ,["","","<input hidden type='button' value='Save'      onclick='app.page.recordSave()'> "]
+
+    ,["","","<input hidden type='button' value='Cancel'    onclick='app.page.recordCancel()'> </div>"]
   ]
 
   ,"u_urls": [
@@ -76,10 +82,12 @@
   "text":[
      ["h3","","Next steps"]
     ,["","","<ol>"]
-    ,["li","","new/dup/save/delete button on form"]
+    ,["li","","Add/dup/delete button on form"]
     ,["li","","edit - numbers, dates, money - done - text"]
     ,["li","","delete - button on form"]
     ,["li","","edit/new/dup/save/delete button on form"]
+    ,["li","","download filtered list not the hold table"]
+    ,["li","","clearing filter should refresh entire table"]
     ,["","","</ol>"]
   ]
 
