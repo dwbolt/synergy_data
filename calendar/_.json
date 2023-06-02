@@ -30,7 +30,6 @@
      ["","","<p id='weeks' class='calendar'>replace with calendar</p>"]
     ,["link"  ,"","/synergyData/calendar/page.css"]
     ,["script","","/synergyData/calendar/pageModule.js"]
-
   ]
 
   ,"u_urls": [
