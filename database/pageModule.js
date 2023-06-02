@@ -37,16 +37,21 @@ constructor( // client side dbUXClass - for a page
 async main(){ // client side dbUXClass - for a page
     document.getElementById("footer").innerHTML = ""    ;   // get rid of footer
     this.#json_db  = await this.proxy.getJSON(this.#url);   // get database file
-    const db       = this.#json_db.meta.databases       ;          
-    const dbkey    = Object.keys(db);
-    let html = `<select size="4" onclick="app.page.select_database(this)">`;
-
-    // build list of databases to choose
-    for(let i=0; i<dbkey.length; i++ ) {
-      html += `<option value="${dbkey[i]}">${dbkey[i]}</option>`;
-    }
-    document.getElementById(this.#DOMid_db).innerHTML = html +" </select>";
+    this.display_menue_db();
 }
+
+
+display_menue_db(){ // client side dbUXClass - for a page
+  const db       = this.#json_db.meta.databases       ;          
+  const dbkey    = Object.keys(db);
+  let html = `<select size="4" onclick="app.page.select_database(this)">`;
+  // build list of databases to choose
+  for(let i=0; i<dbkey.length; i++ ) {
+    html += `<option value="${dbkey[i]}">${dbkey[i]}</option>`;
+  }
+  document.getElementById(this.#DOMid_db).innerHTML = html +" </select>";
+}
+
 
 
 async select_database(
@@ -87,7 +92,7 @@ loadLocalCSV( // client side dbUXClass - for a page
       const table  = this.db.tableAdd(element.files[0].name);       // create table and add to db
       const csv     = new csvClass(table);     // create instace of CSV object
       csv.parseCSV(fr.result, "msg");         // parse loaded CSV file and put into table
-      this.db.displayMenu(this.#DOMid_db,"app.database.load(this)"); // add onclick code
+      this.db.displayMenu(this.#DOMid_table,"app.page.display(this)")
     };
     fr.readAsText( element.files[0] ); // will only read first file selected
   }
