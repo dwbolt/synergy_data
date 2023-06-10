@@ -209,7 +209,7 @@ recordDelete(){// client side dbUXClass - for a page
 show_changes(){ // client side dbUXClass - for a page
   let html = "";
   const table        = this.tableUX.getModel();  // get tableClass being displayed
-  const changes      = table.get_changes();
+  const changes      = table.changes_get();
   const primary_keys = Object.keys(changes);
   for(var i=0; i<primary_keys.length; i++) {
     let key = primary_keys[i]
