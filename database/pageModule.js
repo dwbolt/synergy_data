@@ -1,11 +1,18 @@
-//  database page
+import { csvClass    } from '/_lib/db/csvModule.js'       ;
+import { dbClass     } from '/_lib/db/dbModule.js'        ;
+import { tableUxClass} from '/_lib/UX/tableUxModule.js'   ;
+import { menuClass   } from '/_lib/UX/menuModule.js'      ;
 
-import { dbClass     } from '/_lib/db/dbModule.js'      ;
-import { csvClass    } from '/_lib/db/csvModule.js'     ;
-import { tableUxClass} from '/_lib/UX/tableUxModule.js' ;
-import { proxyClass  } from '/_lib/proxy/proxyModule.js';
+import { proxyClass  } from '/_lib/proxy/proxyModule.js'  ;
 
-class dbUXClass { // client side dbUXClass - for a page
+
+class dbUXClass { // client side dbUXClass - SPA (Single Page App)
+
+  /*
+
+ supports RDBMS in users space
+
+  */
 
   #url          // points to db json file
   #url_dir      // directory json file is in
@@ -21,47 +28,63 @@ constructor( // client side dbUXClass - for a page
    ,DOMid_table  // 
 ){
     this.#url_dir     = dir;
-    this.#url         = `${dir}/_.json`;  
-    this.#DOMid_db    = DOMid_db   ; // where on the page the database interacts with the use
-    this.#DOMid_table = DOMid_table; // where on the page the database interacts with the use
+    this.#url         = `${dir}/_.json`;  // json file that contains meta data for databases
+    this.#DOMid_db    = DOMid_db   ; // where on the page the database interacts with the user
+    this.#DOMid_table = DOMid_table; // where on the page the table interacts with the use
 
-    this.db     = new dbClass(this.#DOMid_db ,"app.page.tableUX");
-    this.proxy  = new proxyClass();
-
+    this.db       = new dbClass(this.#DOMid_db ,"app.page.tableUX");
+    this.proxy    = new proxyClass();
+    this.menu     = new menuClass("menu_page");
     this.tableUX  = new tableUxClass("tableUXDOM","app.page.tableUX");
-    this.tableUX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download"]);   // ,"groupBy"
-    this.tableUX.setRowNumberVisible( false);
+    this.tableUX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","groupBy"]);
+    this.tableUX.setRowNumberVisible(false);
   }
 
 
 async main(){ // client side dbUXClass - for a page
     document.getElementById("footer").innerHTML = ""    ;   // get rid of footer
-    this.#json_db  = await this.proxy.getJSON(this.#url);   // get database file
-    this.display_menue_db();
+    this.#json_db  = await this.proxy.getJSON(this.#url);   // get list of databases
+
+    // build database menu
+    const db       = this.#json_db.meta.databases;          
+    const dbkey    = Object.keys(db);
+    let html = `<select size="4" onclick="app.page.select_database(this)">`;
+    // build list of databases to choose
+    for(let i=0; i<dbkey.length; i++ ) {
+      html += `<option value="${dbkey[i]}">${dbkey[i]}</option>`;
+    }
+    html += " </select>";
+
+    // display menu
+    this.menu.add(`
+      <td>
+      <h4>Databases</h4>
+      ${html}
+      </td>
+      `);
 }
-
-
-display_menue_db(){ // client side dbUXClass - for a page
-  const db       = this.#json_db.meta.databases       ;          
-  const dbkey    = Object.keys(db);
-  let html = `<select size="4" onclick="app.page.select_database(this)">`;
-  // build list of databases to choose
-  for(let i=0; i<dbkey.length; i++ ) {
-    html += `<option value="${dbkey[i]}">${dbkey[i]}</option>`;
-  }
-  document.getElementById(this.#DOMid_db).innerHTML = html +" </select>";
-}
-
 
 
 async select_database(
+  // user clicked on a database
   dom  //
 ) {
-  const v = dom.value;
-  await this.db.load(`${this.#url_dir}/${dom.value}/_.json`);                        // load the database
+  const v = dom.value;                                          // database user clicked on
+  await this.db.load(`${this.#url_dir}/${dom.value}/_.json`);   // load the database
 
   // display table menu
-  this.db.displayMenu(this.#DOMid_table,"app.page.display(this)"); // display tables in database
+  this.menu.deleteTo(1);   // remove menues to the right of database memnu
+  this.menu.add(`
+  <td>
+  <h4>Tables</h4>
+  <p id='menu_page_table'></p>
+  <p><b>import csv file</b><br>
+  <input type='file' accept='.csv' onchange='app.page.loadLocalCSV(this)'><br>
+  <textarea id='msg'></textarea>
+  </p>
+  </td>
+  `);
+  this.db.displayMenu("menu_page_table","app.page.display(this)"); // display tables in database
   }
 
 
@@ -89,10 +112,12 @@ loadLocalCSV( // client side dbUXClass - for a page
     const fr = new FileReader();
     fr.onload =  () => {
       // call back function when file has finished loading
-      const table  = this.db.tableAdd(element.files[0].name);       // create table and add to db
-      const csv     = new csvClass(table);     // create instace of CSV object
-      csv.parseCSV(fr.result, "msg");         // parse loaded CSV file and put into table
-      this.db.displayMenu(this.#DOMid_table,"app.page.display(this)")
+      let name      = element.files[0].name;
+      name          = name.slice(0, name.length -4);                    // get rid of .csv in table name
+      const table   = this.db.tableAdd(name);                           // create table and add to db
+      const csv     = new csvClass(table);                              // create instace of CSV object
+      csv.parseCSV(fr.result, "msg");                                   // parse loaded CSV file and put into table
+      this.db.displayMenu("menu_page_table","app.page.display(this)");  // display new table in menu
     };
     fr.readAsText( element.files[0] ); // will only read first file selected
   }
@@ -104,8 +129,6 @@ async saveDB( // client side dbUXClass - for a page
   await this.db.save();
   this.show_changes();
 }
-
-
 
 
 showForm(  // client side dbUXClass - for a page
@@ -127,7 +150,7 @@ showForm(  // client side dbUXClass - for a page
   document.getElementById("record").innerHTML = html;
 
   // show buttons
-  this.buttonsShow("Edit Duplicate Delete Cancel");
+  this.buttonsShow("New Duplicate Edit  Delete Cancel");
 }
 
 
@@ -260,5 +283,5 @@ recordDelete(){// client side dbUXClass - for a page
 export {dbUXClass};
 
 
-app.page = new dbUXClass("/users/database","databaseDOM","tableDOM");  // access loggin users database
+app.page = new dbUXClass("/users/database","databaseDOM","tableDOM");  // access loggin users databases
 app.page.main();

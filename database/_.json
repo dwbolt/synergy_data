@@ -12,7 +12,7 @@
 
 ,"lists": {
    "intro"   : ["intro"]
-  ,"database": ["database","table","record","changes","nextsteps"]
+  ,"database": ["menu","table","record","changes","nextsteps"]
 }
 
 ,"node": {
@@ -26,15 +26,17 @@
   ]
 }
 
-,"database":{
+,"menu":{
   "text":[
-     ["load","","/synergyData/database/database.html"]
+     ["h3","","menu"]
+    ,["","","<p id='menu_page'></p>"]
     ,["script","","/synergyData/database/pageModule.js"]
   ]
 
   ,"u_urls": [
   ]
 }
+
 
 ,"table":{
   "text":[
@@ -50,16 +52,16 @@
   "text":[
     ["h3","","Selected Record"]
     ,["","","<div id='record'></div>"]
-    ,["","","<div id='buttons_record'>"]
+    ,["","","<p id='buttons_record'>"]
     ,["","","<input hidden type='button' value='New'       onclick='app.page.recordNew()'>  "]
     ,["","","<input hidden type='button' value='Add'       onclick='app.page.recordAdd()'>  "]
-
-    ,["","","<input hidden type='button' value='Edit'      onclick='app.page.recordEdit(true)'> "]
     ,["","","<input hidden type='button' value='Duplicate' onclick='app.page.recordDuplicate()'> "]
+
+    ,["",""," &nbsp <input hidden type='button' value='Edit'      onclick='app.page.recordEdit(true)'> "]
     ,["","","<input hidden type='button' value='Delete'    onclick='app.page.recordDelete()'> "]
     ,["","","<input hidden type='button' value='Save'      onclick='app.page.recordSave()'> "]
 
-    ,["","","<input hidden type='button' value='Cancel'    onclick='app.page.recordCancel()'> </div>"]
+    ,["",""," &nbsp <input hidden type='button' value='Cancel'    onclick='app.page.recordCancel()'> </p>"]
   ]
 
   ,"u_urls": [
@@ -82,11 +84,19 @@
   "text":[
      ["h3","","Next steps"]
     ,["","","<ol>"]
-    ,["li","","Add/dup/delete button on form"]
-    ,["li","","edit - numbers, dates, money - done - text"]
+    ,["li","","CSV import - auto add id if does not exist"]
+    ,["li","","/dup/delete button on form"]
+    ,["li","","edit - numbers, dates, money"]
     ,["li","","delete - button on form"]
-    ,["li","","edit/new/dup/save/delete button on form"]
+
+    ,["","","</ol>"]
+
+    ,["h3","","Done"]
+    ,["","","<ol>"]
+    ,["li","","add new button on show form"]
     ,["li","","download filtered list not the hold table"]
+    ,["li","","edit - text"]
+    ,["li","","Add  - text"]
     ,["li","","clearing filter should refresh entire table"]
     ,["","","</ol>"]
   ]

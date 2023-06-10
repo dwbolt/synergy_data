@@ -87,7 +87,6 @@ h5 {text-align:center;padding: 1px; margin:1}
 
 /* for the pop up form itself */
 #popUpForm {
-	display: none;
 	position: fixed; 
 	margin-top: 100px;
 	margin-bottom: 100px;
