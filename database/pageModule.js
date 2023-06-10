@@ -36,7 +36,7 @@ constructor( // client side dbUXClass - for a page
     this.proxy    = new proxyClass();
     this.menu     = new menuClass("menu_page");
     this.tableUX  = new tableUxClass("tableUXDOM","app.page.tableUX");
-    this.tableUX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","groupBy"]);
+    this.tableUX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
     this.tableUX.setRowNumberVisible(false);
   }
 
@@ -201,11 +201,6 @@ recordSave(){  // client side dbUXClass - for a page
 }
 
 
-recordDelete(){// client side dbUXClass - for a page
-  alert("recordDelete from memery, not implemented yet")
-}
-
-
 show_changes(){ // client side dbUXClass - for a page
   let html = "";
   const table        = this.tableUX.getModel();  // get tableClass being displayed
@@ -270,11 +265,12 @@ recordDuplicate(){// client side dbUXClass - for a page
 
 
 recordDelete(){// client side dbUXClass - for a page
-  //
-  alert("recordDelete from memery, not implemented yet");
+  alert("recordDelete from memery, not implemented yet")
   return;
-
-  this.tableUX.delete(this.#primary_key_value);  
+  const table = this.tableUX.getModel();  // get tableClass being displayed
+  table.delete(this.#primary_key_value);  // delete row
+  this.tableUX.displayData();             // update view
+  recordCancel();
 }
 
 
