@@ -19,7 +19,7 @@
     "text":[
         ["" ,"" ,"<p id='loginX'></p>"]
        ,["p","","<a href='/app.html?p=logInOut&b=userAdd'>Create your own login</a>"]
-       ,["script","","/synergyData/loginOut/pageModule.js"]
+       ,["script","","/synergyData/logInOut/pageModule.js"]
     ]
   }
 
