@@ -19,8 +19,7 @@
     "text":[
         ["" ,"" ,"<p id='loginX'></p>"]
        ,["p","","<a href='/app.html?p=logInOut&b=userAdd'>Create your own login</a>"]
-       ,["eval","","app.login.buildForm(`loginX`)"]
-       ,["eval","","document.getElementById('userName').value='demo';document.getElementById('password').value='demo' "]
+       ,["script","","/synergyData/loginOut/pageModule.js"]
     ]
   }
 

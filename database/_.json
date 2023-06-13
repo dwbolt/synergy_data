@@ -29,7 +29,7 @@
 ,"menu":{
   "text":[
      ["h3","","menu"]
-    ,["","","<a target='blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.wozp6kicg5t1'>comment</a> <br><p id='menu_page'></p>"]
+    ,["","","<a target='blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.wozp6kicg5t1'>comment</a> <br><p id='menu_page'></p><p id='menu_dialog'></p>"]
     ,["script","","/synergyData/database/pageModule.js"]
   ]
 
@@ -51,7 +51,7 @@
 ,"record":{
   "text":[
     ["h3","","Selected Record"]
-    ,["","","<a target='_blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.e8lg9ienjwmx'>comments</a><div id='record'></div>"]
+    ,["","","<a target='_blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.e8lg9ienjwmx'>comments</a><br><div id='record'></div>"]
     ,["","","<p id='buttons_record'>"]
     ,["","","<input hidden type='button' value='New'       onclick='app.page.recordNew()'>  "]
     ,["","","<input hidden type='button' value='Add'       onclick='app.page.recordAdd()'>  "]
@@ -72,7 +72,7 @@
 ,"changes":{
   "text":[
      ["h3","","Memory changes not saved"]
-     ,["","","<a target='_blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.qhpz2u8y55rc'>comments</a><input type='button' value='Save' onclick='app.page.saveDB()'> memory tables to server"]
+     ,["","","<a target='_blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.qhpz2u8y55rc'>comments</a><br><input type='button' value='Save' onclick='app.page.saveDB()'> memory tables to server"]
     ,["p","","<div id='mchanges'></div>"]
   ]
 
@@ -85,13 +85,14 @@
      ["h3","","Next steps"]
     ,["h4","","Selected Record"]
     ,["","","<a target='_blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.dvq81zw9k4fx'>comments</a><ol>"]
-    ,["li","","delete button on form"]
+
     ,["li","","dup button on form"]
     ,["li","","edit - numbers, dates, money"]
     ,["","","</ol>"]
 
     ,["h3","","Done"]
     ,["","","<ol>"]
+    ,["li","","delete button on form - removes from PK and added to delete, does not remove data"]
     ,["li","","CSV import - auto add id if does not exist"]
     ,["li","","add new button on show form"]
     ,["li","","download filtered list not the hold table"]

@@ -37,7 +37,7 @@ main() {  // appClass - accounting - client side
 }
 
 
-menu(  // appClass - accounting - client side
+async menu(  // appClass - accounting - client side
 ){  // init menu for application, display dropdown list of pages,
   // remember menu selection
   const e = document.getElementById('page');
@@ -46,7 +46,7 @@ menu(  // appClass - accounting - client side
   // add or remove data dependant menu items
   let html = `<option value= "home"     >Home </option>`
 
-  if (this.login.getStatus()) {
+  if (await this.login.getStatus()) {
     // logged in, so let user load data
     html += '<option value= "loadYear"  >Load Year</option>'
   }

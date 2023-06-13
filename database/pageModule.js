@@ -42,64 +42,183 @@ constructor( // client side dbUXClass - for a page
 
 
 async main(){ // client side dbUXClass - for a page
+  // user opened database app
+    // make sure user is logged in
+    if (! await app.login.getStatus()) {
+        alert("please log before using the database")
+        window.location.replace("app.html?p=logInOut");
+    }
+
+    // load list of databases available
+    let obj;
+    do {
+      obj  = await this.proxy.getJSONwithError(this.#url);   // get list of databases
+      if(obj.json === null) {
+        alert("missing or bad database/_.json, replacing with test file");
+        // missing or ill formed json file, so store an empty good one 
+        await app.proxy.RESTpost(
+          `{
+            "meta":{
+              "databases": {"personal"   : {"location":"personal"}}
+              }
+          }`
+          ,this.#url)
+      }
+    } while (obj.json === null);
+
+    this.#json_db  = obj.json;   // get list of databases
     document.getElementById("footer").innerHTML = ""    ;   // get rid of footer
-    this.#json_db  = await this.proxy.getJSON(this.#url);   // get list of databases
 
     // build database menu
     const db       = this.#json_db.meta.databases;          
     const dbkey    = Object.keys(db);
-    let html = `<select size="4" onclick="app.page.select_database(this)">`;
+    let html = `<select size="4" onclick="app.page.database_select(this)">`;
     // build list of databases to choose
     for(let i=0; i<dbkey.length; i++ ) {
       html += `<option value="${dbkey[i]}">${dbkey[i]}</option>`;
     }
-    html += " </select>";
+    html += "</select>"
 
     // display menu
     this.menu.add(`
       <td>
-      <h4>Databases</h4>
+      <a onclick="app.page.database_dialog()">Databases</a><br>
       ${html}
       </td>
       `);
 }
 
 
-async select_database(
-  // user clicked on a database
+async database_select( // client side dbUXClass
+  // user clicked on a database - show tables inside database
   dom  //
 ) {
   const v = dom.value;                                          // database user clicked on
+
+  // make sure user is logged in
+  if (! await app.login.getStatus()) {
+    alert("please log before using the database")
+    window.location.replace("app.html?p=logInOut");
+}
   await this.db.load(`${this.#url_dir}/${dom.value}/_.json`);   // load the database
 
   // display table menu
   this.menu.deleteTo(1);   // remove menues to the right of database memnu
   this.menu.add(`
   <td>
-  <h4>Tables</h4>
-  <p id='menu_page_table'></p>
-  <p><b>import csv file</b><br>
-  <input type='file' accept='.csv' onchange='app.page.loadLocalCSV(this)'><br>
-  <textarea id='msg'></textarea>
-  </p>
+  <a onclick='app.page.table_dialog()'>Tables</a><br>
+  <div id='menu_page_table'></div>
   </td>
   `);
-  this.db.displayMenu("menu_page_table","app.page.display(this)"); // display tables in database
+  this.db.displayMenu("menu_page_table","app.page.display_tables(this)"); // display tables in database
   }
 
 
-display(DOM) { 
+database_dialog(  // client side dbUXClass
+
+){
+  document.getElementById('menu_dialog').innerHTML = `
+  <table><tr><td>
+  <b>Database Operation</b><br>
+  <select size="4" onclick="app.page.database_dialog_process(this)">
+  <option value="new">New</option>
+  <option value="delete">Delete</option>
+  <option value="cancel">Cancel</option>
+  </select></td>
+  <td id='dialog_detail'></td>
+  </tr>
+  </table>`;
+}
+
+
+database_dialog_process(  // client side dbUXClass - for a page
+  dom
+  ){
+  switch(dom.value) {
+    case "cancel":
+      // code block
+      document.getElementById('menu_dialog').innerHTML = "";
+      break;
+
+    case "delete":
+      // code block
+      //break;
+
+    case "delete":
+      // code block
+      //break;      
+
+    default:
+      document.getElementById('dialog_detail').innerHTML = `"${dom.value}" not yet implemented for database`
+  }
+}
+
+
+table_dialog(  // client side dbUXClass - for a page
+    ){
+  document.getElementById('menu_dialog').innerHTML =  `
+  <table><tr><td>
+  <b>Table Operation</b><br>
+  <select size="4" onclick="app.page.table_dialog_process(this)">
+  <option value="new">New</option>
+  <option value="delete">Delete</option>
+  <option value="columns">Columns</option>
+  <option value="import">Import</option>
+  <option value="cancel">Cancel</option>
+  </select></td>
+  <td id='dialog_detail'></td>
+  </tr>
+  </table>`;
+}
+
+
+table_dialog_process(  // client side dbUXClass - for a page
+    dom
+    ){
+    switch(dom.value) {
+      case "cancel":
+        document.getElementById('menu_dialog').innerHTML = "";
+        break;
+
+      case "import":
+        document.getElementById('dialog_detail').innerHTML = `
+        <p><b>import csv file</b><br>
+        <input type='file' accept='.csv' onchange='app.page.loadLocalCSV(this)'><br>
+        <textarea id='msg'></textarea>
+        </p>`;
+        break;
+
+      case "new":
+        // code block
+        //break;
+
+      case "delete":
+        // code block
+
+        //</input>break;
+
+      default:
+        // code block
+        document.getElementById('dialog_detail').innerHTML = `"${dom.value}" table is not yet implemented`
+    }
+  }
+
+
+display_tables(   // client side dbUXClass
+  DOM) { 
     // user clicked on table, so show it.
     this.tableUX.setColumnFormat(   0, 'onclick="app.page.showForm(this)"');   // assume primary key is 0 -  needs to be done in code
     this.tableUX.setColumnTransform(0, app.page.displayIndex              );   // // style it like a hyper link so it will get clicked on.
     
     this.tableUX.setModel(this.db,  DOM.value );
-    this.tableUX.display();  // display table
+    const table          = this.tableUX.getModel();
+    this.tableUX.display(table.PK_get());           // display table
     this.buttonsShow("New")
 }
 
 
-displayIndex(value) {   // client side dbUXClass - for a page
+displayIndex(// client side dbUXClass
+  value) {    
   return `<u style="color:blue;">${value}</u>`;  // style it like a hyper link so it will get clicked on.
 }
 
@@ -117,7 +236,7 @@ loadLocalCSV( // client side dbUXClass - for a page
       const table   = this.db.tableAdd(name);                           // create table and add to db
       const csv     = new csvClass(table);                              // create instace of CSV object
       csv.parseCSV(fr.result, "msg");                                   // parse loaded CSV file and put into table
-      this.db.displayMenu("menu_page_table","app.page.display(this)");  // display new table in menu
+      this.db.displayMenu("menu_page_table","app.page.display_tables(this)"); // display tables in database
     };
     fr.readAsText( element.files[0] ); // will only read first file selected
   }
@@ -141,7 +260,7 @@ showForm(  // client side dbUXClass - for a page
     // user clicked on elemnt, remember primary key for other record methodes
     this.#primary_key_value = parseInt(element.innerText,10); 
   }
-  const  row = table.getRowByIndex(table.get_primary_key(), this.#primary_key_value); 
+  const  row = table.PK_get(this.#primary_key_value); 
   const  header = table.getHeader();
   for(var i=0; i<row.length; i++) {
     html += `<tr><td>${header[i]}</td> <td>${row[i]}</td></tr>`
@@ -154,19 +273,19 @@ showForm(  // client side dbUXClass - for a page
 }
 
 
-recordEdit(
+recordEdit(  // client side dbUXClass
   edit_type // true -> edit table record    false -> edit buffer record
 ){// client side dbUXClass - for a page
   this.#edit_type = edit_type;
   let html = "<table>";
   const table  = this.tableUX.getModel();  // get tableClass being displayed
   const row    = (this.#edit_type ? 
-    table.getRowByIndex(table.get_primary_key(), this.#primary_key_value) :
+    table.PK_get(this.#primary_key_value) :
     table.bufferGet(0));  // hard code for one record case 
   const header = table.getHeader();
 
   for(var i=0; i<row.length; i++) {
-    if (i === table.get_primary_key()) {
+    if (i === 0) {
       // do not allow editing of primary key
       html += `<tr><td>${header[i]}</td> <td>${row[i]}</td></tr>`
       this.#primary_key_value = row[i];
@@ -182,8 +301,8 @@ recordEdit(
 
 recordSave(){  // client side dbUXClass - for a page
   // save to memory
-  const table  = this.tableUX.getModel();  // get tableClass being displayed
-  const row    = table.getRowByIndex(table.get_primary_key(), this.#primary_key_value);    
+  const table     = this.tableUX.getModel();  // get tableClass being displayed
+  const row       = table.PK_get(this.#primary_key_value);    
   const rowEdited = [];
 
   // fill rowEdited with values from edit form
@@ -234,7 +353,8 @@ recordAdd(){// client side dbUXClass - for a page
 
   table.bufferAppend();       // move buffer data to table
   this.recordSave();          // update table data from form
-  this.tableUX.displayData();  //
+  this.tableUX.display(table.PK_get() );  // redisplay data
+  this.show_changes();                    // show changes
 }
 
 
@@ -265,12 +385,13 @@ recordDuplicate(){// client side dbUXClass - for a page
 
 
 recordDelete(){// client side dbUXClass - for a page
-  alert("recordDelete from memery, not implemented yet")
-  return;
+  //alert("recordDelete from memery, not implemented yet")
+  //return;
   const table = this.tableUX.getModel();  // get tableClass being displayed
-  table.delete(this.#primary_key_value);  // delete row
-  this.tableUX.displayData();             // update view
-  recordCancel();
+  table.delete(this.#primary_key_value);  // delete row from data
+  this.tableUX.display(table.PK_get() );  // redisplay data
+  this.recordCancel();                    // hide record form
+  this.show_changes();                    // show changes
 }
 
 
