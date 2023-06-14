@@ -13,6 +13,19 @@ h5 {text-align:center;padding: 1px; margin:1}
 
 /* Style for the event form on calendar */
 
+/* style for repeating */
+.repeat_weekly {
+	--link-color: blue;
+}
+  
+.repeat_monthly {
+	--link-color: red;
+}
+
+.repeat_yearly {
+	--link-color: black;
+}
+
 /* for the add and save buttons on the pop up form */
 .addSaveButton {
 	position: absolute;
@@ -27,6 +40,7 @@ h5 {text-align:center;padding: 1px; margin:1}
 	cursor: pointer;
 	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
+
 .addSaveButton:hover {
 	background-color: #36c41d;
 	width: 37%;
@@ -87,6 +101,7 @@ h5 {text-align:center;padding: 1px; margin:1}
 
 /* for the pop up form itself */
 #popUpForm {
+	display: none;
 	position: fixed; 
 	margin-top: 100px;
 	margin-bottom: 100px;
