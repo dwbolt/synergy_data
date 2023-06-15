@@ -263,7 +263,7 @@ showForm(  // client side dbUXClass - for a page
   const  row = table.PK_get(this.#primary_key_value); 
   const  header = table.getHeader();
   for(var i=0; i<row.length; i++) {
-    html += `<tr><td>${header[i]}</td> <td>${row[i]}</td></tr>`
+    html += `<tr><td>${i+1}</td> <td>${header[i]}</td> <td>${row[i]}</td></tr>`
   }
   html += "</table>"
   document.getElementById("record").innerHTML = html;
