@@ -27,7 +27,8 @@
 
 ,"calendar":{
   "text":[
-     ["","","<p id='weeks' class='calendar'>replace with calendar</p>"]
+     ["","","<p id='weeks' class='calendar'></p>"]
+    ,["","","<div class='popUpForm' id='popUpForm' hidden></div>"]
     ,["link"  ,"","/synergyData/calendar/page.css"]
     ,["script","","/synergyData/calendar/pageModule.js"]
   ]
