@@ -1,0 +1,26 @@
+{
+"headTitle":"Event"
+,"heading1": "Calender Event"
+,"updated": "2023-06-22"
+
+,"lists": {
+ "rows":["event"]
+}
+
+,"node": {
+
+
+"event":{
+  "text":[
+    ["","","<p id='description'></p>"]
+    ,["script","","/synergyData/event/pageModule.js"]
+  ]
+
+  ,"u_urls": [
+
+  ]
+}
+
+
+
+}}
