@@ -1,26 +1,16 @@
 // accounting
-import { dbClass     } from '/_lib/db/dbModule.js'      ;
-import { tableClass  } from '/_lib/db/tableModule.js'   ;
-import { csvClass    } from '/_lib/db/csvModule.js'     ;
-import { groupbyClass} from '/_lib/db/groupbyClass.js'  ;
 
-import { tableUxClass} from '/_lib/UX/tableUxModule.js' ;
-import { proxyClass  } from '/_lib/proxy/proxyModule.js';
+//import { csvClass    } from '/_lib/db/csvModule.js'       ;
+import { dbClass     } from '/_lib/db/dbModule.js'      ;
+//import { groupByClass} from '/_lib/db/groupByClass/.js' ;
+
+import { tableUXClass} from '/_lib/UX/tableUxModule.js'  ;
+import { menuClass   } from '/_lib/UX/menuModule.js'     ;
 
 import { reconcileClass  } from '/synergyData/accounting/1-pages/reconcile.js';
 import { statementsClass } from '/synergyData/accounting/1-pages/statements.js';
-
 import { dataClass       } from '/synergyData/accounting/1-pages/data.js';
 import { homeClass       } from '/synergyData/accounting/1-pages/home.js';
-
-
-/*
-
-import { loadyearClass   } from '/synergyData/accounting/1-pages/loadyear.js';
-
-<script type="text/javascript" src="\_lib\UX\loginClass.js"></script>
-<script type="text/javascript" src="\_lib\format\formatClass.js"></script>
-*/
 
 
 class accountingClass { // client side dbUXClass - for a page
@@ -29,16 +19,14 @@ class accountingClass { // client side dbUXClass - for a page
 
 constructor( // client side dbUXClass - for a page
    DOMid  
-){  
-  debugger;
+){
   this.#DOMid   = DOMid;
 
-  this.proxy    = new proxyClass(); // async load server files, json and html fragments
-  this.db       = new dbClass();    // contains journal, chart of accounts, and ending statement balance for accounts that need reconsiliation
-  this.format   = new formatClass();
-  this.login    = new loginClass();
-  
-  this.tableUx  = {}
+  this.db       = new dbClass();
+  this.table    = new tableClass();
+  //this.groupby  = new groupByClass();
+
+  this.tableUx           = {}  // create object ot hold all the 
   this.tableUx.balance   = new tableUxClass("details" ,"app.tableUx.balance"  );
   this.tableUx.accounts  = new tableUxClass("details" ,"app.tableUx.accounts" );
   this.tableUx.journal   = new tableUxClass("details" ,"app.tableUx.journal"  );

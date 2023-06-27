@@ -12,7 +12,8 @@
 
 "event":{
   "text":[
-    ["","","<p id='description'></p>"]
+     ["","","<h3 id='name'></h4>"]
+    ,["","","<p id='description'></p>"]
     ,["script","","/synergyData/event/pageModule.js"]
   ]
 

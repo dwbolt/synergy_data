@@ -9,7 +9,8 @@ async main(
     this.url   = url;
     this.graph = await app.proxy.getJSON(this.url);  
     this.edge  = app.urlParams.get('e'); // page to load
-
+    
+    document.getElementById("name"       ).innerHTML = this.graph.edges[ this.edge ].name;
     document.getElementById("description").innerHTML = this.graph.edges[ this.edge ].description;
 }
 }

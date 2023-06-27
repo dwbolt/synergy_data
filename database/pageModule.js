@@ -3,9 +3,6 @@ import { dbClass     } from '/_lib/db/dbModule.js'        ;
 import { tableUxClass} from '/_lib/UX/tableUxModule.js'   ;
 import { menuClass   } from '/_lib/UX/menuModule.js'      ;
 
-import { proxyClass  } from '/_lib/proxy/proxyModule.js'  ;
-
-
 class dbUXClass { // client side dbUXClass - SPA (Single Page App)
 
   /*
@@ -33,7 +30,6 @@ constructor( // client side dbUXClass - for a page
     this.#DOMid_table = DOMid_table; // where on the page the table interacts with the use
 
     this.db       = new dbClass(this.#DOMid_db ,"app.page.tableUX");
-    this.proxy    = new proxyClass();
     this.menu     = new menuClass("menu_page");
     this.tableUX  = new tableUxClass("tableUXDOM","app.page.tableUX");
     this.tableUX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
@@ -52,7 +48,7 @@ async main(){ // client side dbUXClass - for a page
     // load list of databases available
     let obj;
     do {
-      obj  = await this.proxy.getJSONwithError(this.#url);   // get list of databases
+      obj  = await app.proxy.getJSONwithError(this.#url);   // get list of databases
       if(obj.json === null) {
         alert("missing or bad database/_.json, replacing with test file");
         // missing or ill formed json file, so store an empty good one 
