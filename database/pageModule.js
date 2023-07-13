@@ -203,12 +203,12 @@ table_dialog_process(  // client side dbUXClass - for a page
 display_tables(   // client side dbUXClass
   DOM) { 
     // user clicked on table, so show it.
-    this.tableUX.setColumnFormat(   0, 'onclick="app.page.showForm(this)"');   // assume primary key is 0 -  needs to be done in code
-    this.tableUX.setColumnTransform(0, app.page.displayIndex              );   // // style it like a hyper link so it will get clicked on.
+    this.tableUX.setColumnFormat(   0, 'onclick="app.page.recordShow(this)"');   // assume primary key is 0 -  needs to be done in code
+    this.tableUX.setColumnTransform(0, app.page.displayIndex              );   // style it like a hyper link so it will get clicked on.
     
-    this.tableUX.setModel(this.db,  DOM.value );
+    this.tableUX.setModel(this.db,  DOM.value                             );   // attach data to viewer
     const table          = this.tableUX.getModel();
-    this.tableUX.display(table.PK_get());           // display table
+    this.tableUX.display(table.PK_get()                                   );   // display table
     this.buttonsShow("New")
 }
 
@@ -246,10 +246,10 @@ async saveDB( // client side dbUXClass - for a page
 }
 
 
-showForm(  // client side dbUXClass - for a page
+recordShow(  // client side dbUXClass - for a page
   element // dom element
 ){
-  // showForm
+  // recordShow
   let html = "<table>";
   const table             = this.tableUX.getModel()  // get tableClass being displayed
   if (element) {
@@ -258,8 +258,24 @@ showForm(  // client side dbUXClass - for a page
   }
   const  row = table.PK_get(this.#primary_key_value); 
   const  header = table.getHeader();
-  for(var i=0; i<row.length; i++) {
-    html += `<tr><td>${i+1}</td> <td>${header[i]}</td> <td>${row[i]}</td></tr>`
+  let rowValue,location;
+  for(var i=0; i<header.length; i++) {
+    location = table.get_field(i,"location");
+    if (typeof(location) === "number") {
+      rowValue = row[i];
+    } else {
+      // assume multi
+      rowValue = "";
+      let multi = table.get_multi(this.#primary_key_value, i);
+      for(let ii=0; ii<multi.length; ii++){
+        rowValue += `${multi[ii][0]}:${multi[ii][1]} - ${multi[ii][2]} <br>`;
+      }
+    }
+
+    if (typeof(rowValue) === "undefined") {
+      rowValue = "";
+    }
+    html += `<tr><td>${i+1}</td> <td>${header[i]}</td> <td>${rowValue}</td></tr>`
   }
   html += "</table>"
   document.getElementById("record").innerHTML = html;
@@ -279,21 +295,42 @@ recordEdit(  // client side dbUXClass
     table.PK_get(this.#primary_key_value) :
     table.bufferGet(0));  // hard code for one record case 
   const header = table.getHeader();
-
-  for(var i=0; i<row.length; i++) {
-    if (i === 0) {
+  let multi_value,location,type;
+  for(var i=0; i<header.length; i++) {
+    location = table.get_field(i,"location");
+    type     = table.get_field(i,"type");
+    if (type === "PK") {
       // do not allow editing of primary key
-      html += `<tr><td>${header[i]}</td> <td>${row[i]}</td></tr>`
+      html += `<tr><td>${header[i]}</td> <td>${row[location]}</td></tr>`
       this.#primary_key_value = row[i];
     } else {
-      html += `<tr><td>${header[i]}</td> <td><input id='edit-${i}' type='text' value='${row[i]}'></td></tr>`
+      if (location==="multi") {
+        // multi value
+        let multi = table.get_multi(this.#primary_key_value, i);
+        html += `<tr><td>${header[i]}</td> <td>`;
+        for(let ii=0; ii<multi.length; ii++){
+          html += 
+          `<input id='edit-${type}-label-${ii}'   type='text' value='${multi[ii][0]}'></input>
+           <input id='edit-${type}-value-${ii}'   type='text' value='${multi[ii][1]}'></input>
+           <input id='edit-${type}-comment-${ii}' type='text' value='${multi[ii][2]}'></input><br>
+          `
+        }
+        html += "</td></tr>";
+      } else {
+        // single value
+        let value = row[location];
+        if (typeof(value) === "undefined") {
+          value="";  // assume string, code neeed to init default type.
+        }
+        html += `<tr><td>${header[i]}</td> <td><input id='edit-${i}' type='text' value='${value}'></td></tr>`
+      }
     }
-
   }
-  html += "</table>"
+  html += "</table>";
   document.getElementById("record").innerHTML = html;
   this.buttonsShow("Save Cancel");
 }
+
 
 recordSave(){  // client side dbUXClass - for a page
   // save to memory
@@ -302,17 +339,36 @@ recordSave(){  // client side dbUXClass - for a page
   const rowEdited = [];
 
   // fill rowEdited with values from edit form
-  for(var i=0; i<row.length; i++)  {
+  const header = table.getHeader();
+  for(var i=0; i<header.length; i++)  {
+    // walk the form 
+    let location = table.get_field(i,"location");   
+    if (typeof(location) === "number") {
+      // single value
       let edit = document.getElementById(`edit-${i}`);
       if (edit) {
         // value input
         rowEdited[i] = edit.value;
       }
+    } else {
+      // multi value
+      let type     = table.get_field(i,"type"); // PK, string, number, phone, url
+      rowEdited[i] = [];                        // start empty, build from form
+      let ii=0;
+      let label = document.getElementById(`edit-${type}-label-${0}`);
+      while (label) {
+        let value   = document.getElementById(`edit-${type}-value-${ii}`  );
+        let comment = document.getElementById(`edit-${type}-comment-${ii}`);
+        rowEdited[i].push([label.value, value.value, comment.value]);
+        ii++;
+        label = document.getElementById(`edit-${type}-label-${ii}`  );
+      }
+    }
   }
 
   table.save2memory(this.#primary_key_value, rowEdited);
   this.show_changes();
-  this.showForm();
+  this.recordShow();
 }
 
 

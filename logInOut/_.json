@@ -9,44 +9,32 @@
 ]
 
 ,"lists": {
-   "login"  : ["demo","login"]
+   "login"  : ["login"]
   ,"userAdd": ["userAdd"]
 }
 
 ,"node": {
 
 "login":{
-    "text":[
-        ["" ,"" ,"<p id='loginX'></p>"]
-       ,["p","","<a href='/app.html?p=logInOut&b=userAdd'>Create your own login</a>"]
-       ,["script","","/synergyData/logInOut/pageModule.js"]
-    ]
-  }
-
-  ,"demo":{
-    "text":[
-       ["p","","You can use the Demo accout to play with the system.  The data is the demo account can be changed by anyone using the demo account. Create an account if you want your data to be persistant"]
-    ]
-   
-    ,"u_pictures": [
-    ]
-   
-    ,"u_urls": [
-    ] 
-  }
-
-  ,"userAdd":{
-    "text":[
-        ["","","<p id='userAddForm'></p>"]
-       ,["p","","Create a login if you are willing to be a beta tester.  "]
-       ,["eval","","app.login.buildFormUserAdd(`userAddForm`)"]
-    ]
-   
-    ,"u_pictures": [
-    ]
-   
-    ,"u_urls": [
-    ] 
-  }
- }
+  "text":[
+      ["" ,"" ,"<p id='loginX'></p>"]
+      ,["p","","<a href='/app.html?p=logInOut&b=userAdd'>Create your own login</a>"]
+      ,["script","","/synergyData/logInOut/pageModule.js"]
+  ]
 }
+
+,"userAdd":{
+  "text":[
+      ["","","<p id='userAddForm'></p>"]
+      ,["p","","Create a login if you are willing to be a beta tester.  "]
+      ,["eval","","app.login.buildFormUserAdd(`userAddForm`)"]
+  ]
+  
+  ,"u_pictures": [
+  ]
+  
+  ,"u_urls": [
+  ] 
+}
+
+}}

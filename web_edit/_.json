@@ -1,0 +1,50 @@
+{
+"headTitle":"Synergy"
+,"heading1": "WebEdit"
+,"updated": "2023-07-13"
+
+,"buttons":[
+   {"button":"Edit-Idex.html"   ,"id":"edit", "onclick":"app.display(this)"}
+  ,{"button":"intro"            ,"id":"intro"   , "onclick":"app.display(this)"}
+]
+
+
+,"lists": {
+   "intro" : ["intro","nextsteps"]
+  ,"edit"  : ["edit"]
+}
+
+,"node": {
+
+"intro":{
+  "text":[
+    ["load","","/synergyData/database/intro.html"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+,"edit":{
+  "text":[
+     ["load"  ,"", "/synergyData/web_edit/pageModule.html"]
+    ,["script","", "/synergyData/web_edit/pageModule.js"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+,"nextsteps":{
+  "text":[
+     ["h3","","Next steps"]
+    ,["","","<ol>"]
+    ,["li","","test"]
+    ,["","","</ol>"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+}}

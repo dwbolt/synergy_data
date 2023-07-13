@@ -12,7 +12,7 @@
 
 ,"lists": {
    "intro"   : ["intro"]
-  ,"database": ["menu","table","record","changes","nextsteps"]
+  ,"database": ["alpha","menu","table","record","changes","nextsteps"]
 }
 
 ,"node": {
@@ -26,10 +26,21 @@
   ]
 }
 
+,"alpha":{
+  "text":[
+     ["h3","","Alpha"]
+    ,["p","","Alpha version software is unstable, keep backups csv files of anythig you do not want to lose."]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+
 ,"menu":{
   "text":[
      ["h3","","menu"]
-    ,["","","<a target='blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.wozp6kicg5t1'>comment</a> <br><p id='menu_page'></p><p id='menu_dialog'></p>"]
+    ,["","","<a target='blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.wozp6kicg5t1'>comment</a> <br>  <p id='menu_page'></p><p id='menu_dialog'></p>"]
     ,["script","","/synergyData/database/pageModule.js"]
   ]
 
