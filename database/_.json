@@ -12,7 +12,7 @@
 
 ,"lists": {
    "intro"   : ["intro"]
-  ,"database": ["alpha","menu","table","record","changes","nextsteps"]
+  ,"database": ["alpha","menu","table","record","link","table2","changes","nextsteps"]
 }
 
 ,"node": {
@@ -50,6 +50,16 @@
 
 
 ,"table":{
+  "text":[
+     ["h3","","Selected Table"]
+    ,["","","<a target='_blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.2odvck1w1gfa'>comments</a> <br><div id='tableUXDOM'>table</div>"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
+,"table2":{
   "text":[
      ["h3","","Selected Table"]
     ,["","","<a target='_blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.2odvck1w1gfa'>comments</a> <br><div id='tableUXDOM'>table</div>"]

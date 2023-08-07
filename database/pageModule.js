@@ -60,7 +60,7 @@ async main(){ // client side dbUXClass - for a page
           }`
           ,this.#url)
       }
-    } while (obj.json === null);
+    } while (obj.json === null);  // repeat until we load a database
 
     this.#json_db  = obj.json;   // get list of databases
     document.getElementById("footer").innerHTML = ""    ;   // get rid of footer
@@ -261,6 +261,27 @@ recordShow(  // client side dbUXClass - for a page
   let rowValue,location;
   for(var i=0; i<header.length; i++) {
     location = table.get_field(i,"location");
+
+    switch(location) {
+      case "row":
+        rowValue = row[i];
+        break;
+      case "column":
+        rowValue = table.get_column(this.#primary_key_value,i);
+        break;
+      case "multi":
+        rowValue = "";
+        let multi = table.get_multi(this.#primary_key_value, i);
+        for(let ii=0; ii<multi.length; ii++){
+          rowValue += `${multi[ii][0]}:${multi[ii][1]} - ${multi[ii][2]} <br>`;
+        }
+        break;
+      default:
+        // error
+        alert(`error class="dbUXClass" method="recordShow"`);
+    }
+
+/*
     if (typeof(location) === "number") {
       rowValue = row[i];
     } else {
@@ -271,7 +292,7 @@ recordShow(  // client side dbUXClass - for a page
         rowValue += `${multi[ii][0]}:${multi[ii][1]} - ${multi[ii][2]} <br>`;
       }
     }
-
+*/
     if (typeof(rowValue) === "undefined") {
       rowValue = "";
     }

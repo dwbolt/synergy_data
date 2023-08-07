@@ -18,7 +18,7 @@
 
 "intro":{
   "text":[
-    ["load","","/synergyData/database/intro.html"]
+    ["load","","/synergyData/web_edit/intro.html"]
   ]
 
   ,"u_urls": [
@@ -39,7 +39,7 @@
   "text":[
      ["h3","","Next steps"]
     ,["","","<ol>"]
-    ,["li","","test"]
+    ,["li","","multi file support"]
     ,["","","</ol>"]
   ]
 
