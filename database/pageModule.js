@@ -235,7 +235,7 @@ loadLocalCSV( // client side dbUXClass - for a page
       this.db.displayMenu("menu_page_table","app.page.display_tables(this)"); // display tables in database
     };
     fr.readAsText( element.files[0] ); // will only read first file selected
-  }
+}
 
 
 async saveDB( // client side dbUXClass - for a page
@@ -281,18 +281,6 @@ recordShow(  // client side dbUXClass - for a page
         alert(`error class="dbUXClass" method="recordShow"`);
     }
 
-/*
-    if (typeof(location) === "number") {
-      rowValue = row[i];
-    } else {
-      // assume multi
-      rowValue = "";
-      let multi = table.get_multi(this.#primary_key_value, i);
-      for(let ii=0; ii<multi.length; ii++){
-        rowValue += `${multi[ii][0]}:${multi[ii][1]} - ${multi[ii][2]} <br>`;
-      }
-    }
-*/
     if (typeof(rowValue) === "undefined") {
       rowValue = "";
     }
@@ -322,29 +310,41 @@ recordEdit(  // client side dbUXClass
     type     = table.get_field(i,"type");
     if (type === "PK") {
       // do not allow editing of primary key
-      html += `<tr><td>${header[i]}</td> <td>${row[location]}</td></tr>`
+      html += `<tr><td>${header[i]}</td> <td>${row[table.get_field(i,"param")]}</td></tr>`
       this.#primary_key_value = row[i];
     } else {
-      if (location==="multi") {
-        // multi value
-        let multi = table.get_multi(this.#primary_key_value, i);
-        html += `<tr><td>${header[i]}</td> <td>`;
-        for(let ii=0; ii<multi.length; ii++){
-          html += 
-          `<input id='edit-${type}-label-${ii}'   type='text' value='${multi[ii][0]}'></input>
-           <input id='edit-${type}-value-${ii}'   type='text' value='${multi[ii][1]}'></input>
-           <input id='edit-${type}-comment-${ii}' type='text' value='${multi[ii][2]}'></input><br>
-          `
-        }
-        html += "</td></tr>";
-      } else {
-        // single value
-        let value = row[location];
-        if (typeof(value) === "undefined") {
-          value="";  // assume string, code neeed to init default type.
-        }
-        html += `<tr><td>${header[i]}</td> <td><input id='edit-${i}' type='text' value='${value}'></td></tr>`
+      let value;  
+      switch(location) {
+        case "multi":
+          // multi value
+          let multi = table.get_multi(this.#primary_key_value, i);
+          html += `<tr><td>${header[i]}</td> <td>`;
+          for(let ii=0; ii<multi.length; ii++){
+            html += 
+            `<input id='edit-${type}-label-${ii}'   type='text' value='${multi[ii][0]}'></input>
+            <input id='edit-${type}-value-${ii}'   type='text' value='${multi[ii][1]}'></input>
+            <input id='edit-${type}-comment-${ii}' type='text' value='${multi[ii][2]}'></input><br>
+            `
+          }
+          html += "</td></tr>";
+          break;
+        case "row":
+          // single value
+          value = row[table.get_field(i,"param")];
+          if (typeof(value) === "undefined") {
+            value="";  // assume string, code neeed to init default type.
+          }
+          html += `<tr><td>${header[i]}</td> <td><input id='edit-${i}' type='text' value='${value}'></td></tr>`
+          break;
+        case "column":
+          // single value
+          value = table.get_column(this.#primary_key_value,i);
+          html += `<tr><td>${header[i]}</td> <td><input id='edit-${i}' type='text' value='${value}'></td></tr>`
+          break;
+        default:
+          // 
       }
+      
     }
   }
   html += "</table>";

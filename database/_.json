@@ -12,7 +12,7 @@
 
 ,"lists": {
    "intro"   : ["intro"]
-  ,"database": ["alpha","menu","table","record","link","table2","changes","nextsteps"]
+  ,"database": ["alpha","menu","table","record","relations","changes","nextsteps"]
 }
 
 ,"node": {
@@ -59,15 +59,17 @@
   ]
 }
 
-,"table2":{
+
+,"relations":{
   "text":[
-     ["h3","","Selected Table"]
-    ,["","","<a target='_blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.2odvck1w1gfa'>comments</a> <br><div id='tableUXDOM'>table</div>"]
+     ["h3","","Relations"]
+    ,["","","<div id='tableUXRelations'>table</div>"]
   ]
 
   ,"u_urls": [
   ]
 }
+
 
 ,"record":{
   "text":[
@@ -107,20 +109,8 @@
     ,["h4","","Selected Record"]
     ,["","","<a target='_blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.dvq81zw9k4fx'>comments</a><ol>"]
 
-    ,["li","","dup button on form"]
-    ,["li","","edit - numbers, dates, money"]
-    ,["","","</ol>"]
+    ,["load","","/synergyData/database/next_steps.html"]
 
-    ,["h3","","Done"]
-    ,["","","<ol>"]
-    ,["li","","delete button on form - removes from PK and added to delete, does not remove data"]
-    ,["li","","CSV import - auto add id if does not exist"]
-    ,["li","","add new button on show form"]
-    ,["li","","download filtered list not the hold table"]
-    ,["li","","edit - text"]
-    ,["li","","Add  - text"]
-    ,["li","","clearing filter should refresh entire table"]
-    ,["","","</ol>"]
   ]
 
   ,"u_urls": [
