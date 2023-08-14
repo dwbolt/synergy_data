@@ -3,6 +3,7 @@ import { dbClass     } from '/_lib/db/dbModule.js'        ;
 import { tableUxClass} from '/_lib/UX/tableUxModule.js'   ;
 import { menuClass   } from '/_lib/UX/menuModule.js'      ;
 
+
 class dbUXClass { // client side dbUXClass - SPA (Single Page App)
 
   /*
@@ -19,6 +20,7 @@ class dbUXClass { // client side dbUXClass - SPA (Single Page App)
   #primary_key_value
   #edit_type          // true -> table       false -> buffer
 
+
 constructor( // client side dbUXClass - for a page
     dir    // user directory that database is in
    ,DOMid_db     // 
@@ -34,54 +36,59 @@ constructor( // client side dbUXClass - for a page
     this.tableUX  = new tableUxClass("tableUXDOM","app.page.tableUX");
     this.tableUX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
     this.tableUX.setRowNumberVisible(false);
+
+    
+    this.tableUXRelations  = new tableUxClass("tableUXRelations","app.page.tableUXRelations");
+    this.tableUXRelations.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
+    this.tableUXRelations.setRowNumberVisible(false);
   }
 
 
 async main(){ // client side dbUXClass - for a page
   // user opened database app
-    // make sure user is logged in
-    if (! await app.login.getStatus()) {
-        alert("please log before using the database")
-        window.location.replace("app.html?p=logInOut");
+  // make sure user is logged in
+  if (! await app.login.getStatus()) {
+      alert("please log before using the database")
+      window.location.replace("app.html?p=logInOut");
+  }
+
+  // load list of databases available
+  let obj;
+  do {
+    obj  = await app.proxy.getJSONwithError(this.#url);   // get list of databases
+    if(obj.json === null) {
+      alert("missing or bad database/_.json, replacing with test file");
+      // missing or ill formed json file, so store an empty good one 
+      await app.proxy.RESTpost(
+        `{
+          "meta":{
+            "databases": {"personal"   : {"location":"personal"}}
+            }
+        }`
+        ,this.#url)
     }
+  } while (obj.json === null);  // repeat until we load a database
 
-    // load list of databases available
-    let obj;
-    do {
-      obj  = await app.proxy.getJSONwithError(this.#url);   // get list of databases
-      if(obj.json === null) {
-        alert("missing or bad database/_.json, replacing with test file");
-        // missing or ill formed json file, so store an empty good one 
-        await app.proxy.RESTpost(
-          `{
-            "meta":{
-              "databases": {"personal"   : {"location":"personal"}}
-              }
-          }`
-          ,this.#url)
-      }
-    } while (obj.json === null);  // repeat until we load a database
+  this.#json_db  = obj.json;   // get list of databases
+  document.getElementById("footer").innerHTML = ""    ;   // get rid of footer
 
-    this.#json_db  = obj.json;   // get list of databases
-    document.getElementById("footer").innerHTML = ""    ;   // get rid of footer
+  // build database menu
+  const db       = this.#json_db.meta.databases;          
+  const dbkey    = Object.keys(db);
+  let html = `<select size="4" onclick="app.page.database_select(this)">`;
+  // build list of databases to choose
+  for(let i=0; i<dbkey.length; i++ ) {
+    html += `<option value="${dbkey[i]}">${dbkey[i]}</option>`;
+  }
+  html += "</select>"
 
-    // build database menu
-    const db       = this.#json_db.meta.databases;          
-    const dbkey    = Object.keys(db);
-    let html = `<select size="4" onclick="app.page.database_select(this)">`;
-    // build list of databases to choose
-    for(let i=0; i<dbkey.length; i++ ) {
-      html += `<option value="${dbkey[i]}">${dbkey[i]}</option>`;
-    }
-    html += "</select>"
-
-    // display menu
-    this.menu.add(`
-      <td>
-      <a onclick="app.page.database_dialog()">Databases</a><br>
-      ${html}
-      </td>
-      `);
+  // display menu
+  this.menu.add(`
+    <td>
+    <a onclick="app.page.database_dialog()">Databases</a><br>
+    ${html}
+    </td>
+    `);
 }
 
 
@@ -107,8 +114,55 @@ async database_select( // client side dbUXClass
   </td>
   `);
   this.db.displayMenu("menu_page_table","app.page.display_tables(this)"); // display tables in database
+
+
+  // create relation index
+  this.relation_creat_index();
   }
 
+
+relation_creat_index( // client side dbUXClass
+){
+  /* walk relation_table
+  this.relation_index = {
+    "table1":{
+      "pk1":[list of pks into relation]
+      ...
+      "pkN":[list of pks into relation ]
+
+     }
+    ,"tableN":{...}
+  }
+  */
+  this.relation_index = {};
+  const relations = this.db.getTable("relations");
+  const pks       = relations.get_PK();    // array of PK keys for entire table;
+  for(let i=0; i< pks.length; i++) {
+    let row = relations.get_object(pks[i]);  // row as a json object
+    this.relation_add_PK(row.id, row.table_1, row.PK_1);
+    this.relation_add_PK(row.id, row.table_2, row.PK_2);
+  }
+}
+
+
+relation_add_PK(  // client side dbUXClass
+   id          // relation id
+  ,table_name  // of relation
+  ,pk          // primary key of table
+
+){
+  if (typeof(this.relation_index[table_name]) === "undefined") {
+    // create empty object
+    this.relation_index[table_name] = {};
+  }
+
+  if (typeof(this.relation_index[table_name][pk]) === "undefined") {
+    // create empty array
+    this.relation_index[table_name][pk] = []; 
+  }
+
+  this.relation_index[table_name][pk].push(id);
+}
 
 database_dialog(  // client side dbUXClass
 
@@ -203,14 +257,32 @@ table_dialog_process(  // client side dbUXClass - for a page
 display_tables(   // client side dbUXClass
   DOM) { 
     // user clicked on table, so show it.
-    this.tableUX.setColumnFormat(   0, 'onclick="app.page.recordShow(this)"');   // assume primary key is 0 -  needs to be done in code
-    this.tableUX.setColumnTransform(0, app.page.displayIndex              );   // style it like a hyper link so it will get clicked on.
-    
-    this.tableUX.setModel(this.db,  DOM.value                             );   // attach data to viewer
-    const table          = this.tableUX.getModel();
-    this.tableUX.display(table.PK_get()                                   );   // display table
+    this.tableUX.setColumnFormat(   0, 'onclick="app.page.recordShow(this)"');  // assume primary key is 0 -  needs to be done in code
+    this.tableUX.setColumnTransform(0, app.page.displayIndex                );  // style it like a hyper link so it will get clicked on.
+    this.tableUX.setModel(this.db,  DOM.value                               );  // attach data to viewer
+    const table = this.tableUX.getModel();
+    this.tableUX.display(table.PK_get()                                     );   // display table
     this.buttonsShow("New")
 }
+
+
+
+display_relations(   // client side dbUXClass
+  ) {   
+    // user clicked on table, so show it.
+   // this.tableUXRelations.setColumnFormat(   0, 'onclick="app.page.recordShow(this)"');  // assume primary key is 0 -  needs to be done in code
+    this.tableUXRelations.setColumnTransform(0, app.page.displayIndex                );  // style it like a hyper link so it will get clicked on.
+    this.tableUXRelations.setModel(this.db,  "relations"                             );  // attach data to viewer
+    const table = this.tableUXRelations.getModel();
+    // get list of relations from relation_index
+    let array = this.relation_index[this.tableUX.tableName][this.#primary_key_value];
+    if(!array) {
+      // convert undevined to empty array
+      array = [];
+    }
+    this.tableUXRelations.display( array);   // display table
+}
+
 
 
 displayIndex(// client side dbUXClass
@@ -250,8 +322,8 @@ recordShow(  // client side dbUXClass - for a page
   element // dom element
 ){
   // recordShow
-  let html = "<table>";
   const table             = this.tableUX.getModel()  // get tableClass being displayed
+  let html = `Table: ${this.tableUX.tableName}<br><table>`;
   if (element) {
     // user clicked on elemnt, remember primary key for other record methodes
     this.#primary_key_value = parseInt(element.innerText,10); 
@@ -291,6 +363,10 @@ recordShow(  // client side dbUXClass - for a page
 
   // show buttons
   this.buttonsShow("New Duplicate Edit  Delete Cancel");
+
+  // show relations
+  // need to set filters to only things connected to record
+  this.display_relations("tableUXRelations");
 }
 
 
@@ -397,7 +473,7 @@ show_changes(){ // client side dbUXClass - for a page
   let html = "";
   const table        = this.tableUX.getModel();  // get tableClass being displayed
   const changes      = table.changes_get();
-  const primary_keys = Object.keys(changes);
+  const primary_keys = Object.keys(changes);table
   for(var i=0; i<primary_keys.length; i++) {
     let key = primary_keys[i]
     html += `key=${key}<br>`;

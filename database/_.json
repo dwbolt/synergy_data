@@ -63,7 +63,7 @@
 ,"relations":{
   "text":[
      ["h3","","Relations"]
-    ,["","","<div id='tableUXRelations'>table</div>"]
+    ,["","","<div id='tableUXRelations'></div>"]
   ]
 
   ,"u_urls": [
