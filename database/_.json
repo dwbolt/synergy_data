@@ -40,7 +40,7 @@
 ,"menu":{
   "text":[
      ["h3","","menu"]
-    ,["","","<a target='blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.wozp6kicg5t1'>comment</a> <br>  <p id='menu_page'></p><p id='menu_dialog'></p>"]
+    ,["","","<p id='menu_page'></p><p id='menu_dialog'></p>"]
     ,["script","","/synergyData/database/pageModule.js"]
   ]
 
@@ -52,7 +52,7 @@
 ,"table":{
   "text":[
      ["h3","","Selected Table"]
-    ,["","","<a target='_blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.2odvck1w1gfa'>comments</a> <br><div id='tableUXDOM'>table</div>"]
+    ,["","","<div id='table1UXDOM'>table</div><div id='table2UXDOM'>table</div>"]
   ]
 
   ,"u_urls": [

@@ -31,13 +31,20 @@ constructor( // client side dbUXClass - for a page
     this.#DOMid_db    = DOMid_db   ; // where on the page the database interacts with the user
     this.#DOMid_table = DOMid_table; // where on the page the table interacts with the use
 
-    this.db       = new dbClass(this.#DOMid_db ,"app.page.tableUX");
-    this.menu     = new menuClass("menu_page");
-    this.tableUX  = new tableUxClass("tableUXDOM","app.page.tableUX");
-    this.tableUX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
-    this.tableUX.setRowNumberVisible(false);
+    this.db        = new dbClass(this.#DOMid_db ,"app.page.tableUX");
+    this.menu      = new menuClass("menu_page");
 
-    
+    // setup  this.table1UX
+    this.table1UX  = new tableUxClass("table1UXDOM","app.page.table1UX");
+    this.table1UX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
+    this.table1UX.setRowNumberVisible(false);
+
+    // setup  this.table2UX
+    this.table2UX  = new tableUxClass("table2UXDOM","app.page.table2UX");
+    this.table2UX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
+    this.table2UX.setRowNumberVisible(false);
+
+    // setup  this.tableUXRelations
     this.tableUXRelations  = new tableUxClass("tableUXRelations","app.page.tableUXRelations");
     this.tableUXRelations.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
     this.tableUXRelations.setRowNumberVisible(false);
@@ -105,16 +112,24 @@ async database_select( // client side dbUXClass
 }
   await this.db.load(`${this.#url_dir}/${dom.value}/_.json`);   // load the database
 
-  // display table menu
+  // display table1 menu
   this.menu.deleteTo(1);   // remove menues to the right of database memnu
   this.menu.add(`
   <td>
-  <a onclick='app.page.table_dialog()'>Tables</a><br>
-  <div id='menu_page_table'></div>
+  <a onclick='app.page.table_dialog()'>Tables 1</a><br>
+  <div id='menu_page_table1'></div>
   </td>
   `);
-  this.db.displayMenu("menu_page_table","app.page.display_tables(this)"); // display tables in database
+  this.db.displayMenu("menu_page_table1","app.page.display_tables(this,'table1UX')"); // display tables in database
 
+  // display table2 menu
+  this.menu.add(`
+  <td>
+  <a onclick='app.page.table_dialog()'>Tables 2</a><br>
+  <div id='menu_page_table2'></div>
+  </td>
+  `);
+  this.db.displayMenu("menu_page_table2","app.page.display_tables(this,'table2UX')"); // display tables in database
 
   // create relation index
   this.relation_creat_index();
@@ -255,13 +270,24 @@ table_dialog_process(  // client side dbUXClass - for a page
 
 
 display_tables(   // client side dbUXClass
-  DOM) { 
+   DOM       // DOM.value is table user clicked on
+  ,tableUX   // string, a
+  ) { 
+
+    // hide 
+    if (tableUX  === "table1UX" ) {
+      this.table2UX.set_hidden(true);
+    } else {
+      this.table1UX.set_hidden(true);
+    }
+
     // user clicked on table, so show it.
-    this.tableUX.setColumnFormat(   0, 'onclick="app.page.recordShow(this)"');  // assume primary key is 0 -  needs to be done in code
-    this.tableUX.setColumnTransform(0, app.page.displayIndex                );  // style it like a hyper link so it will get clicked on.
-    this.tableUX.setModel(this.db,  DOM.value                               );  // attach data to viewer
-    const table = this.tableUX.getModel();
-    this.tableUX.display(table.PK_get()                                     );   // display table
+    this[tableUX].set_hidden(false);                                             // show table
+    this[tableUX].setColumnFormat(   0, 'onclick="app.page.recordShow(this)"');  // assume primary key is 0 -  needs to be done in code
+    this[tableUX].setColumnTransform(0, app.page.displayIndex                );  // style it like a hyper link so it will get clicked on.
+    this[tableUX].setModel(this.db,  DOM.value                               );  // attach data to viewer
+    const table = this[tableUX].getModel();
+    this[tableUX].display(table.PK_get()                                     );   // display table
     this.buttonsShow("New")
 }
 
