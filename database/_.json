@@ -74,17 +74,14 @@
 ,"record":{
   "text":[
     ["h3","","Selected Record"]
-    ,["","","<a target='_blank' href='https://docs.google.com/document/d/1mjRLX7CUspwhvYVRCcYtifRRIUsOs7BGNx0gy061v5E/edit#bookmark=id.e8lg9ienjwmx'>comments</a><br><div id='record'></div>"]
-    ,["","","<p id='buttons_record'>"]
-    ,["","","<input hidden type='button' value='New'       onclick='app.page.recordNew()'>  "]
-    ,["","","<input hidden type='button' value='Add'       onclick='app.page.recordAdd()'>  "]
-    ,["","","<input hidden type='button' value='Duplicate' onclick='app.page.recordDuplicate()'> "]
+    ,["","","<div id='table1UXDOM_record'></div><br>"]
+    ,["","","<div id='table1UXDOM_record_buttons'></div><br>"]
 
-    ,["",""," &nbsp <input hidden type='button' value='Edit'      onclick='app.page.recordEdit(true)'> "]
-    ,["","","<input hidden type='button' value='Delete'    onclick='app.page.recordDelete()'> "]
-    ,["","","<input hidden type='button' value='Save'      onclick='app.page.recordSave()'> "]
-
-    ,["",""," &nbsp <input hidden type='button' value='Cancel'    onclick='app.page.recordCancel()'> </p>"]
+    ,["","","<div id='relationUXDOM_record_buttons'></div><br>"]
+    ,["","","<div id='table1UXDOM_record_buttons'></div><br>"]
+    
+    ,["","","<div id='table2UXDOM_record'></div><br>"]
+    ,["","","<div id='table2UXDOM_record_buttons'></div>"]
   ]
 
   ,"u_urls": [
