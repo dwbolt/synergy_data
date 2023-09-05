@@ -2,9 +2,8 @@
 
 //import { csvClass    } from '/_lib/db/csvModule.js'       ;
 import { dbClass     } from '/_lib/db/dbModule.js'      ;
-//import { groupByClass} from '/_lib/db/groupByClass/.js' ;
+import { tableUXClass} from '/_lib/db/tableUxModule.js' ;
 
-import { tableUXClass} from '/_lib/UX/tableUxModule.js'  ;
 import { menuClass   } from '/_lib/UX/menuModule.js'     ;
 
 import { reconcileClass  } from '/synergyData/accounting/1-pages/reconcile.js';

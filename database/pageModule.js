@@ -1,6 +1,7 @@
 import { csvClass    } from '/_lib/db/csvModule.js'       ;
 import { dbClass     } from '/_lib/db/dbModule.js'        ;
-import { tableUxClass} from '/_lib/UX/tableUxModule.js'   ;
+import { tableUxClass} from '/_lib/db/tableUxModule.js'   ;
+
 import { menuClass   } from '/_lib/UX/menuModule.js'      ;
 
 
