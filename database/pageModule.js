@@ -121,7 +121,7 @@ async database_select( // client side dbUXClass
   <div id='menu_page_table1'></div>
   </td>
   `);
-  this.db.displayMenu("menu_page_table1","app.page.display_tables(this,'table1UX')"); // display tables in database
+
 
   // display table2 menu
   this.menu.add(`
@@ -130,12 +130,18 @@ async database_select( // client side dbUXClass
   <div id='menu_page_table2'></div>
   </td>
   `);
-  this.db.displayMenu("menu_page_table2","app.page.display_tables(this,'table2UX')"); // display tables in database
+
 
   // create relation index
+  this.display_db_menu();
   this.relation_creat_index();
   }
 
+
+display_db_menu(){
+    this.db.displayMenu("menu_page_table1","app.page.display_tables(this,'table1UX')"); // display tables in database
+    this.db.displayMenu("menu_page_table2","app.page.display_tables(this,'table2UX')"); // display tables in database}
+}
 
 relation_creat_index( // client side dbUXClass
 ){
@@ -225,7 +231,7 @@ table_dialog(  // client side dbUXClass - for a page
   document.getElementById('menu_dialog').innerHTML =  `
   <table><tr><td>
   <b>Table Operation</b><br>
-  <select size="4" onclick="app.page.table_dialog_process(this)">
+  <select size="6" onclick="app.page.table_dialog_process(this)">
   <option value="new">New</option>
   <option value="delete">Delete</option>
   <option value="columns">Columns</option>
@@ -331,7 +337,7 @@ loadLocalCSV( // client side dbUXClass - for a page
       const table   = this.db.tableAdd(name);                           // create table and add to db
       const csv     = new csvClass(table);                              // create instace of CSV object
       csv.parseCSV(fr.result, "msg");                                   // parse loaded CSV file and put into table
-      this.db.displayMenu("menu_page_table","app.page.display_tables(this)"); // display tables in database
+      this.display_db_menu();
     };
     fr.readAsText( element.files[0] ); // will only read first file selected
 }
