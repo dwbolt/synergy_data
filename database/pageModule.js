@@ -295,7 +295,7 @@ display_tables(   // client side dbUXClass
     this[tableUX].setModel(this.db,  DOM.value                               );  // attach data to viewer
     const table = this[tableUX].getModel();
     this[tableUX].display(table.PK_get()                                     );   // display table
-    this.buttonsShow("New")
+    //this.buttonsShow("New")
 }
 
 
@@ -348,20 +348,6 @@ async saveDB( // client side dbUXClass - for a page
   ){
   await this.db.save();
   this.show_changes();
-}
-
-
-buttonsShow( // client side dbUXClass - for a page
-  // "New Add  Edit Duplicate Delete Save  Cancel"
-  s_values   // walk through id=Buttons and show all in the list   
-){  // client side dbUXClass - for a page
-  let button = document.getElementById("buttons_record").firstChild;
-  while(button) {
-    button.hidden = (s_values.includes(button.value) ? 
-      false  // show button
-    : true  )// hide button
-    button = button.nextSibling;
-  }
 }
 
 
