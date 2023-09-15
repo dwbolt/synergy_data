@@ -31,29 +31,29 @@ constructor( // client side dbUXClass - for a page
     this.#url         = `${dir}/_.json`;  // json file that contains meta data for databases
     this.#DOMid_db    = DOMid_db   ; // where on the page the database interacts with the user
     this.#DOMid_table = DOMid_table; // where on the page the table interacts with the use
-
-    this.db        = new dbClass(this.#DOMid_db ,"app.page.tableUX");
-    this.menu      = new menuClass("menu_page");
-
-    // setup  this.table1UX
-    this.table1UX  = new tableUxClass("table1UXDOM","app.page.table1UX");
-    this.table1UX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
-    this.table1UX.setRowNumberVisible(false);
-
-    // setup  this.table2UX
-    this.table2UX  = new tableUxClass("table2UXDOM","app.page.table2UX");
-    this.table2UX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
-    this.table2UX.setRowNumberVisible(false);
-
-    // setup  this.tableUXRelations
-    this.tableUXRelations  = new tableUxClass("tableUXRelations","app.page.tableUXRelations");
-    this.tableUXRelations.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
-    this.tableUXRelations.setRowNumberVisible(false);
   }
 
 
 async main(){ // client side dbUXClass - for a page
   // user opened database app
+  this.db        = new dbClass(this.#DOMid_db ,"app.page.tableUX");
+  this.menu      = new menuClass("menu_page");
+
+  // setup  this.table1UX
+  this.table1UX  = new tableUxClass("table1UXDOM","app.page.table1UX");
+  this.table1UX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
+  this.table1UX.setRowNumberVisible(false);
+
+  // setup  this.table2UX
+  this.table2UX  = new tableUxClass("table2UXDOM","app.page.table2UX");
+  this.table2UX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
+  this.table2UX.setRowNumberVisible(false);
+
+  // setup  this.tableUXRelations
+  this.tableUXRelations  = new tableUxClass("tableUXRelations","app.page.tableUXRelations");
+  this.tableUXRelations.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
+  this.tableUXRelations.setRowNumberVisible(false);
+
   // make sure user is logged in
   if (! await app.login.getStatus()) {
       alert("please log before using the database")
@@ -91,6 +91,7 @@ async main(){ // client side dbUXClass - for a page
   html += "</select>"
 
   // display menu
+  this.menu.init();
   this.menu.add(`
     <td>
     <a onclick="app.page.database_dialog()">Databases</a><br>
@@ -255,9 +256,10 @@ table_dialog_process(  // client side dbUXClass - for a page
       case "import":
         document.getElementById('dialog_detail').innerHTML = `
         <p><b>import csv file</b><br>
-        <input type='file' accept='.csv' onchange='app.page.loadLocalCSV(this)'><br>
+        <input type='file' accept='.csv' multiple="multiple" onchange='app.page.loadLocalCSV(this)'><br>
         <textarea id='msg'></textarea>
-        </p>`;
+        </p>
+        <p>imported CSV file will appear in above table list</p>`;
         break;
 
       case "new":
@@ -329,17 +331,25 @@ loadLocalCSV( // client side dbUXClass - for a page
     element  // DOM
     ) {
     
-    const fr = new FileReader();
-    fr.onload =  () => {
+    this.fr = new FileReader();
+
+    this.fr.onload =  () => {
       // call back function when file has finished loading
-      let name      = element.files[0].name;
+      let name      = element.files[this.i].name;
       name          = name.slice(0, name.length -4);                    // get rid of .csv in table name
       const table   = this.db.tableAdd(name);                           // create table and add to db
       const csv     = new csvClass(table);                              // create instace of CSV object
-      csv.parseCSV(fr.result, "msg");                                   // parse loaded CSV file and put into table
+      csv.parseCSV(this.fr.result, "msg");                                   // parse loaded CSV file and put into table
       this.display_db_menu();
+
+      this.i ++ // process next file import
+      if (this.i < element.files.length) {
+        this.fr.readAsText( element.files[this.i] ); // import next file
+      }
     };
-    fr.readAsText( element.files[0] ); // will only read first file selected
+
+    this.i = 0;
+    this.fr.readAsText( element.files[this.i] ); // read first file
 }
 
 
@@ -374,4 +384,5 @@ export {dbUXClass};
 
 
 app.page = new dbUXClass("/users/database","databaseDOM","tableDOM");  // access loggin users databases
+
 app.page.main();

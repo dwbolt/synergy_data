@@ -12,7 +12,7 @@
 
 ,"lists": {
    "intro"   : ["intro"]
-  ,"database": ["alpha","menu","table","record","relations","changes","nextsteps"]
+  ,"database": ["menu","table","record","relations","changes","nextsteps"]
 }
 
 ,"node": {
