@@ -12,7 +12,7 @@
 
 ,"lists": {
    "intro"   : ["intro"]
-  ,"database": ["menu","table","record","relations","changes","nextsteps"]
+  ,"database": ["database","search","table","record","relations","changes","nextsteps"]
 }
 
 ,"node": {
@@ -37,9 +37,9 @@
 }
 
 
-,"menu":{
+,"database":{
   "text":[
-     ["h3","","menu"]
+     ["h3","","Data Base"]
     ,["","","<p id='menu_page'></p><p id='menu_dialog'></p>"]
     ,["script","","/synergyData/database/pageModule.js"]
   ]
@@ -49,10 +49,20 @@
 }
 
 
+,"search":{
+  "text":[
+     ["h3","","Search, Sort and Sum"]
+    ,["","","<div id='table1UXDOM_sss'></div> <div id='table2UXDOM_sss'></div>"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
 ,"table":{
   "text":[
      ["h3","","Selected Table"]
-    ,["","","<div id='table1UXDOM'>table</div><div id='table2UXDOM'>table</div>"]
+    ,["","","<div id='table1UXDOM'></div> <div id='table2UXDOM'></div>"]
   ]
 
   ,"u_urls": [

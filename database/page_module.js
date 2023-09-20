@@ -3,7 +3,7 @@ import { dbClass     } from '/_lib/db/dbModule.js'        ;
 import { tableUxClass} from '/_lib/db/tableUxModule.js'   ;
 
 import { menuClass   } from '/_lib/UX/menuModule.js'      ;
-
+import {loginClass   } from '/_lib/UX/loginModule.js'     ;
 
 class dbUXClass { // client side dbUXClass - SPA (Single Page App)
 
@@ -27,6 +27,7 @@ constructor( // client side dbUXClass - for a page
    ,DOMid_db     // 
    ,DOMid_table  // 
 ){
+    this.login      = new loginClass();
     this.#url_dir     = dir;
     this.#url         = `${dir}/_.json`;  // json file that contains meta data for databases
     this.#DOMid_db    = DOMid_db   ; // where on the page the database interacts with the user
@@ -55,7 +56,7 @@ async main(){ // client side dbUXClass - for a page
   this.tableUXRelations.setRowNumberVisible(false);
 
   // make sure user is logged in
-  if (! await app.login.getStatus()) {
+  if (! await this.login.getStatus()) {
       alert("please log before using the database")
       window.location.replace("app.html?p=logInOut");
   }
@@ -279,6 +280,7 @@ table_dialog_process(  // client side dbUXClass - for a page
 
 
 display_tables(   // client side dbUXClass
+  // user clicked on a table 
    DOM       // DOM.value is table user clicked on
   ,tableUX   // table1UX or table2UX  - 
   ) { 
@@ -383,6 +385,3 @@ show_changes(){ // client side dbUXClass - for a page
 export {dbUXClass};
 
 
-app.page = new dbUXClass("/users/database","databaseDOM","tableDOM");  // access loggin users databases
-
-app.page.main();
