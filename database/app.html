@@ -57,7 +57,7 @@ var app={}; // will point to appClass
 </script>
 
 <script type="module">
-import  {dbUXClass}   from './page_module.js';
-app.page = new dbUXClass("/users/database","databaseDOM","tableDOM");  // access loggin users databases
-app.page.main();
+import  {dbUXClass}   from './spa_module.js';
+app = new dbUXClass("/users/database","databaseDOM","tableDOM");  // access loggin users databases
+app.main();
 </script>

@@ -1,9 +1,12 @@
-import { csvClass    } from '/_lib/db/csv_module.js'       ;
+/*  database spa (single page app */
+
+import { csvClass    } from '/_lib/db/csv_module.js'      ;
 import { dbClass     } from '/_lib/db/dbModule.js'        ;
 import { tableUxClass} from '/_lib/db/tableUxModule.js'   ;
 
 import { menuClass   } from '/_lib/UX/menuModule.js'      ;
 import {loginClass   } from '/_lib/UX/loginModule.js'     ;
+import {proxyClass   }   from '/_lib/proxy/proxyModule.js';
 
 class dbUXClass { // client side dbUXClass - SPA (Single Page App)
 
@@ -27,7 +30,8 @@ constructor( // client side dbUXClass - for a page
    ,DOMid_db     // 
    ,DOMid_table  // 
 ){
-    this.login      = new loginClass();
+    this.login        = new loginClass();
+    this.proxy        = new proxyClass();
     this.#url_dir     = dir;
     this.#url         = `${dir}/_.json`;  // json file that contains meta data for databases
     this.#DOMid_db    = DOMid_db   ; // where on the page the database interacts with the user
@@ -36,30 +40,36 @@ constructor( // client side dbUXClass - for a page
 
 
 async main(){ // client side dbUXClass - for a page
+
+  if (await this.login.getStatus()) {
+		// user logged in
+		document.getElementById("navigation").innerHTML = await this.proxy.getText("./menuUser.html") 
+		document.getElementById("userName"  ).innerHTML = `Home for: ${sessionStorage.nameFirst} ${sessionStorage.nameLast}`
+	} else {
+		// user not logged in
+		document.getElementById("navigation").innerHTML = await this.proxy.getText("./menu.html")
+    alert("please log before using the database");
+	}
+
+
   // user opened database app
-  this.db        = new dbClass(this.#DOMid_db ,"app.page.tableUX");
+  this.db        = new dbClass(this.#DOMid_db ,"app.tableUX");
   this.menu      = new menuClass("menu_page");
 
   // setup  this.table1UX
-  this.table1UX  = new tableUxClass("table1UXDOM","app.page.table1UX");
+  this.table1UX  = new tableUxClass("table1UXDOM","app.table1UX");
   this.table1UX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
   this.table1UX.setRowNumberVisible(false);
 
   // setup  this.table2UX
-  this.table2UX  = new tableUxClass("table2UXDOM","app.page.table2UX");
+  this.table2UX  = new tableUxClass("table2UXDOM","app.table2UX");
   this.table2UX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
   this.table2UX.setRowNumberVisible(false);
 
   // setup  this.tableUXRelations
-  this.tableUXRelations  = new tableUxClass("tableUXRelations","app.page.tableUXRelations");
+  this.tableUXRelations  = new tableUxClass("tableUXRelations","app.tableUXRelations");
   this.tableUXRelations.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
   this.tableUXRelations.setRowNumberVisible(false);
-
-  // make sure user is logged in
-  if (! await this.login.getStatus()) {
-      alert("please log before using the database")
-      window.location.replace("app.html?p=logInOut");
-  }
 
   // load list of databases available
   let obj;
@@ -84,7 +94,7 @@ async main(){ // client side dbUXClass - for a page
   // build database menu
   const db       = this.#json_db.meta.databases;          
   const dbkey    = Object.keys(db);
-  let html = `<select size="4" onclick="app.page.database_select(this)">`;
+  let html = `<select size="4" onclick="app.database_select(this)">`;
   // build list of databases to choose
   for(let i=0; i<dbkey.length; i++ ) {
     html += `<option value="${dbkey[i]}">${dbkey[i]}</option>`;
@@ -95,7 +105,7 @@ async main(){ // client side dbUXClass - for a page
   this.menu.init();
   this.menu.add(`
     <td>
-    <a onclick="app.page.database_dialog()">Databases</a><br>
+    <a onclick="app.database_dialog()">Databases</a><br>
     ${html}
     </td>
     `);
@@ -119,7 +129,7 @@ async database_select( // client side dbUXClass
   this.menu.deleteTo(1);   // remove menues to the right of database memnu
   this.menu.add(`
   <td>
-  <a onclick='app.page.table_dialog()'>Tables 1</a><br>
+  <a onclick='app.table_dialog()'>Tables 1</a><br>
   <div id='menu_page_table1'></div>
   </td>
   `);
@@ -128,7 +138,7 @@ async database_select( // client side dbUXClass
   // display table2 menu
   this.menu.add(`
   <td>
-  <a onclick='app.page.table_dialog()'>Tables 2</a><br>
+  <a onclick='app.table_dialog()'>Tables 2</a><br>
   <div id='menu_page_table2'></div>
   </td>
   `);
@@ -141,8 +151,8 @@ async database_select( // client side dbUXClass
 
 
 display_db_menu(){
-    this.db.displayMenu("menu_page_table1","app.page.display_tables(this,'table1UX')"); // display tables in database
-    this.db.displayMenu("menu_page_table2","app.page.display_tables(this,'table2UX')"); // display tables in database}
+    this.db.displayMenu("menu_page_table1","app.display_tables(this,'table1UX')"); // display tables in database
+    this.db.displayMenu("menu_page_table2","app.display_tables(this,'table2UX')"); // display tables in database}
 }
 
 relation_creat_index( // client side dbUXClass
@@ -194,7 +204,7 @@ database_dialog(  // client side dbUXClass
   document.getElementById('menu_dialog').innerHTML = `
   <table><tr><td>
   <b>Database Operation</b><br>
-  <select size="4" onclick="app.page.database_dialog_process(this)">
+  <select size="4" onclick="app.database_dialog_process(this)">
   <option value="new">New</option>
   <option value="delete">Delete</option>
   <option value="cancel">Cancel</option>
@@ -233,7 +243,7 @@ table_dialog(  // client side dbUXClass - for a page
   document.getElementById('menu_dialog').innerHTML =  `
   <table><tr><td>
   <b>Table Operation</b><br>
-  <select size="6" onclick="app.page.table_dialog_process(this)">
+  <select size="6" onclick="app.table_dialog_process(this)">
   <option value="new">New</option>
   <option value="delete">Delete</option>
   <option value="columns">Columns</option>
@@ -257,7 +267,7 @@ table_dialog_process(  // client side dbUXClass - for a page
       case "import":
         document.getElementById('dialog_detail').innerHTML = `
         <p><b>import csv file</b><br>
-        <input type='file' accept='.csv' multiple="multiple" onchange='app.page.loadLocalCSV(this)'><br>
+        <input type='file' accept='.csv' multiple="multiple" onchange='app.loadLocalCSV(this)'><br>
         <textarea id='msg'></textarea>
         </p>
         <p>imported CSV file will appear in above table list</p>`;
@@ -294,8 +304,8 @@ display_tables(   // client side dbUXClass
 
     this[tableUX].set_hidden(false);  // show tableUX clicked on                                   
 
-    this[tableUX].setColumnFormat(   0, `onclick="app.page['${tableUX}'].recordUX.show(this)"`);  // assume primary key is 0 -  needs to be done in code
-    this[tableUX].setColumnTransform(0, app.page.displayIndex                );  // style it like a hyper link so it will get clicked on.
+    this[tableUX].setColumnFormat(   0, `onclick="app['${tableUX}'].recordUX.show(this)"`);  // assume primary key is 0 -  needs to be done in code
+    this[tableUX].setColumnTransform(0, app.displayIndex                );  // style it like a hyper link so it will get clicked on.
     this[tableUX].setModel(this.db,  DOM.value                               );  // attach data to viewer
     const table = this[tableUX].getModel();
     this[tableUX].display(table.PK_get()                                     );   // display table
@@ -307,8 +317,8 @@ display_tables(   // client side dbUXClass
 display_relations(   // client side dbUXClass
   ) {   
     // user clicked on table, so show it.
-   // this.tableUXRelations.setColumnFormat(   0, 'onclick="app.page.recordShow(this)"');  // assume primary key is 0 -  needs to be done in code
-    this.tableUXRelations.setColumnTransform(0, app.page.displayIndex                );  // style it like a hyper link so it will get clicked on.
+   // this.tableUXRelations.setColumnFormat(   0, 'onclick="app.recordShow(this)"');  // assume primary key is 0 -  needs to be done in code
+    this.tableUXRelations.setColumnTransform(0, app.displayIndex                );  // style it like a hyper link so it will get clicked on.
     this.tableUXRelations.setModel(this.db,  "relations"                             );  // attach data to viewer
     const table = this.tableUXRelations.getModel();
     // get list of relations from relation_index
