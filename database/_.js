@@ -40,18 +40,17 @@ constructor( // client side dbUXClass - for a page
 
 
 async main(){ // client side dbUXClass - for a page
-
-  if (await this.login.getStatus()) {
+  if (await app.login.getStatus()) {
 		// user logged in
-		document.getElementById("navigation").innerHTML = await this.proxy.getText("./menuUser.html") 
-		document.getElementById("userName"  ).innerHTML = `Home for: ${sessionStorage.nameFirst} ${sessionStorage.nameLast}`
+		document.getElementById("navigation").innerHTML = await this.proxy.getText(`/synergyData/${app.pageName}/menu.html`) ;
+		document.getElementById("userName"  ).innerHTML = `User: ${localStorage.nameFirst} ${localStorage.nameLast}`
 	} else {
 		// user not logged in
 		document.getElementById("navigation").innerHTML = await this.proxy.getText("./menu.html")
-    alert("please log before using the database");
+    return;
 	}
 
-
+debugger
   // user opened database app
   this.db        = new dbClass(this.#DOMid_db ,"app.tableUX");
   this.menu      = new menuClass("menu_page");
@@ -72,11 +71,12 @@ async main(){ // client side dbUXClass - for a page
   this.tableUXRelations.setRowNumberVisible(false);
 
   // load list of databases available
-  let obj;
-  do {
-    obj  = await app.proxy.getJSONwithError(this.#url);   // get list of databases
+  const obj  = await app.proxy.getJSONwithError(this.#url);
+  //do {
+    ;   // get list of databases
     if(obj.json === null) {
-      alert("missing or bad database/_.json, replacing with test file");
+      alert(`error loading "${this.#url}"`);
+      /*
       // missing or ill formed json file, so store an empty good one 
       await app.proxy.RESTpost(
         `{
@@ -84,9 +84,10 @@ async main(){ // client side dbUXClass - for a page
             "databases": {"personal"   : {"location":"personal"}}
             }
         }`
-        ,this.#url)
+        ,this.#url)*/
+
     }
-  } while (obj.json === null);  // repeat until we load a database
+  //} while (obj.json === null);  // repeat until we load a database
 
   this.#json_db  = obj.json;   // get list of databases
   document.getElementById("footer").innerHTML = ""    ;   // get rid of footer
@@ -394,4 +395,5 @@ show_changes(){ // client side dbUXClass - for a page
 
 export {dbUXClass};
 
-
+app.spa = new dbUXClass("/user/database");  // need some parmeres
+app.spa.main();
