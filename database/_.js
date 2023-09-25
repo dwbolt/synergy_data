@@ -71,23 +71,11 @@ async main(){ // client side dbUXClass - for a page
 
   // load list of databases available
   const obj  = await app.proxy.getJSONwithError(this.#url);
-  //do {
-    ;   // get list of databases
-    if(obj.json === null) {
-      alert(`error loading "${this.#url}"`);
-      return;  // no point in going foward
-      /*
-      // missing or ill formed json file, so store an empty good one 
-      await app.proxy.RESTpost(
-        `{
-          "meta":{
-            "databases": {"personal"   : {"location":"personal"}}
-            }
-        }`
-        ,this.#url)*/
-
-    }
-  //} while (obj.json === null);  // repeat until we load a database
+  // get list of databases
+  if(obj.json === null) {
+    alert(`error loading "${this.#url}"`);
+    return;  // no point in going foward
+  }
 
   this.#json_db  = obj.json;   // get list of databases
   document.getElementById("footer").innerHTML = ""    ;   // get rid of footer
