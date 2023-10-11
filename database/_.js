@@ -112,7 +112,8 @@ async database_select( // client side dbUXClass
     alert("please log before using the database")
     window.location.replace("app.html?p=logInOut");
 }
-  await this.db.load(`${this.#url_dir}/${dom.value}/_.json`);   // load the database
+  const dburl = `${this.#url_dir}/${dom.value}/_.json`;
+  await this.db.load(dburl);   // load the database
 
   // display table1 menu
   this.menu.deleteTo(1);   // remove menues to the right of database memnu
