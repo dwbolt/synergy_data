@@ -36,6 +36,7 @@ constructor( // client side dbUXClass - for a page
     this.#url         = `${dir}/_.json`;  // json file that contains meta data for databases
     this.#DOMid_db    = DOMid_db   ; // where on the page the database interacts with the user
     this.#DOMid_table = DOMid_table; // where on the page the table interacts with the use
+    this.tableUX;     // "table1UX" or "table2UX"
   }
 
 
@@ -65,7 +66,7 @@ async main(){ // client side dbUXClass - for a page
   this.table2UX.setRowNumberVisible(false);
 
   // setup  this.tableUXRelations
-  this.tableUXRelations  = new tableUxClass("tableUXRelations","app.tableUXRelations");
+  this.tableUXRelations  = new tableUxClass("relationUXDOM","app.tableUXRelations");
   this.tableUXRelations.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
   this.tableUXRelations.setRowNumberVisible(false);
 
@@ -119,7 +120,7 @@ async database_select( // client side dbUXClass
   this.menu.deleteTo(1);   // remove menues to the right of database memnu
   this.menu.add(`
   <td>
-  <a onclick='app.table_dialog()'>Tables 1</a><br>
+  <a onclick='app.spa.table_dialog()'>Tables 1</a><br>
   <div id='menu_page_table1'></div>
   </td>
   `);
@@ -128,7 +129,7 @@ async database_select( // client side dbUXClass
   // display table2 menu
   this.menu.add(`
   <td>
-  <a onclick='app.table_dialog()'>Tables 2</a><br>
+  <a onclick='app.spa.table_dialog()'>Tables 2</a><br>
   <div id='menu_page_table2'></div>
   </td>
   `);
@@ -285,6 +286,8 @@ display_tables(   // client side dbUXClass
   ,tableUX   // table1UX or table2UX  - 
   ) { 
 
+    this.tableUX = tableUX;  // remember 
+
     // hide tableUX not clicked on 
     if (tableUX  === "table1UX" ) {
       this.table2UX.set_hidden(true);
@@ -294,12 +297,16 @@ display_tables(   // client side dbUXClass
 
     this[tableUX].set_hidden(false);  // show tableUX clicked on                                   
 
-    this[tableUX].setColumnFormat(   0, `onclick="app['${tableUX}'].recordUX.show(this)"`);  // assume primary key is 0 -  needs to be done in code
+
+    this[tableUX].setColumnFormat(   0, `onclick="app.spa['${tableUX}'].recordUX.show(this)"`);  // assume primary key is 0 -  needs to be done in code
     this[tableUX].setColumnTransform(0, app.displayIndex                );  // style it like a hyper link so it will get clicked on.
-    this[tableUX].setModel(this.db,  DOM.value                               );  // attach data to viewer
+    this[tableUX].setModel(this.db,  DOM.value                          );  // attach data to viewer
     const table = this[tableUX].getModel();
-    this[tableUX].display(table.PK_get()                                     );   // display table
-    //this.buttonsShow("New")
+    this[tableUX].display(table.PK_get()                                );   // display table
+
+    // show button to create a new record
+    this[tableUX].recordUX.buttonsShow("new");
+
 }
 
 
@@ -312,10 +319,11 @@ display_relations(   // client side dbUXClass
     this.tableUXRelations.setModel(this.db,  "relations"                             );  // attach data to viewer
     const table = this.tableUXRelations.getModel();
     // get list of relations from relation_index
-    let array = this.relation_index[this.tableUX.tableName][this.#primary_key_value];
-    if(!array) {
+    const table_name = this[this.tableUX].tableName;
+    let array = [];
+    if(this.relation_index[table_name] && this.relation_index[table_name][this.#primary_key_value]) {
       // convert undevined to empty array
-      array = [];
+      array = this.relation_index[table_name][this.#primary_key_value];
     }
     this.tableUXRelations.display( array);   // display table
 }
