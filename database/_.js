@@ -305,7 +305,7 @@ display_tables(   // client side dbUXClass
     this[tableUX].display(table.PK_get()                                );   // display table
 
     // show button to create a new record
-    this[tableUX].recordUX.buttonsShow("new");
+    this[tableUX].recordUX.buttonsShow("New");
 
 }
 
