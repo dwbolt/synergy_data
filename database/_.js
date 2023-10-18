@@ -94,10 +94,8 @@ async main(){ // client side dbUXClass - for a page
   // display menu
   this.menu.init();
   this.menu.add(`
-    <td>
     <a onclick="app.database_dialog()">Databases</a><br>
     ${html}
-    </td>
     `);
 }
 
@@ -119,19 +117,15 @@ async database_select( // client side dbUXClass
   // display table1 menu
   this.menu.deleteTo(1);   // remove menues to the right of database memnu
   this.menu.add(`
-  <td>
   <a onclick='app.spa.table_dialog()'>Tables 1</a><br>
-  <div id='menu_page_table1'></div>
-  </td>
+  <div id='menu_page_table1' style="min-width:100px;"></div>
   `);
 
 
   // display table2 menu
   this.menu.add(`
-  <td>
   <a onclick='app.spa.table_dialog()'>Tables 2</a><br>
-  <div id='menu_page_table2'></div>
-  </td>
+  <div id='menu_page_table2' style="min-width:100px;"></div>
   `);
 
 
@@ -287,7 +281,7 @@ display_tables(   // client side dbUXClass
   ) { 
 
     this.tableUX = tableUX;  // remember 
-
+/*
     // hide tableUX not clicked on 
     if (tableUX  === "table1UX" ) {
       this.table2UX.set_hidden(true);
@@ -296,7 +290,7 @@ display_tables(   // client side dbUXClass
     }
 
     this[tableUX].set_hidden(false);  // show tableUX clicked on                                   
-
+*/
 
     this[tableUX].setColumnFormat(   0, `onclick="app.spa['${tableUX}'].recordUX.show(this)"`);  // assume primary key is 0 -  needs to be done in code
     this[tableUX].setColumnTransform(0, app.displayIndex                );  // style it like a hyper link so it will get clicked on.
