@@ -1,20 +1,25 @@
+<h1>Synergy Database</h1>
 <div>
-    <h1>Select database and table to work with</h1>
-    <div id='menu_page' style="display:flex; flex-wrap: wrap; justify-content:flex-start"></div>
-    <p id='menu_dialog'></p>
+    <h3><a onclick="app.hide('db')">-</a> 
+        <a onclick="app.show('db')">+</a> Select database and table to work with</h3>
+    <div id="db">
+        <div id='menu_page' style="display:flex; flex-wrap: wrap; justify-content:flex-start"></div>
+        <p id='menu_dialog'></p>
+    </div>
+
 </div>
 
 <div>
     <h3><a onclick="app.hide('sss')">-</a> 
         <a onclick="app.show('sss')">+</a> 
         Search, Sort and Sum</h3>
-    <div id="sss" style="display:flex;">
-        <div width="25%">
+    <div id="sss" >
+        <div style="display:inline-block; width:300px">
             <div id='table1UXDOM__group_by_fields'></div>
             <div id='table1UXDOM__intersection'></div>
         </div>
 
-        <div width="25%"></div>
+        <div  style="display:inline-block; width:300px">
             <div id='table2UXDOM__group_by_fields'></div>
             <div id='table2UXDOM__intersections'></div>
         </div>
@@ -22,7 +27,9 @@
 </div>
 
 <div>
-    <h3><a onclick="app.hide('tables')">-</a> <a onclick="app.show('tables')">+</a> Selected Tables </h3>
+    <h3><a onclick="app.hide('tables')">-</a>
+        <a onclick="app.show('tables')">+</a> 
+         Selected Tables </h3>
     <div id="tables">
         <div id='table1UXDOM'></div><br>
         <div id='table2UXDOM'></div>
@@ -31,21 +38,26 @@
 </div>
 
 <div>
-    <h3>Selected Record</h3>
-    <div style="display: flex">
-        <div width="50%">
-            <div id='table1UXDOM_record'></div><br>
-            <div id='table1UXDOM_record_buttons'></div><br>
+    <h3><a onclick="app.hide('record')">-</a>
+        <a onclick="app.show('record')">+</a> 
+        Selected Record</h3>
+    <div id="record">
+        <div style="display: flex">
+            <div style="margin: 10px 10px 10px 10px; border-style: solid;">
+                <div id='table1UXDOM_record'></div><br>
+                <div id='table1UXDOM_record_buttons'></div><br>
+            </div>
+    
+            <div style="margin: 30px 10px 10px 10px; border-style: solid;">           
+                <div id='table2UXDOM_record'></div><br>
+                <div id='table2UXDOM_record_buttons'></div>
+            </div>
         </div>
+    
+        <div id='relationUXDOM'></div><br>
+        <div id='relationUXDOM_record_buttons'></div>
+    </div>    
 
-        <div width="50%">           
-            <div id='table2UXDOM_record'></div><br>
-            <div id='table2UXDOM_record_buttons'></div>
-        </div>
-    </div>
-
-    <div id='relationUXDOM'></div><br>
-    <div id='relationUXDOM_record_buttons'></div><br>
 </div>
 
 <div>
