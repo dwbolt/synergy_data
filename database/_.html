@@ -1,7 +1,7 @@
 <h1>Synergy Database</h1>
 <div>
-    <h3><a onclick="app.hide('db')">-</a> 
-        <a onclick="app.show('db')">+</a> Select database and table to work with</h3>
+    <h3><a onclick="app.toggle('db')">- +</a> 
+        Select database and table to work with</h3>
     <div id="db">
         <div id='menu_page' style="display:flex; flex-wrap: wrap; justify-content:flex-start"></div>
         <p id='menu_dialog'></p>
@@ -10,16 +10,15 @@
 </div>
 
 <div>
-    <h3><a onclick="app.hide('sss')">-</a> 
-        <a onclick="app.show('sss')">+</a> 
+    <h3><a onclick="app.toggle('sss')">- +</a> 
         Search, Sort and Sum</h3>
     <div id="sss" >
-        <div style="display:inline-block; width:300px">
+        <div class="table1" style="display:inline-block; width:300px">
             <div id='table1UXDOM__group_by_fields'></div>
             <div id='table1UXDOM__intersection'></div>
         </div>
 
-        <div  style="display:inline-block; width:300px">
+        <div  class="table2" style="display:inline-block; width:300px">
             <div id='table2UXDOM__group_by_fields'></div>
             <div id='table2UXDOM__intersections'></div>
         </div>
@@ -27,30 +26,39 @@
 </div>
 
 <div>
-    <h3><a onclick="app.hide('tables')">-</a>
-        <a onclick="app.show('tables')">+</a> 
+    <h3><a onclick="app.toggle('tables')">- +</a>
          Selected Tables </h3>
     <div id="tables">
-        <div id='table1UXDOM'></div><br>
-        <div id='table2UXDOM'></div>
+        <div class="table1">
+            <h4><a onclick="app.toggle('table1UXDOM')">- +</a>table 1</h4>
+            <div id='table1UXDOM'></div>
+        </div>
+        <div class="table2">
+            <h4><a onclick="app.toggle('table2UXDOM')">- +</a>table 2</h4>
+            <div id='table2UXDOM'></div>
+        </div>
     </div>
 
 </div>
 
 <div>
-    <h3><a onclick="app.hide('record')">-</a>
-        <a onclick="app.show('record')">+</a> 
+    <h3><a onclick="app.toggle('record')">- +</a>
         Selected Record</h3>
     <div id="record">
         <div style="display: flex">
-            <div style="margin: 10px 10px 10px 10px; border-style: solid;">
-                <div id='table1UXDOM_record'></div><br>
-                <div id='table1UXDOM_record_buttons'></div><br>
+            <div class="table1">
+                <h4><a onclick="app.toggle('t1_record')">- +</a>Table 1</h4>
+                <div id="t1_record" style="margin: 10px 10px 10px 10px; border-style: solid;">
+                    <div id='table1UXDOM_record'></div><br>
+                    <div id='table1UXDOM_record_buttons'></div><br>
+                </div>
             </div>
-    
-            <div style="margin: 30px 10px 10px 10px; border-style: solid;">           
-                <div id='table2UXDOM_record'></div><br>
-                <div id='table2UXDOM_record_buttons'></div>
+            <div class="table2">
+                <h4><a onclick="app.toggle('t2_record')">- +</a>Table 2</h4>
+                <div id="t2_record"  style="margin: 30px 10px 10px 10px; border-style: solid;">           
+                    <div id='table2UXDOM_record'></div><br>
+                    <div id='table2UXDOM_record_buttons'></div>
+                </div>
             </div>
         </div>
     
@@ -61,8 +69,12 @@
 </div>
 
 <div>
-    <h3>Memory changes not saved</h3>
-    <input type='button' value='Save' onclick='app.page.saveDB()'>
-     memory tables to server
-    <div id='mchanges'></div>
+    <h3><a onclick="app.toggle('changes')">- +</a>
+        Memory changes not saved</h3>
+    <div id="changes">
+        <input type='button' value='Save' onclick='app.page.saveDB()'>
+        memory tables to server
+       <div id='mchanges'></div>
+    </div>
+
 </div>

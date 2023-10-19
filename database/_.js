@@ -117,15 +117,19 @@ async database_select( // client side dbUXClass
   // display table1 menu
   this.menu.deleteTo(1);   // remove menues to the right of database memnu
   this.menu.add(`
+  <div class="table1">
   <a onclick='app.spa.table_dialog()'>Tables 1</a><br>
   <div id='menu_page_table1' style="min-width:100px;"></div>
+  </div>
   `);
 
 
   // display table2 menu
   this.menu.add(`
+  <div class="table2">
   <a onclick='app.spa.table_dialog()'>Tables 2</a><br>
   <div id='menu_page_table2' style="min-width:100px;"></div>
+  </div>
   `);
 
 
