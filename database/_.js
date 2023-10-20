@@ -283,19 +283,8 @@ display_tables(   // client side dbUXClass
    DOM       // DOM.value is table user clicked on
   ,tableUX   // table1UX or table2UX  - 
   ) { 
-
+    // show table
     this.tableUX = tableUX;  // remember 
-/*
-    // hide tableUX not clicked on 
-    if (tableUX  === "table1UX" ) {
-      this.table2UX.set_hidden(true);
-    } else {
-      this.table1UX.set_hidden(true);
-    }
-
-    this[tableUX].set_hidden(false);  // show tableUX clicked on                                   
-*/
-
     this[tableUX].setColumnFormat(   0, `onclick="app.spa['${tableUX}'].recordUX.show(this)"`);  // assume primary key is 0 -  needs to be done in code
     this[tableUX].setColumnTransform(0, app.displayIndex                );  // style it like a hyper link so it will get clicked on.
     this[tableUX].setModel(this.db,  DOM.value                          );  // attach data to viewer
@@ -303,7 +292,7 @@ display_tables(   // client side dbUXClass
     this[tableUX].display(table.PK_get()                                );   // display table
 
     // show button to create a new record
-    this[tableUX].recordUX.buttonsShow("New");
+    this[tableUX].recordUX.clear();
 
 }
 
