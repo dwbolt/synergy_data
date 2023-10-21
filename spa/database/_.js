@@ -43,7 +43,7 @@ constructor( // client side dbUXClass - for a page
 async main(){ // client side dbUXClass - for a page
   if (await app.login.getStatus()) {
 		// user logged in
-		document.getElementById("navigation").innerHTML = await this.proxy.getText(`/synergyData/${app.pageName}/menu.html`) ;
+		document.getElementById("navigation").innerHTML = await this.proxy.getText(`/synergyData/spa/${app.pageName}/menu.html`) ;
 		document.getElementById("userName"  ).innerHTML = `User: ${localStorage.nameFirst} ${localStorage.nameLast}`
 	} else {
 		// user not logged in
