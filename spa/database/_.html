@@ -12,7 +12,7 @@
 <div>
     <h3><a onclick="app.toggle('sss')">- +</a> 
         Search, Sort and Sum</h3>
-    <div id="sss" >
+    <div id="sss" style="display:none;">
         <div class="table1" style="display:inline-block; width:300px">
             <div id='table1UXDOM__group_by_fields'></div>
             <div id='table1UXDOM__intersection'></div>
@@ -28,7 +28,7 @@
 <div>
     <h3><a onclick="app.toggle('tables')">- +</a>
          Selected Tables </h3>
-    <div id="tables">
+    <div id="tables"  style="display:none;">
         <div class="table1">
             <h4><a onclick="app.toggle('table1UXDOM')">- +</a>table 1</h4>
             <div id='table1UXDOM'></div>
@@ -44,7 +44,7 @@
 <div>
     <h3><a onclick="app.toggle('record')">- +</a>
         Selected Record</h3>
-    <div id="record">
+    <div id="record"  style="display:none;">
         <div style="display: flex">
             <div class="table1">
                 <h4><a onclick="app.toggle('t1_record')">- +</a>Table 1</h4>
@@ -71,7 +71,7 @@
 <div>
     <h3><a onclick="app.toggle('changes')">- +</a>
         Memory changes not saved</h3>
-    <div id="changes">
+    <div id="changes"  style="display:none;">
         <input type='button' value='Save' onclick='app.page.saveDB()'>
         memory tables to server
        <div id='mchanges'></div>

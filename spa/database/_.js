@@ -94,7 +94,7 @@ async main(){ // client side dbUXClass - for a page
   // display menu
   this.menu.init();
   this.menu.add(`
-    <a onclick="app.database_dialog()">Databases</a><br>
+    Databases<br>
     ${html}
     `);
 }
@@ -118,12 +118,32 @@ async database_select( // client side dbUXClass
   this.menu.deleteTo(1);   // remove menues to the right of database memnu
   this.menu.add(`
   <div class="table1">
-  <a onclick='app.spa.table_dialog()'>Tables 1</a><br>
+  Tables<br>
   <div id='menu_page_table1' style="min-width:100px;"></div>
   </div>
   `);
 
 
+/*
+  table_dialog(  // client side dbUXClass - for a page
+    ){
+  document.getElementById('menu_dialog').innerHTML =  `
+  <table><tr><td>
+  <b>Table Operation</b><br>
+  <select size="6" onclick="app.spa.table_dialog_process(this)">
+  <option value="new">New</option>
+  <option value="delete">Delete</option>
+  <option value="columns">Columns</option>
+  <option value="import">Import</option>
+  <option value="cancel">Cancel</option>
+  </select></td>
+  <td id='dialog_detail'></td>
+  </tr>
+  </table>`;
+}
+*/
+  //<a onclick='app.spa.table_dialog()'>
+/*
   // display table2 menu
   this.menu.add(`
   <div class="table2">
@@ -131,7 +151,7 @@ async database_select( // client side dbUXClass
   <div id='menu_page_table2' style="min-width:100px;"></div>
   </div>
   `);
-
+*/
 
   // create relation index
   this.display_db_menu();
@@ -141,7 +161,7 @@ async database_select( // client side dbUXClass
 
 display_db_menu(){
     this.db.displayMenu("menu_page_table1","app.spa.display_tables(this,'table1UX')"); // display tables in database
-    this.db.displayMenu("menu_page_table2","app.spa.display_tables(this,'table2UX')"); // display tables in database}
+ //   this.db.displayMenu("menu_page_table2","app.spa.display_tables(this,'table2UX')"); // display tables in database}
 }
 
 relation_creat_index( // client side dbUXClass
@@ -227,23 +247,6 @@ database_dialog_process(  // client side dbUXClass - for a page
 }
 
 
-table_dialog(  // client side dbUXClass - for a page
-    ){
-  document.getElementById('menu_dialog').innerHTML =  `
-  <table><tr><td>
-  <b>Table Operation</b><br>
-  <select size="6" onclick="app.spa.table_dialog_process(this)">
-  <option value="new">New</option>
-  <option value="delete">Delete</option>
-  <option value="columns">Columns</option>
-  <option value="import">Import</option>
-  <option value="cancel">Cancel</option>
-  </select></td>
-  <td id='dialog_detail'></td>
-  </tr>
-  </table>`;
-}
-
 
 table_dialog_process(  // client side dbUXClass - for a page
     dom
@@ -283,6 +286,22 @@ display_tables(   // client side dbUXClass
    DOM       // DOM.value is table user clicked on
   ,tableUX   // table1UX or table2UX  - 
   ) { 
+    // add menu
+    this.menu.deleteTo(2);
+    this.menu.add(`
+    <table><tr><td>
+    <b>Table Operation</b><br>
+    <select size="6" onclick="app.spa.table_dialog_process(this)">
+    <option value="new">New</option>
+    <option value="delete">Delete</option>
+    <option value="columns">Columns</option>
+    <option value="import">Import</option>
+    </select></td>
+    <td id='dialog_detail'></td>
+    </tr>
+    </table>`
+  )
+
     // show table
     this.tableUX = tableUX;  // remember 
     this[tableUX].setColumnFormat(   0, `onclick="app.spa['${tableUX}'].recordUX.show(this)"`);  // assume primary key is 0 -  needs to be done in code
