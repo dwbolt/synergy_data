@@ -1,80 +1,63 @@
 <h1>Synergy Database</h1>
-<div>
-    <h3><a onclick="app.toggle('db')">- +</a> 
-        Select database and table to work with</h3>
-    <div id="db">
-        <div id='menu_page' style="display:flex; flex-wrap: wrap; justify-content:flex-start"></div>
-        <p id='menu_dialog'></p>
-    </div>
 
+<div id="db" >
+    <h3><a onclick="app.spa.toggle('db')"> - </a>
+        Select Database/Table</h3>
+    <div id='menu_page' style="display:flex; flex-wrap: wrap; justify-content:flex-start"></div>
 </div>
 
-<div>
-    <h3><a onclick="app.toggle('sss')">- +</a> 
-        Search, Sort and Sum</h3>
-    <div id="sss" style="display:none;">
-        <div class="table1" style="display:inline-block; width:300px">
-            <div id='table1UXDOM__group_by_fields'></div>
-            <div id='table1UXDOM__intersection'></div>
-        </div>
+<div id="sss" style="display:none;"> 
+    <h3><a onclick="app.spa.toggle('sss')"> X </a> Search, Sort and Sum</h3>
+    <div class="table1" style="display:inline-block; width:300px">
+        <div id='table1UXDOM__group_by_fields'></div>
+        <div id='table1UXDOM__intersection'></div>
+    </div>
 
-        <div  class="table2" style="display:inline-block; width:300px">
-            <div id='table2UXDOM__group_by_fields'></div>
-            <div id='table2UXDOM__intersections'></div>
-        </div>
+    <div  class="table2" style="display:inline-block; width:300px">
+        <div id='table2UXDOM__group_by_fields'></div>
+        <div id='table2UXDOM__intersections'></div>
     </div>
 </div>
 
-<div>
-    <h3><a onclick="app.toggle('tables')">- +</a>
+<div id="tables"  style="display:none;">
+    <h3><a onclick="app.spa.toggle('tables')"> - </a>
          Selected Tables </h3>
-    <div id="tables"  style="display:none;">
+    <div>
         <div class="table1">
             <h4><a onclick="app.toggle('table1UXDOM')">- +</a>table 1</h4>
             <div id='table1UXDOM'></div>
         </div>
-        <div class="table2">
-            <h4><a onclick="app.toggle('table2UXDOM')">- +</a>table 2</h4>
-            <div id='table2UXDOM'></div>
+    </div>
+</div>
+
+<div id="record"  style="display:none;">
+    <h3><a onclick="app.spa.toggle('record')">- +</a>
+        Selected Record</h3>
+    <div style="display: flex">
+        <div  id="t1_record"  class="table1">
+            <h4><a onclick="app.spa.toggle('t1_record')">- +</a>Table 1</h4>
+            <div style="margin: 10px 10px 10px 10px; border-style: solid;">
+                <div id='table1UXDOM_record'></div><br>
+                <div id='table1UXDOM_record_buttons'></div><br>
+            </div>
+        </div>
+        <div class="table2" id="t2_record"  >
+            <h4><a onclick="app.spa.toggle('t2_record')">- +</a>Table 2</h4>
+            <div style="margin: 30px 10px 10px 10px; border-style: solid;">           
+                <div id='table2UXDOM_record'></div><br>
+                <div id='table2UXDOM_record_buttons'></div>
+            </div>
         </div>
     </div>
 
+    <div id='relationUXDOM'></div><br>
+    <div id='relationUXDOM_record_buttons'></div>
 </div>
 
-<div>
-    <h3><a onclick="app.toggle('record')">- +</a>
-        Selected Record</h3>
-    <div id="record"  style="display:none;">
-        <div style="display: flex">
-            <div class="table1">
-                <h4><a onclick="app.toggle('t1_record')">- +</a>Table 1</h4>
-                <div id="t1_record" style="margin: 10px 10px 10px 10px; border-style: solid;">
-                    <div id='table1UXDOM_record'></div><br>
-                    <div id='table1UXDOM_record_buttons'></div><br>
-                </div>
-            </div>
-            <div class="table2">
-                <h4><a onclick="app.toggle('t2_record')">- +</a>Table 2</h4>
-                <div id="t2_record"  style="margin: 30px 10px 10px 10px; border-style: solid;">           
-                    <div id='table2UXDOM_record'></div><br>
-                    <div id='table2UXDOM_record_buttons'></div>
-                </div>
-            </div>
-        </div>
-    
-        <div id='relationUXDOM'></div><br>
-        <div id='relationUXDOM_record_buttons'></div>
-    </div>    
-
-</div>
-
-<div>
-    <h3><a onclick="app.toggle('changes')">- +</a>
+<div id="changes"  style="display:none;">
+    <h3><a onclick="app.spa.toggle('changes')"> - </a>
         Memory changes not saved</h3>
-    <div id="changes"  style="display:none;">
         <input type='button' value='Save' onclick='app.page.saveDB()'>
         memory tables to server
        <div id='mchanges'></div>
-    </div>
-
 </div>

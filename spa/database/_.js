@@ -25,7 +25,7 @@ class dbUXClass { // client side dbUXClass - SPA (Single Page App)
   #edit_type          // true -> table       false -> buffer
 
 
-constructor( // client side dbUXClass - for a page
+constructor( // client side dbUXClass - for a spa
     dir    // user directory that database is in
    ,DOMid_db     // 
    ,DOMid_table  // 
@@ -40,7 +40,7 @@ constructor( // client side dbUXClass - for a page
   }
 
 
-async main(){ // client side dbUXClass - for a page
+async main(){ // client side dbUXClass - for a spa
   if (await app.login.getStatus()) {
 		// user logged in
 		document.getElementById("navigation").innerHTML = await this.proxy.getText(`/synergyData/spa/${app.pageName}/menu.html`) ;
@@ -61,9 +61,11 @@ async main(){ // client side dbUXClass - for a page
   this.table1UX.setRowNumberVisible(false);
 
   // setup  this.table2UX
+ /*
   this.table2UX  = new tableUxClass("table2UXDOM","app.spa.table2UX");
   this.table2UX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
   this.table2UX.setRowNumberVisible(false);
+*/
 
   // setup  this.tableUXRelations
   this.tableUXRelations  = new tableUxClass("relationUXDOM","app.tableUXRelations");
@@ -117,41 +119,9 @@ async database_select( // client side dbUXClass
   // display table1 menu
   this.menu.deleteTo(1);   // remove menues to the right of database memnu
   this.menu.add(`
-  <div class="table1">
-  Tables<br>
+  Tables
   <div id='menu_page_table1' style="min-width:100px;"></div>
-  </div>
   `);
-
-
-/*
-  table_dialog(  // client side dbUXClass - for a page
-    ){
-  document.getElementById('menu_dialog').innerHTML =  `
-  <table><tr><td>
-  <b>Table Operation</b><br>
-  <select size="6" onclick="app.spa.table_dialog_process(this)">
-  <option value="new">New</option>
-  <option value="delete">Delete</option>
-  <option value="columns">Columns</option>
-  <option value="import">Import</option>
-  <option value="cancel">Cancel</option>
-  </select></td>
-  <td id='dialog_detail'></td>
-  </tr>
-  </table>`;
-}
-*/
-  //<a onclick='app.spa.table_dialog()'>
-/*
-  // display table2 menu
-  this.menu.add(`
-  <div class="table2">
-  <a onclick='app.spa.table_dialog()'>Tables 2</a><br>
-  <div id='menu_page_table2' style="min-width:100px;"></div>
-  </div>
-  `);
-*/
 
   // create relation index
   this.display_db_menu();
@@ -160,8 +130,7 @@ async database_select( // client side dbUXClass
 
 
 display_db_menu(){
-    this.db.displayMenu("menu_page_table1","app.spa.display_tables(this,'table1UX')"); // display tables in database
- //   this.db.displayMenu("menu_page_table2","app.spa.display_tables(this,'table2UX')"); // display tables in database}
+    this.db.displayMenu("menu_page_table1","app.spa.table_select(this,'table1UX')"); // display tables in database
 }
 
 relation_creat_index( // client side dbUXClass
@@ -224,7 +193,42 @@ database_dialog(  // client side dbUXClass
 }
 
 
-database_dialog_process(  // client side dbUXClass - for a page
+toggle(
+  section_name  // client side dbUXClass - for a spa
+) {
+  const section = document.getElementById(section_name);
+  const menu    = document.getElementById(section_name+"_menu");
+  if (section && menu) {
+    // toggle visibiltuy of section
+    section.style.display = section.style.display === "none" ? "block" : "none";
+    // make menu visibilty oposite of section
+    menu.style.display    = section.style.display === "none" ? "inline" : "none";
+  } else {
+    // error
+    alert(`error file="dbUXClass.js method="toggle" section_name="${section_name}"`);
+  }
+}
+
+
+
+show(
+  section_name  // client side dbUXClass - for a spa
+) {
+  const section = document.getElementById(section_name);
+  const menu    = document.getElementById(section_name+"_menu");
+  if (section && menu) {
+    // show section
+    section.style.display = "block";
+    // make menu visibilty oposite of section
+    menu.style.display    = section.style.display === "none" ? "inline" : "none";
+  } else {
+    // error
+    alert(`error file="dbUXClass.js method="show" section_name="${section_name}"`);
+  }
+}
+
+
+database_dialog_process(  // client side dbUXClass - for a spa
   dom
   ){
   switch(dom.value) {
@@ -248,59 +252,59 @@ database_dialog_process(  // client side dbUXClass - for a page
 
 
 
-table_dialog_process(  // client side dbUXClass - for a page
+table_dialog_process(  // client side dbUXClass - for a spa
     dom
     ){
     switch(dom.value) {
-      case "cancel":
-        document.getElementById('menu_dialog').innerHTML = "";
-        break;
+    case "clear":
+      document.getElementById('dialog_detail').innerHTML = "";
+      break;
+      
+    case "import":
+      document.getElementById('dialog_detail').innerHTML = `
+      <p><b>import csv file</b><br>
+      <input type='file' accept='.csv' multiple="multiple" onchange='app.spa.loadLocalCSV(this)'><br>
+      <textarea id='msg'></textarea>
+      </p>
+      <p>imported CSV file will appear in above table list</p>`;
+      break;
 
-      case "import":
-        document.getElementById('dialog_detail').innerHTML = `
-        <p><b>import csv file</b><br>
-        <input type='file' accept='.csv' multiple="multiple" onchange='app.spa.loadLocalCSV(this)'><br>
-        <textarea id='msg'></textarea>
-        </p>
-        <p>imported CSV file will appear in above table list</p>`;
-        break;
+    case "new":
+      // code block
+      //break;
 
-      case "new":
-        // code block
-        //break;
+    case "delete":
+      // code block
 
-      case "delete":
-        // code block
+      //</input>break;
 
-        //</input>break;
-
-      default:
-        // code block
-        document.getElementById('dialog_detail').innerHTML = `"${dom.value}" table is not yet implemented`
+    default:
+      // code block
+      document.getElementById('dialog_detail').innerHTML = `"${dom.value}" table is not yet implemented`
     }
   }
 
 
-display_tables(   // client side dbUXClass
+table_select(   // client side dbUXClass
   // user clicked on a table 
    DOM       // DOM.value is table user clicked on
   ,tableUX   // table1UX or table2UX  - 
   ) { 
     // add menu
     this.menu.deleteTo(2);
-    this.menu.add(`
-    <table><tr><td>
+    this.menu.add(`<div style="display:flex">
+    <div>
     <b>Table Operation</b><br>
     <select size="6" onclick="app.spa.table_dialog_process(this)">
     <option value="new">New</option>
     <option value="delete">Delete</option>
     <option value="columns">Columns</option>
     <option value="import">Import</option>
-    </select></td>
-    <td id='dialog_detail'></td>
-    </tr>
-    </table>`
-  )
+    <option value="clear">Clear</option>
+    </select>
+    </div>
+    <div id='dialog_detail' style="margin:10px 10px 10px 10px;"></div>
+    </div>`);
 
     // show table
     this.tableUX = tableUX;  // remember 
@@ -309,6 +313,8 @@ display_tables(   // client side dbUXClass
     this[tableUX].setModel(this.db,  DOM.value                          );  // attach data to viewer
     const table = this[tableUX].getModel();
     this[tableUX].display(table.PK_get()                                );   // display table
+
+    this.show("tables");
 
     // show button to create a new record
     this[tableUX].recordUX.clear();
@@ -342,7 +348,7 @@ displayIndex(// client side dbUXClass
 }
 
 
-loadLocalCSV( // client side dbUXClass - for a page
+loadLocalCSV( // client side dbUXClass - for a spa
     // user selected a new CSV file from their local drive, load it into memory and add it to the table menu
     element  // DOM
     ) {
@@ -369,7 +375,7 @@ loadLocalCSV( // client side dbUXClass - for a page
 }
 
 
-async saveDB( // client side dbUXClass - for a page
+async saveDB( // client side dbUXClass - for a spa
   // user clicked on save to server button
   ){
   await this.db.save();
@@ -377,7 +383,7 @@ async saveDB( // client side dbUXClass - for a page
 }
 
 
-show_changes(){ // client side dbUXClass - for a page
+show_changes(){ // client side dbUXClass - for a spa
   let html = "";
   const table        = this.tableUX.getModel();  // get tableClass being displayed
   const changes      = table.changes_get();
