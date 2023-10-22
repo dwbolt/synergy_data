@@ -315,6 +315,7 @@ table_select(   // client side dbUXClass
     this[tableUX].display(table.PK_get()                                );   // display table
 
     this.show("tables");
+    this.show("record");
 
     // show button to create a new record
     this[tableUX].recordUX.clear();
