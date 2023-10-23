@@ -112,16 +112,33 @@ async database_select( // client side dbUXClass
   if (! await app.login.getStatus()) {
     alert("please log before using the database")
     window.location.replace("app.html?p=logInOut");
-}
-  const dburl = `${this.#url_dir}/${dom.value}/_.json`;
-  await this.db.load(dburl);   // load the database
+  }
 
-  // display table1 menu
+  // load the database
+  const dburl = `${this.#url_dir}/${dom.value}/_.json`;
+  await this.db.load(dburl);  
+
+  // display table menu
   this.menu.deleteTo(1);   // remove menues to the right of database memnu
   this.menu.add(`
   Tables
   <div id='menu_page_table1' style="min-width:100px;"></div>
   `);
+
+  // add menu
+  this.menu.add(`<div style="display:flex">
+  <div>
+  <b>Table Operation</b><br>
+  <select size="6" onclick="app.spa.table_dialog_process(this)">
+  <option value="new">New</option>
+  <option value="delete">Delete</option>
+  <option value="columns">Columns</option>
+  <option value="import">Import</option>
+  <option value="clear">Clear</option>
+  </select>
+  </div>
+  <div id='dialog_detail' style="margin:10px 10px 10px 10px;"></div>
+  </div>`);
 
   // create relation index
   this.display_db_menu();
@@ -290,22 +307,6 @@ table_select(   // client side dbUXClass
    DOM       // DOM.value is table user clicked on
   ,tableUX   // table1UX or table2UX  - 
   ) { 
-    // add menu
-    this.menu.deleteTo(2);
-    this.menu.add(`<div style="display:flex">
-    <div>
-    <b>Table Operation</b><br>
-    <select size="6" onclick="app.spa.table_dialog_process(this)">
-    <option value="new">New</option>
-    <option value="delete">Delete</option>
-    <option value="columns">Columns</option>
-    <option value="import">Import</option>
-    <option value="clear">Clear</option>
-    </select>
-    </div>
-    <div id='dialog_detail' style="margin:10px 10px 10px 10px;"></div>
-    </div>`);
-
     // show table
     this.tableUX = tableUX;  // remember 
     this[tableUX].setColumnFormat(   0, `onclick="app.spa['${tableUX}'].recordUX.show(this)"`);  // assume primary key is 0 -  needs to be done in code
@@ -325,7 +326,7 @@ table_select(   // client side dbUXClass
 
 
 display_relations(   // client side dbUXClass
-  ) {   
+  ) {  
     // user clicked on table, so show it.
    // this.tableUXRelations.setColumnFormat(   0, 'onclick="app.spa.recordShow(this)"');  // assume primary key is 0 -  needs to be done in code
     this.tableUXRelations.setColumnTransform(0, this.displayIndex                );  // style it like a hyper link so it will get clicked on.
