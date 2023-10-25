@@ -130,6 +130,7 @@ async database_select( // client side dbUXClass
   <div>
   <b>Table Operation</b><br>
   <select size="6" onclick="app.spa.table_dialog_process(this)">
+  <option value="save">Save</option>
   <option value="new">New</option>
   <option value="delete">Delete</option>
   <option value="columns">Columns</option>
@@ -286,6 +287,11 @@ table_dialog_process(  // client side dbUXClass - for a spa
       <p>imported CSV file will appear in above table list</p>`;
       break;
 
+    case "save":
+        // save table
+        this.save();
+        break;
+
     case "new":
       // code block
       //break;
@@ -374,6 +380,40 @@ loadLocalCSV( // client side dbUXClass - for a spa
 
     this.i = 0;
     this.fr.readAsText( element.files[this.i] ); // read first file
+}
+
+/*async save(  // dbClass - client-side
+  // save changed loaded tables to disk
+) {
+  let save_new_meta  = false
+  const keys = Object.keys(this.tables);  // keys to loaded tables
+  // walking all tables in database to see if they have canged or or new
+  for(var i=0; i< keys.length; i++) {
+    // save all loaded tables that have changed
+    await this.tables[keys[i]].save2file();  // will return quickly if no changes
+    if ( typeof(this.#json.meta.tables[keys[i]]) ===  "undefined") {
+      this.#json.meta.tables[keys[i]] = {"location": keys[i], comments: "imported table"}
+      save_new_meta = true;
+    }
+  }
+
+  if (save_new_meta) {
+    // have a new table or tables, add it to meta data
+    await app.proxy.RESTpost(
+      `{
+        "meta":{
+          "tables": ${JSON.stringify(this.#json.meta.tables)}
+        }
+      }`, this.#url);
+  }
+}*/
+
+
+async save( // client side dbUXClass - for a spa
+  // user clicked on save table button 
+  ){
+  await this.table.save(); 
+  this.show_changes();
 }
 
 
