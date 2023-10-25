@@ -363,7 +363,7 @@ loadLocalCSV( // client side dbUXClass - for a spa
       name          = name.slice(0, name.length -4);                    // get rid of .csv in table name
       const table   = this.db.tableAdd(name);                           // create table and add to db
       const csv     = new csvClass(table);                              // create instace of CSV object
-      csv.parseCSV(this.fr.result, "msg");                                   // parse loaded CSV file and put into table
+      csv.parse_CSV(this.fr.result, "msg");                                   // parse loaded CSV file and put into table
       this.display_db_menu();
 
       this.i ++ // process next file import
