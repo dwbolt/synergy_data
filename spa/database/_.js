@@ -6,7 +6,7 @@ import { tableUxClass} from '/_lib/db/tableUxModule.js'   ;
 
 import { menuClass   } from '/_lib/UX/menuModule.js'      ;
 import {loginClass   } from '/_lib/UX/loginModule.js'     ;
-import {proxyClass   }   from '/_lib/proxy/proxyModule.js';
+import {proxyClass   } from '/_lib/proxy/proxyModule.js';
 
 class dbUXClass { // client side dbUXClass - SPA (Single Page App)
 
@@ -318,8 +318,8 @@ table_select(   // client side dbUXClass
     this[tableUX].setColumnFormat(   0, `onclick="app.spa['${tableUX}'].recordUX.show(this)"`);  // assume primary key is 0 -  needs to be done in code
     this[tableUX].setColumnTransform(0, app.displayIndex                );  // style it like a hyper link so it will get clicked on.
     this[tableUX].setModel(this.db,  DOM.value                          );  // attach data to viewer
-    const table = this[tableUX].getModel();
-    this[tableUX].display(table.PK_get()                                );   // display table
+    this.table = this[tableUX].getModel();
+    this[tableUX].display(this.table.PK_get()                                );   // display table
 
     this.show("tables");
     this.show("record");
@@ -412,7 +412,7 @@ loadLocalCSV( // client side dbUXClass - for a spa
 async save( // client side dbUXClass - for a spa
   // user clicked on save table button 
   ){
-  await this.table.save(); 
+  await this.table.save2file(); 
   this.show_changes();
 }
 
