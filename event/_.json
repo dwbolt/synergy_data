@@ -14,7 +14,7 @@
   "text":[
      ["","","<h3 id='name'></h4>"]
     ,["","","<p id='description'></p>"]
-    ,["script","","/synergyData/event/pageModule.js"]
+    ,["script","","/synergyData/event/page_module.js"]
   ]
 
   ,"u_urls": [

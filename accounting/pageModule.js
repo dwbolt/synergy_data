@@ -1,10 +1,10 @@
 // accounting
 
-//import { csvClass    } from '/_lib/db/csvModule.js'       ;
-import { dbClass     } from '/_lib/db/dbModule.js'      ;
-import { tableUXClass} from '/_lib/db/tableUxModule.js' ;
+//import { csvClass    } from '/_lib/db/csv_module.js'       ;
+import { dbClass     } from '/_lib/db/db_module.js'      ;
+import { tableUXClass} from '/_lib/db/tableUx_module.js' ;
 
-import { menuClass   } from '/_lib/UX/menuModule.js'     ;
+import { menuClass   } from '/_lib/UX/menu_module.js'     ;
 
 import { reconcileClass  } from '/synergyData/accounting/1-pages/reconcile.js';
 import { statementsClass } from '/synergyData/accounting/1-pages/statements.js';

@@ -1,12 +1,12 @@
 /*  database spa (single page app */
 
 import { csvClass    } from '/_lib/db/csv_module.js'      ;
-import { dbClass     } from '/_lib/db/dbModule.js'        ;
-import { tableUxClass} from '/_lib/db/tableUxModule.js'   ;
+import { dbClass     } from '/_lib/db/db_module.js'        ;
+import { tableUxClass} from '/_lib/db/tableUx_module.js'   ;
 
-import { menuClass   } from '/_lib/UX/menuModule.js'      ;
-import {loginClass   } from '/_lib/UX/loginModule.js'     ;
-import {proxyClass   } from '/_lib/proxy/proxyModule.js';
+import { menuClass   } from '/_lib/UX/menu_module.js'      ;
+import {loginClass   } from '/_lib/UX/login_module.js'     ;
+import {proxyClass   } from '/_lib/proxy/proxy_module.js';
 
 class dbUXClass { // client side dbUXClass - SPA (Single Page App)
 

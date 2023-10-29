@@ -28,7 +28,7 @@
 ,"edit":{
   "text":[
      ["load"  ,"", "/synergyData/web_edit/pageModule.html"]
-    ,["script","", "/synergyData/web_edit/pageModule.js"]
+    ,["script","", "/synergyData/web_edit/page_module.js"]
   ]
 
   ,"u_urls": [

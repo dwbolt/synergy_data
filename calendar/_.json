@@ -30,7 +30,7 @@
      ["","","<p id='weeks' class='calendar'></p>"]
     ,["","","<div class='popUpForm' id='popUpForm' hidden></div>"]
     ,["link"  ,"","/synergyData/calendar/page.css"]
-    ,["script","","/synergyData/calendar/pageModule.js"]
+    ,["script","","/synergyData/calendar/page_module.js"]
   ]
 
   ,"u_urls": [
