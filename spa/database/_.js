@@ -315,7 +315,7 @@ table_select(   // client side dbUXClass
   ) { 
     // show table
     this.tableUX = tableUX;  // remember 
-    this[tableUX].setColumnFormat(   0, `onclick="app.spa['${tableUX}'].recordUX.show(this)"`);  // assume primary key is 0 -  needs to be done in code
+   // this[tableUX].setColumnFormat(   0, `onclick="app.spa['${tableUX}'].recordUX.show(this)"`);  // assume primary key is 0 -  needs to be done in code
     this[tableUX].setColumnTransform(0, app.displayIndex                );  // style it like a hyper link so it will get clicked on.
     this[tableUX].setModel(this.db,  DOM.value                          );  // attach data to viewer
     this.table = this[tableUX].getModel();
