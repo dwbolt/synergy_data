@@ -129,7 +129,7 @@ async database_select( // client side dbUXClass
   this.menu.add(`<div style="display:flex">
   <div>
   <b>Table Operation</b><br>
-  <select size="6" onclick="app.spa.table_dialog_process(this)">
+  <select size="6" onclick="app.spa.table_process(this)">
   <option value="save">Save</option>
   <option value="new">New</option>
   <option value="delete">Delete</option>
@@ -270,7 +270,7 @@ database_dialog_process(  // client side dbUXClass - for a spa
 
 
 
-table_dialog_process(  // client side dbUXClass - for a spa
+table_process(  // client side dbUXClass - for a spa
     dom
     ){
     switch(dom.value) {
@@ -316,7 +316,7 @@ table_select(   // client side dbUXClass
     // show table
     this.tableUX = tableUX;  // remember 
    // this[tableUX].setColumnFormat(   0, `onclick="app.spa['${tableUX}'].recordUX.show(this)"`);  // assume primary key is 0 -  needs to be done in code
-    this[tableUX].setColumnTransform(0, app.displayIndex                );  // style it like a hyper link so it will get clicked on.
+    //this[tableUX].setColumnTransform(0, app.displayIndex                );  // style it like a hyper link so it will get clicked on.
     this[tableUX].setModel(this.db,  DOM.value                          );  // attach data to viewer
     this.table = this[tableUX].getModel();
     this[tableUX].display(this.table.PK_get()                                );   // display table

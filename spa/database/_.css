@@ -4,3 +4,8 @@
   padding:  10px 10px 10px 10px;
 	background-color: yellow;
 }
+
+.link { /* back ground color for table1 */
+	color: blue;
+  text-decoration-line: underline;
+}
