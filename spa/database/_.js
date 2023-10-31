@@ -314,21 +314,18 @@ table_select(   // client side dbUXClass
   ,tableUX   // table1UX or table2UX  - 
   ) { 
     // show table
-    this.tableUX = tableUX;  // remember 
-   // this[tableUX].setColumnFormat(   0, `onclick="app.spa['${tableUX}'].recordUX.show(this)"`);  // assume primary key is 0 -  needs to be done in code
-    //this[tableUX].setColumnTransform(0, app.displayIndex                );  // style it like a hyper link so it will get clicked on.
-    this[tableUX].setModel(this.db,  DOM.value                          );  // attach data to viewer
+    this.tableUX = tableUX;                        // remember 
+    this[tableUX].setModel(this.db,  DOM.value );  // attach data to viewer
     this.table = this[tableUX].getModel();
-    this[tableUX].display(this.table.PK_get()                                );   // display table
+    this[tableUX].display(this.table.PK_get()  );  // display table
 
-    this.show("tables");
-    this.show("record");
+    this.show("tables");  // show the tables section
+    this.show("record");  // show record section
 
     // show button to create a new record
     this[tableUX].recordUX.clear();
 
 }
-
 
 
 display_relations(   // client side dbUXClass
@@ -347,7 +344,6 @@ display_relations(   // client side dbUXClass
     }
     this.tableUXRelations.display( array);   // display table
 }
-
 
 
 displayIndex(// client side dbUXClass

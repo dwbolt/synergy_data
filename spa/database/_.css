@@ -2,10 +2,14 @@
   border: 1px;
   margin: 10px 10px 10px 10px;
   padding:  10px 10px 10px 10px;
-	background-color: yellow;
+	background-color: cyan;
 }
 
 .link { /* back ground color for table1 */
 	color: blue;
   text-decoration-line: underline;
+}
+
+.changed { /* back ground color for table1 */
+	color: yellow;
 }
