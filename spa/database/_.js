@@ -1,12 +1,12 @@
 /*  database spa (single page app */
 
-import { csvClass    } from '/_lib/db/csv_module.js'      ;
-import { dbClass     } from '/_lib/db/db_module.js'        ;
-import { tableUxClass} from '/_lib/db/tableUx_module.js'   ;
+import {csvClass    } from '/_lib/db/csv_module.js'     ;
+import {dbUxClass   } from '/_lib/db/dbUx_module.js'    ;
+import {tableUxClass} from '/_lib/db/tableUx_module.js' ;
 
-import { menuClass   } from '/_lib/UX/menu_module.js'      ;
-import {loginClass   } from '/_lib/UX/login_module.js'     ;
-import {proxyClass   } from '/_lib/proxy/proxy_module.js';
+import {menuClass   } from '/_lib/UX/menu_module.js'    ;
+import {loginClass  } from '/_lib/UX/login_module.js'   ;
+import {proxyClass  } from '/_lib/proxy/proxy_module.js';
 
 class dbUXClass { // client side dbUXClass - SPA (Single Page App)
 
@@ -51,38 +51,33 @@ async main(){ // client side dbUXClass - for a spa
     return;
 	}
 
-  // user opened database app
-  this.db        = new dbClass(this.#DOMid_db ,"app.tableUX");
-  this.menu      = new menuClass("menu_page");
-
-  // setup  this.table1UX
-  this.table1UX  = new tableUxClass("table1UXDOM","app.spa.table1UX");
-  this.table1UX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
-  this.table1UX.setRowNumberVisible(false);
-
-  // setup  this.table2UX
- /*
-  this.table2UX  = new tableUxClass("table2UXDOM","app.spa.table2UX");
-  this.table2UX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
-  this.table2UX.setRowNumberVisible(false);
-*/
-
-  // setup  this.tableUXRelations
-  this.tableUXRelations  = new tableUxClass("relationUXDOM","app.tableUXRelations");
-  this.tableUXRelations.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
-  this.tableUXRelations.setRowNumberVisible(false);
-
-  // load list of databases available
+  // load database meta data 
   const obj  = await app.proxy.getJSONwithError(this.#url);
-  // get list of databases
   if(obj.json === null) {
     alert(`error loading "${this.#url}"`);
     return;  // no point in going foward
   }
 
+  // user opened database app
+  this.db        = new dbUxClass(this.#DOMid_db, "app.tableUX");
+  this.menu      = new menuClass("menu_page");
+
+    // create html contain for each table
+  
+    `<div class="table">
+    <div id='table1UXDOM'></div>
+    </div>`
+
+
+
+
+
   this.#json_db  = obj.json;   // get list of databases
   document.getElementById("footer").innerHTML = ""    ;   // get rid of footer
 
+}
+
+menu_create() {
   // build database menu
   const db       = this.#json_db.meta.databases;          
   const dbkey    = Object.keys(db);
@@ -100,6 +95,20 @@ async main(){ // client side dbUXClass - for a spa
     ${html}
     `);
 }
+
+
+/*
+  // setup  this.table1UX
+  this.table1UX  = new tableUxClass("table1UXDOM","app.spa.table1UX");
+  this.table1UX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
+  this.table1UX.setRowNumberVisible(false);
+
+
+  // setup  this.tableUXRelations
+  this.tableUXRelations  = new tableUxClass("relationUXDOM","app.tableUXRelations");
+  this.tableUXRelations.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
+  this.tableUXRelations.setRowNumberVisible(false);
+*/
 
 
 async database_select( // client side dbUXClass

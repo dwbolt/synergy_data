@@ -1,8 +1,9 @@
-.table1 { /* back ground color for table1 */
+.table { /* back ground color for table1 */
   border: 1px;
   margin: 10px 10px 10px 10px;
   padding:  10px 10px 10px 10px;
 	background-color: cyan;
+  display: none
 }
 
 .link { /* back ground color for table1 */
