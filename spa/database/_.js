@@ -1,7 +1,7 @@
 /*  database spa (single page app */
 
 import {csvClass    } from '/_lib/db/csv_module.js'     ;
-import {dbUxClass   } from '/_lib/db/dbUx_module.js'    ;
+import {dbClass     } from '/_lib/db/db_module.js'      ;
 import {tableUxClass} from '/_lib/db/tableUx_module.js' ;
 
 import {menuClass   } from '/_lib/UX/menu_module.js'    ;
@@ -36,7 +36,7 @@ constructor( // client side dbUXClass - for a spa
     this.#url         = `${dir}/_.json`;  // json file that contains meta data for databases
     this.#DOMid_db    = DOMid_db   ; // where on the page the database interacts with the user
     this.#DOMid_table = DOMid_table; // where on the page the table interacts with the use
-    this.tableUX;     // "table1UX" or "table2UX"
+    this.tableUX      = {};     // object contains one tableUXClass attribute for each table
   }
 
 
@@ -52,30 +52,29 @@ async main(){ // client side dbUXClass - for a spa
 	}
 
   // load database meta data 
-  const obj  = await app.proxy.getJSONwithError(this.#url);
+  /*
+  this.db  = await app.proxy.getJSONwithError(this.#url);
   if(obj.json === null) {
     alert(`error loading "${this.#url}"`);
     return;  // no point in going foward
   }
+*/
 
   // user opened database app
-  this.db        = new dbUxClass(this.#DOMid_db, "app.tableUX");
+  this.db        = new dbClass();
+  if(!this.db.load_meta(this.#url)) {
+     // error no need to go furter
+    return; 
+  }
   this.menu      = new menuClass("menu_page");
 
-    // create html contain for each table
-  
-    `<div class="table">
-    <div id='table1UXDOM'></div>
-    </div>`
+  // create menu and tableUX's
+  this.menu_create();
 
-
-
-
-
-  this.#json_db  = obj.json;   // get list of databases
+  this.#json_db                               = obj.json;   // get list of databases
   document.getElementById("footer").innerHTML = ""    ;   // get rid of footer
-
 }
+
 
 menu_create() {
   // build database menu
@@ -94,6 +93,15 @@ menu_create() {
     Databases<br>
     ${html}
     `);
+
+  // build 
+  html = "";
+  for(let i=0; i<table_name.length; i++ ) {
+    html +=   `<div class="table">         <div id='tableUX_${table_name[i]}'></div></div>`
+    this.tableUX[table_name[i]] = new tableUxClass(`tableUX_${table_name[i]}`,`app.spa.tableUX["${table_name[i]}"]`);
+    this.tableUX[table_name[i]].setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
+    this.tableUX[table_name[i]].setRowNumberVisible(false);
+  }
 }
 
 
@@ -278,7 +286,6 @@ database_dialog_process(  // client side dbUXClass - for a spa
 }
 
 
-
 table_process(  // client side dbUXClass - for a spa
     dom
     ){
@@ -333,7 +340,6 @@ table_select(   // client side dbUXClass
 
     // show button to create a new record
     this[tableUX].recordUX.clear();
-
 }
 
 

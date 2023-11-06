@@ -3,46 +3,19 @@
 ,"heading1": "Calendar"
 ,"updated": "2023-05-30"
 
-,"buttons":[
-   {"button":"Calendar"             ,"id":"calendar", "onclick":"app.display(this)"}
-  ,{"button":"intro"                ,"id":"intro"   , "onclick":"app.display(this)"}
-]
-
 
 ,"lists": {
-   "intro"   : ["intro","nextsteps"]
-  ,"calendar": ["calendar"]
+  "rows": ["weeks"]
 }
 
 ,"node": {
 
-"intro":{
-  "text":[
-    ["load","","/synergyData/database/intro.html"]
-  ]
-
-  ,"u_urls": [
-  ]
-}
-
-,"calendar":{
+"weeks":{
   "text":[
      ["","","<p id='weeks' class='calendar'></p>"]
     ,["","","<div class='popUpForm' id='popUpForm' hidden></div>"]
     ,["link"  ,"","/synergyData/calendar/page.css"]
     ,["script","","/synergyData/calendar/page_module.js"]
-  ]
-
-  ,"u_urls": [
-  ]
-}
-
-,"nextsteps":{
-  "text":[
-     ["h3","","Next steps"]
-    ,["","","<ol>"]
-    ,["li","","test"]
-    ,["","","</ol>"]
   ]
 
   ,"u_urls": [
