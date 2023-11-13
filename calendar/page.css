@@ -4,7 +4,9 @@
 .notYear  {font-size: 0;}
 .past     {background-color: lightgrey;}
 .today    {background-color: yellow;}
-.calendar {display: flex;}
+.calendar {display: block}
+
+.day {min-width: 90px;}
 
 /* Style for the event form on calendar */
 
