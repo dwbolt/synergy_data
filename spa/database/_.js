@@ -464,5 +464,5 @@ show_changes(){ // client side dbUXClass - for a spa
 
 export {dbUXClass};
 
-app.spa = new dbUXClass("/users/database");  // need some parmeres
+app.spa = new dbUXClass("/users/database");  
 app.spa.main();
