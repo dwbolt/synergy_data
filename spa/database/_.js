@@ -116,6 +116,7 @@ async database_select( // client side dbUXClass
   if (! await app.login.getStatus()) {
     alert("please log before using the database")
     window.location.replace("app.html?p=logInOut");
+    return;
   }
 
   // load the database
@@ -156,21 +157,22 @@ display_db_tables(// dbClass - client-side
 ) {
    //   this.db.displayMenu("",""); // display tables in database
   // build menu list
-  let html = `<select size="9" onclick="app.spa.table_select(this,'table1UX')">`;
-  let html_tableUX = "";
-  this.tableUX = {};  // init
+  let html_menu     = `<select size="9" onclick="app.spa.table_select(this,'table1UX')">`;
+  let html_tableUX  = "";
+  let html_recordUX = "";
+  this.tableUX  = {}; // init
   this.db.get_table_names().forEach((table, i) => {
-    html               += `<option value="${table}">${table}</option>`;
+    html_menu          += `<option value="${table}">${table}</option>`;
     html_tableUX       +=  `<div id="tableUX_${table}"></div>`
-    this.tableUX[table] = new tableUxClass(`tableUX_${table}`,`app.spa.tableUX["${table}"]`);
+    html_recordUX      +=  `<div id="tableUX_${table}_record"></div>`
+    this.tableUX[table] = new tableUxClass(`tableUX_${table}`,`app.spa.tableUX['${table}']`);
     this.tableUX[table].setModel(this.db,table);
   });
-  html += `
-  </select>`;
+  html_menu += `</select>`;
 
-  document.getElementById("menu_page_tables").innerHTML = html;
-  document.getElementById("tableUXs").innerHTML = html_tableUX;
-  
+  document.getElementById("menu_page_tables").innerHTML = html_menu;    // add table menu to dom
+  document.getElementById("tableUXs"        ).innerHTML = html_tableUX;    // add place to display each table in dom
+  document.getElementById("recordUXs"       ).innerHTML = html_recordUX;    // add place to display a record for each table in dom
 }
 
 
@@ -345,7 +347,7 @@ table_select(   // client side dbUXClass
     ux.display( ux.getModel().PK_get()  );  // display table
 
     this.show("tables");  // show the tables section
-    this.show("record");  // show record section
+    this.show("records");  // show record section
     ux.recordUX.clear();  // show button to create a new record
 }
 
