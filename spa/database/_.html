@@ -7,7 +7,7 @@
 </div>
 
 <div id="sss" style="display:none;"> 
-    <h3><a onclick="app.spa.toggle('sss')"> X </a> Search, Sort and Sum</h3>
+    <h3><a onclick="app.spa.toggle('sss')"> - </a> Search, Sort and Sum</h3>
     <div class="table1" style="display:inline-block; width:300px">
         <div id='table1UXDOM__group_by_fields'></div>
         <div id='table1UXDOM__intersection'></div>
@@ -34,27 +34,16 @@
     <h3><a onclick="app.spa.toggle('record')"> - </a>
         Add Relations</h3>
     <div style="display: flex">
-        <div  id="t1_record"  class="table1">
-            <h4><a onclick="app.spa.toggle('t1_record')">- +</a>Table 1</h4>
-            <div style="margin: 10px 10px 10px 10px; border-style: solid;">
-                <div id='table1UXDOM_record'></div><br>
-                <div id='table1UXDOM_record_buttons'></div><br>
-            </div>
-        </div>
-        <div id="record"  >
-            <h4><a onclick="app.spa.toggle('t2_record')">- +</a>Table 2</h4>
+        <div id="record1" style="margin: 30px 10px 10px 10px; border-style: solid;"></div>
+        <div id="record2" style="margin: 30px 10px 10px 10px; border-style: solid;"></div>
+        <div id="record_relation"  >
+            <h4><a onclick="app.spa.toggle('t2_record')">- +</a>Relation</h4>
             <div style="margin: 30px 10px 10px 10px; border-style: solid;">           
                 <div id='table2UXDOM_record'></div><br>
                 <div id='table2UXDOM_record_buttons'></div>
             </div>
         </div>
-        <div id="t2_record"  class="table2">
-            <h4><a onclick="app.spa.toggle('t2_record')">- +</a>Table 2</h4>
-            <div style="margin: 30px 10px 10px 10px; border-style: solid;">           
-                <div id='table2UXDOM_record'></div><br>
-                <div id='table2UXDOM_record_buttons'></div>
-            </div>
-        </div>
+
     </div>
 
     <div id='relationUXDOM'></div><br>

@@ -336,19 +336,21 @@ table_select(   // client side dbUXClass
   // user clicked on a table 
    DOM       // DOM.value is table user clicked on
   ) { 
-    // hide all tables
+    // hide all tables and records
     this.db.get_table_names().forEach((table, i) => {
-      document.getElementById(`tableUX_${table}`).style.display = "none";
+      document.getElementById(`tableUX_${table}`       ).style.display = "none";
+      document.getElementById(`tableUX_${table}_record`).style.display = "none";
     })
 
-    // show table clicked on
-    document.getElementById(`tableUX_${DOM.value}`).style.display = "block";
+    // show table & record clicked on
+    document.getElementById(`tableUX_${DOM.value}`       ).style.display = "block";
+    document.getElementById(`tableUX_${DOM.value}_record`).style.display = "block";
     const ux = this.tableUX[DOM.value];
     ux.display( ux.getModel().PK_get()  );  // display table
 
     this.show("tables");  // show the tables section
     this.show("records");  // show record section
-    ux.recordUX.clear();  // show button to create a new record
+    ux.recordUX.createUX();  // show button to create a new record
 }
 
 
