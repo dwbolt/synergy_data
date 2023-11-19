@@ -33,6 +33,7 @@ constructor( // client side dbUXClass - for a spa
     this.#url_dir     = dir;
     this.#url         = `${dir}/_.json`;  // json file that contains meta data for databases
     this.tableUX      = null;     // object contains one tableUXClass attribute for each table, init when user chooses database to open
+    this.table_active = "";  
   }
 
 
@@ -45,7 +46,7 @@ async main(){ // client side dbUXClass - for a spa
 		document.getElementById("userName"  ).innerHTML = `User: ${localStorage.nameFirst} ${localStorage.nameLast}`
 	} else {
 		// user not logged in
-		document.getElementById("navigation").innerHTML = await this.proxy.getText("./menu.html")
+		document.getElementById("navigation").innerHTML = await this.proxy.getText("./menu.html");
     alert("Login to use database single page application")
     return;
 	}
@@ -60,9 +61,6 @@ async main(){ // client side dbUXClass - for a spa
 
   // create menu and tableUX's
   this.menu_db_list();
-
-  //this.#json_db                               = obj.json;   // get list of databases
-
 }
 
 
@@ -82,30 +80,7 @@ menu_db_list() {
     Databases<br>
     ${html}
     `);
-/*
-  // build 
-  html = "";
-  for(let i=0; i<table_name.length; i++ ) {
-    html +=   `<div class="table">         <div id='tableUX_${table_name[i]}'></div></div>`
-    this.tableUX[table_name[i]] = new tableUxClass(`tableUX_${table_name[i]}`,`app.spa.tableUX["${table_name[i]}"]`);
-    this.tableUX[table_name[i]].setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
-    this.tableUX[table_name[i]].setRowNumberVisible(false);
-  }*/
 }
-
-
-/*
-  // setup  this.table1UX
-  this.table1UX  = new tableUxClass("table1UXDOM","app.spa.table1UX");
-  this.table1UX.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
-  this.table1UX.setRowNumberVisible(false);
-
-
-  // setup  this.tableUXRelations
-  this.tableUXRelations  = new tableUxClass("relationUXDOM","app.tableUXRelations");
-  this.tableUXRelations.setStatusLineData(["tableName","nextPrev","rows","firstLast","tags","rows/page","download","groupBy"]);
-  this.tableUXRelations.setRowNumberVisible(false);
-*/
 
 
 async database_select( // client side dbUXClass
@@ -331,11 +306,18 @@ table_process(  // client side dbUXClass - for a spa
     }
   }
 
+copy2record2(){
+  // get html for record_data
+  document.getElementById("record2").innerHTML = document.getElementById(`tableUX_${this.table_active}_record_data`).innerHTML;
+}
 
 table_select(   // client side dbUXClass
-  // user clicked on a table 
+  // user clicked on a table - so display it
    DOM       // DOM.value is table user clicked on
   ) { 
+    // remember active table
+    this.table_active = DOM.value;
+
     // hide all tables and records
     this.db.get_table_names().forEach((table, i) => {
       document.getElementById(`tableUX_${table}`       ).style.display = "none";
@@ -348,9 +330,9 @@ table_select(   // client side dbUXClass
     const ux = this.tableUX[DOM.value];
     ux.display( ux.getModel().PK_get()  );  // display table
 
-    this.show("tables");  // show the tables section
-    this.show("records");  // show record section
-    ux.recordUX.createUX();  // show button to create a new record
+    this.show("tables"   );  // show the tables section
+    this.show("records"  );  // show record section
+    ux.recordUX.createUX();  // create recordStructure if not already there
 }
 
 
