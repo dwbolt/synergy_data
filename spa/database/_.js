@@ -111,10 +111,9 @@ async database_select( // client side dbUXClass
   <select size="6" onclick="app.spa.table_process(this)">
   <option value="save">Save</option>
   <option value="new">New</option>
-  <option value="delete">Delete</option>
+  <option value="remove">Remove</option>
   <option value="columns">Columns</option>
   <option value="import">Import</option>
-  <option value="clear">Clear</option>
   </select>
   </div>
   <div id='dialog_detail' style="margin:10px 10px 10px 10px;"></div>
@@ -272,13 +271,12 @@ database_dialog_process(  // client side dbUXClass - for a spa
 table_process(  // client side dbUXClass - for a spa
     dom
     ){
+    let detail;
+
     switch(dom.value) {
-    case "clear":
-      document.getElementById('dialog_detail').innerHTML = "";
-      break;
       
     case "import":
-      document.getElementById('dialog_detail').innerHTML = `
+      detail = `
       <p><b>import csv file</b><br>
       <input type='file' accept='.csv' multiple="multiple" onchange='app.spa.loadLocalCSV(this)'><br>
       <textarea id='msg'></textarea>
@@ -286,30 +284,42 @@ table_process(  // client side dbUXClass - for a spa
       <p>imported CSV file will appear in above table list</p>`;
       break;
 
+    case "remove":
+      // table
+      detail = `<p>remove database link to table.  Table will not be deleted.
+      <input type='button' onclick='app.spa.remove();'></p>`;
+      break;
+
     case "save":
-        // save table
-        this.save();
-        break;
+      detail = `<p>Changes will be saved.
+      <input type='button' value="Save" onclick='app.spa.save();'></p>`;
+      break;
 
     case "new":
-      // code block
-      //break;
-
-    case "delete":
-      // code block
-
-      //</input>break;
+      detail = "create a new table, not implemented yet"
+      break;
 
     default:
       // code block
-      document.getElementById('dialog_detail').innerHTML = `"${dom.value}" table is not yet implemented`
+      detail = `Error, file="synergyData/spa/database/_.js}" method="table_process" dom="${dom.value}" `
     }
+
+    document.getElementById('dialog_detail').innerHTML = detail;
   }
 
-copy2record2(){
+
+  remove(){
+    // delete table
+
+  }
+
+copy2record(   // client side dbUXClass
+  ux  // "1" or "2"
+  ){
   // get html for record_data
-  document.getElementById("record2").innerHTML = document.getElementById(`tableUX_${this.table_active}_record_data`).innerHTML;
+  document.getElementById(`record${ux}`).innerHTML = document.getElementById(`tableUX_${this.table_active}_record_data`).innerHTML;
 }
+
 
 table_select(   // client side dbUXClass
   // user clicked on a table - so display it

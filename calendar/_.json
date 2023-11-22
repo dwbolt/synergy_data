@@ -1,12 +1,9 @@
 {
 "headTitle":"Synergy"
 ,"heading1": "Calendar"
-,"updated": "2023-05-30"
+,"updated": "2023-11-22"
 
-
-,"lists": {
-  "rows": ["weeks"]
-}
+,"lists": {"rows": ["weeks"]}
 
 ,"node": {
 

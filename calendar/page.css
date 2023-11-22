@@ -1,26 +1,20 @@
-  h5 {text-align:center;padding: 1px; margin:1}
+h5 {text-align:center;padding: 1px; margin:1}
 
 /* for dates in the past on the calendar*/
-.notYear  {font-size: 0;}
+.notYear {font-size: 0;}
 .past     {background-color: lightgrey;}
 .today    {background-color: yellow;}
-.future   {background-color: lightgreen;}
-.calendar {display: block}
+.future   {background-color: cyan;}
+.calendar {display: block;}
 
-.day {min-width: 90px; }
+.day {min-width: auto;}
 
 /* Style for the event form on calendar */
 
 /* style for repeating */
-.repeat_weekly  {--link-color: blue ;}
-.repeat_monthly {--link-color: red  ;}
-.repeat_yearly  {--link-color: black;}
-
-.section {
-	justify-content:center; 
-	text-align: center;
-	margin: 5px;
-}
+.repeat_weekly  {--link-color: blue;}
+.repeat_monthly {--link-color: red;}
+.repeat_yearly {--link-color: black;}
 
 /* for the add and save buttons on the pop up form */
 .addSaveButton {
@@ -97,6 +91,7 @@
 
 /* for the pop up form itself */
 #popUpForm {
+	display: none;
 	position: fixed; 
 	margin-top: 100px;
 	margin-bottom: 100px;
@@ -106,7 +101,7 @@
 	right: 0;
 	bottom: 0;
 	width: 500px;
-/*	height: 700px;*/
+	height: 700px;
 	background-color: #ffffff
 }
 
@@ -122,7 +117,7 @@
 }
 
 .dayPicker {
-	margin-top: 200px;
+	margin-top: 10px;
 }
 
 .repeatDiv {
@@ -153,6 +148,10 @@
 	transition: 100ms;
 }
 
+/* .pickDayContainer:hover .checkmark {
+	color: green;
+} */
+
 .pickDayContainer input:checked ~ .checkmark {
 	background-color: #515050;
 	transition: 100ms;
@@ -178,6 +177,15 @@
 }
 
 .removeMonthlySelectorButton {
+	/* display: inline-block;
+	color: #ffffff;
+	text-align: center;
+	font-size: 25px;
+	background-color: #808080;
+	height: 20px;
+	width: 20px;
+	border-radius: 30%;
+	transition: 200ms; */
 	cursor: pointer;
 	font-size: 25px;
 	color: #515050;
