@@ -296,7 +296,9 @@ table_process(  // client side dbUXClass - for a spa
       break;
 
     case "new":
-      detail = "create a new table, not implemented yet"
+      detail = `create a new table<br>
+      <input type="text" id="new_table_name"><br>
+      <input type="button" value="New" onclick="app.spa.new();">`
       break;
 
     default:
@@ -308,7 +310,52 @@ table_process(  // client side dbUXClass - for a spa
   }
 
 
-  remove(){
+async new(){  // client side dbUXClass - for a spa
+  // add table template
+  const table = `
+{
+"meta" : {
+  "fields" : {
+     "pk"        : {"header" : "PK"         , "type" : "pk"     , "location" : "column"  }
+    ,"label"     : {"header" : "Label"      , "type" : "string" , "location" : "column"  }
+    ,"display"   : {"header" : "Display"    , "type" : "string" , "location" : "column"  }
+    ,"comment"   : {"header" : "Commement"  , "type" : "string" , "location" : "column"  }
+    ,"relations" : {"header" : "Relations"  , "type" : "string" , "location" : "relation"}
+  }
+  ,"select"  : ["pk","label","display","comment","relations"]
+  ,"PK"      : {}
+  ,"PK_max"  : 0
+  ,"index"   : []
+  ,"deleted" : {}
+  }
+
+,"columns" : {
+   "pk"          : {}
+  ,"label"       : {}
+  ,"display"     : {}
+  ,"comment"     : {}
+  ,"description" : {}
+  }
+,"relation":{}
+}
+`
+  const name = document.getElementById("new_table_name").value;
+  if (name === "") {
+    alert("must enter name of table");
+    return;
+  }
+  const url = `${this.db.dir}/${name}/_.json`
+  const msg = await app.proxy.RESTpost(table, url);
+  alert(`save status = ${msg.statusText} 
+  file=${url}`);
+  
+  // update database metadata
+
+  }
+
+
+
+remove(){
     // delete table
 
   }
