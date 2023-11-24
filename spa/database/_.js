@@ -291,9 +291,10 @@ table_process(  // client side dbUXClass - for a spa
       break;
 
     case "save":
-      detail = `<p>Changes will be saved.
-      <input type='button' value="Save" onclick='app.spa.save();'></p>`;
-      break;
+      document.getElementById('dialog_detail').innerHTML = `<p>Changes will be saved.
+      <input type='button' value="Save" onclick='app.spa.save();'></p><p id="changes"></p>`;
+      this.show_changes();
+      return;
 
     case "new":
       detail = `create a new table<br>
@@ -473,7 +474,7 @@ loadLocalCSV( // client side dbUXClass - for a spa
 async save( // client side dbUXClass - for a spa
   // user clicked on save table button 
   ){
-  await this.table.save2file(); 
+  await this.db.getTable(this.table_active).save2file(); 
   this.show_changes();
 }
 
@@ -488,9 +489,9 @@ async saveDB( // client side dbUXClass - for a spa
 
 show_changes(){ // client side dbUXClass - for a spa
   let html = "";
-  const table        = this.tableUX.getModel();  // get tableClass being displayed
+  const table        = this.db.getTable(this.table_active);  // get tableClass being displayed
   const changes      = table.changes_get();
-  const primary_keys = Object.keys(changes);table
+  const primary_keys = Object.keys(changes);
   for(var i=0; i<primary_keys.length; i++) {
     let key = primary_keys[i]
     html += `key=${key}<br>`;
@@ -500,7 +501,7 @@ show_changes(){ // client side dbUXClass - for a spa
       html += ` &nbsp;&nbsp;field = ${fields[ii]} &nbsp;&nbsp; obj=${JSON.stringify(changes[key][fields[ii]])}<br>`
     }
   }
-  document.getElementById("mchanges").innerHTML = html
+  document.getElementById("changes").innerHTML = html
 }
 
 }
