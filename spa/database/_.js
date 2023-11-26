@@ -87,6 +87,8 @@ async database_select( // client side dbUXClass
   // user clicked on a database - show tables inside database
   dom  //  dom.value is database name user clicked on.
 ) {
+
+  this.table_active = "";  // have not yet selected a table
   // make sure user is logged in
   if (! await app.login.getStatus()) {
     alert("please log before using the database")
@@ -108,12 +110,9 @@ async database_select( // client side dbUXClass
   this.menu.add(`<div style="display:flex">
   <div>
   <b>Table Operation</b><br>
-  <select size="6" onclick="app.spa.table_process(this)">
-  <option value="save">Save</option>
-  <option value="new">New</option>
-  <option value="remove">Remove</option>
-  <option value="columns">Columns</option>
+  <select id="table_operations" size="6" onclick="app.spa.table_process(this)">
   <option value="import">Import</option>
+  <option value="new"   >New</option>
   </select>
   </div>
   <div id='dialog_detail' style="margin:10px 10px 10px 10px;"></div>
@@ -144,9 +143,9 @@ display_db_tables(// dbClass - client-side
   });
   html_menu += `</select>`;
 
-  document.getElementById("menu_page_tables").innerHTML = html_menu;    // add table menu to dom
-  document.getElementById("tableUXs"        ).innerHTML = html_tableUX;    // add place to display each table in dom
-  document.getElementById("recordUXs"       ).innerHTML = html_recordUX;    // add place to display a record for each table in dom
+  document.getElementById("menu_page_tables").innerHTML = html_menu;     // add table menu to dom
+  document.getElementById("tableUXs"        ).innerHTML = html_tableUX;  // add place to display each table in dom
+  document.getElementById("recordUXs"       ).innerHTML = html_recordUX; // add place to display a record for each table in dom
 }
 
 
@@ -273,15 +272,22 @@ table_process(  // client side dbUXClass - for a spa
     ){
     let detail;
 
+    // see if 
     switch(dom.value) {
       
     case "import":
       detail = `
       <p><b>import csv file</b><br>
-      <input type='file' accept='.csv' multiple="multiple" onchange='app.spa.loadLocalCSV(this)'><br>
+      <input type='file' accept='.csv' multiple="multiple" onchange='app.spa.loadLocalCSV(this)' ><br>
       <textarea id='msg'></textarea>
       </p>
       <p>imported CSV file will appear in above table list</p>`;
+      break;
+    
+    case "new":
+      detail = `create a new table<br>
+      <input type="text" id="new_table_name" placeholder="Enter Table Name"><br>
+      <input type="button" value="New" onclick="app.spa.new();">`
       break;
 
     case "remove":
@@ -294,12 +300,6 @@ table_process(  // client side dbUXClass - for a spa
       document.getElementById('dialog_detail').innerHTML = `<p>Changes will be saved.
       <input type='button' value="Save" onclick='app.spa.save();'></p><p id="changes"></p>`;
       this.show_changes();
-      return;
-
-    case "new":
-      detail = `create a new table<br>
-      <input type="text" id="new_table_name"><br>
-      <input type="button" value="New" onclick="app.spa.new();">`
       break;
 
     default:
@@ -373,8 +373,16 @@ table_select(   // client side dbUXClass
   // user clicked on a table - so display it
    DOM       // DOM.value is table user clicked on
   ) { 
-    // remember active table
-    this.table_active = DOM.value;
+    if (this.table_active === "") {
+      // first table is selected, so add more options
+      document.getElementById("table_operations").innerHTML += `
+      <option value="save"    >Save</option>
+      <option value="remove"  >Remove</option>
+      <option value="columns" >Column</option>
+      `
+    }
+    this.table_active = DOM.value;  // remember active table - (safari does not suport style="display:none;" on optons tag, )
+
 
     // hide all tables and records
     this.db.get_table_names().forEach((table, i) => {
