@@ -300,7 +300,7 @@ table_process(  // client side dbUXClass - for a spa
       document.getElementById('dialog_detail').innerHTML = `<p>Changes will be saved.
       <input type='button' value="Save" onclick='app.spa.save();'></p><p id="changes"></p>`;
       this.show_changes();
-      break;
+      return;
 
     default:
       // code block
