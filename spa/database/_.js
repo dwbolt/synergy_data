@@ -134,7 +134,7 @@ display_db_tables(// dbClass - client-side
   let html_tableUX  = "";
   let html_recordUX = "";
   this.tableUX  = {}; // init
-  this.db.get_table_names().forEach((table, i) => {
+  Object.keys(this.db.tables).forEach((table, i) => {
     html_menu          += `<option value="${table}">${table}</option>`;
     html_tableUX       +=  `<div id="tableUX_${table}"></div>`
     html_recordUX      +=  `<div id="tableUX_${table}_record"></div>`
