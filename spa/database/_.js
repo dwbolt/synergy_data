@@ -164,6 +164,9 @@ relation_creat_index( // client side dbUXClass
   */
   this.relation_index = {};
   const relations = this.db.getTable("relations");
+  if (typeof(relations) === "undefined") {
+    return // this database does not have a relation table.
+  }
   const pks       = relations.get_PK();    // array of PK keys for entire table;
   for(let i=0; i< pks.length; i++) {
     let row = relations.get_object(pks[i]);  // row as a json object
@@ -224,7 +227,6 @@ toggle(
     alert(`error file="dbUXClass.js method="toggle" section_name="${section_name}"`);
   }
 }
-
 
 
 show(
@@ -451,32 +453,6 @@ loadLocalCSV( // client side dbUXClass - for a spa
     this.i = 0;
     this.fr.readAsText( element.files[this.i] ); // read first file
 }
-
-/*async save(  // dbClass - client-side
-  // save changed loaded tables to disk
-) {
-  let save_new_meta  = false
-  const keys = Object.keys(this.tables);  // keys to loaded tables
-  // walking all tables in database to see if they have canged or or new
-  for(var i=0; i< keys.length; i++) {
-    // save all loaded tables that have changed
-    await this.tables[keys[i]].save2file();  // will return quickly if no changes
-    if ( typeof(this.#json.meta.tables[keys[i]]) ===  "undefined") {
-      this.#json.meta.tables[keys[i]] = {"location": keys[i], comments: "imported table"}
-      save_new_meta = true;
-    }
-  }
-
-  if (save_new_meta) {
-    // have a new table or tables, add it to meta data
-    await app.proxy.RESTpost(
-      `{
-        "meta":{
-          "tables": ${JSON.stringify(this.#json.meta.tables)}
-        }
-      }`, this.#url);
-  }
-}*/
 
 
 async save( // client side dbUXClass - for a spa
