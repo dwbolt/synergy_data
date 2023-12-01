@@ -458,8 +458,8 @@ loadLocalCSV( // client side dbUXClass - for a spa
 async save( // client side dbUXClass - for a spa
   // user clicked on save table button 
   ){
-  await this.db.getTable(this.table_active).save2file(); 
-  this.show_changes();
+  const msg = await this.db.save_table(this.table_active); 
+  //this.show_changes();
 }
 
 
