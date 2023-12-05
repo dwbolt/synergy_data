@@ -164,7 +164,7 @@ relation_creat_index( // client side dbUXClass
   */
   this.relation_index = {};
   const relations = this.db.getTable("relations");
-  if (typeof(relations) === "undefined") {
+  if (relations === undefined) {
     return // this database does not have a relation table.
   }
   const pks       = relations.get_PK();    // array of PK keys for entire table;
@@ -182,12 +182,12 @@ relation_add_PK(  // client side dbUXClass
   ,pk          // primary key of table
 
 ){
-  if (typeof(this.relation_index[table_name]) === "undefined") {
+  if (this.relation_index[table_name] === undefined) {
     // create empty object
     this.relation_index[table_name] = {};
   }
 
-  if (typeof(this.relation_index[table_name][pk]) === "undefined") {
+  if (this.relation_index[table_name][pk] === undefined) {
     // create empty array
     this.relation_index[table_name][pk] = []; 
   }

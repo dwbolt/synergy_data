@@ -98,7 +98,7 @@ async loadPage( // appClass - accounting - client side
   document.getElementById("html").innerHTML = await app.proxy.getText(`1-pages/${url}.html`);
 
   // execute main code for loaded page
-  if ( typeof(app.pages[url]) != "undefined") {
+  if ( app.pages[url] != undefined) {
     // make sure a class is defined for page
     app.page = app.pages[url];
     await app.page.main();
