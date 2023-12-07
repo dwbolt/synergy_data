@@ -396,7 +396,8 @@ table_select(   // client side dbUXClass
     document.getElementById(`tableUX_${DOM.value}`       ).style.display = "block";
     document.getElementById(`tableUX_${DOM.value}_record`).style.display = "block";
     const ux = this.tableUX[DOM.value];
-    ux.display( ux.getModel().PK_get()  );  // display table
+    //ux.display( ux.getModel().PK_get()  );  // display table
+    ux.display();  // display table
 
     this.show("tables"   );  // show the tables section
     this.show("records"  );  // show record section
