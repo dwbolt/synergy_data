@@ -349,10 +349,14 @@ async new(){  // client side dbUXClass - for a spa
   }
   const url = `${this.db.dir}/${name}/_.json`
   const msg = await app.proxy.RESTpost(table, url);
-  alert(`save status = ${msg.statusText} 
-  file=${url}`);
+  alert(`save 
+  success = ${msg.success}
+  msg     = ${msg.message} 
+  url     = ${url}`);
   
+  if (!msg.success){return;}
   // update database metadata
+  this.db.tableAdd(name);
 
   }
 
