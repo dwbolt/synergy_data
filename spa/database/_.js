@@ -154,7 +154,8 @@ relation_creat_index( // client side dbUXClass
   /* walk relation_table
   this.relation_index = {
     "table1":{
-      "pk1":[list of pks into relation]
+      "pk1":{table?:[[relation pk,table pk], ....]
+             tableN:{list of pks}}
       ...
       "pkN":[list of pks into relation ]
 
@@ -169,30 +170,33 @@ relation_creat_index( // client side dbUXClass
   }
   const pks       = relations.get_PK();    // array of PK keys for entire table;
   for(let i=0; i< pks.length; i++) {
-    let row = relations.get_object(pks[i]);  // row as a json object
-    this.relation_add_PK(row.id, row.table_1, row.PK_1);
-    this.relation_add_PK(row.id, row.table_2, row.PK_2);
+    let pk = pks[i];
+    let relation = relations.get_object(pk);  // row as a json object
+    this.relation_init(pk, relation.table_1, relation.pk_1, relation.table_2, relation.pk_2);
+    this.relation_init(pk, relation.table_2, relation.pk_2, relation.table_1, relation.pk_1);
   }
 }
 
 
-relation_add_PK(  // client side dbUXClass
-   id          // relation id
-  ,table_name  // of relation
-  ,pk          // primary key of table
-
+relation_init(  // client side dbUXClass
+   pk                // relation pk
+  ,table_name1       // 
+  ,table_name_pk1    // 
+  ,table_name2       // 
+  ,table_name_pk2    // primary key of table
 ){
-  if (this.relation_index[table_name] === undefined) {
+  if (
+    this.relation_index[table_name1] === undefined) {
     // create empty object
-    this.relation_index[table_name] = {};
+    this.relation_index[table_name1] = {};
   }
 
-  if (this.relation_index[table_name][pk] === undefined) {
+  if (
+    this.relation_index[table_name1][table_name_pk1] === undefined) {
     // create empty array
-    this.relation_index[table_name][pk] = []; 
+    this.relation_index[table_name1][table_name_pk1] = [];
   }
-
-  this.relation_index[table_name][pk].push(id);
+    this.relation_index[table_name1][table_name_pk1].push([pk, table_name2 ,table_name_pk2]);
 }
 
 database_dialog(  // client side dbUXClass
@@ -400,7 +404,6 @@ table_select(   // client side dbUXClass
     document.getElementById(`tableUX_${DOM.value}`       ).style.display = "block";
     document.getElementById(`tableUX_${DOM.value}_record`).style.display = "block";
     const ux = this.tableUX[DOM.value];
-    //ux.display( ux.getModel().PK_get()  );  // display table
     ux.display();  // display table
 
     this.show("tables"   );  // show the tables section
@@ -443,10 +446,11 @@ loadLocalCSV( // client side dbUXClass - for a spa
     this.fr.onload =  () => {
       // call back function when file has finished loading
       let name      = element.files[this.i].name;
-      name          = name.slice(0, name.length -4);                    // get rid of .csv in table name
-      const table   = this.db.tableAdd(name);                           // create table and add to db
-      const csv     = new csvClass(table);                              // create instace of CSV object
-      csv.parse_CSV(this.fr.result, "msg");                                   // parse loaded CSV file and put into table
+      name          = name.slice(0, name.length -4);             // get rid of .csv in table name
+      const table   = this.db.tableAdd(name);                    // create table and add to db
+      const csv     = new csvClass(table);                       // create instace of CSV object
+      csv.parse_CSV(this.fr.result, "msg");                      // parse loaded CSV file and put into table
+      table.save2file();                                         // save import
       this.display_db_tables();
 
       this.i ++ // process next file import
