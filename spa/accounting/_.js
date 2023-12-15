@@ -26,21 +26,19 @@ class dbUXClass { // client side dbUXClass - SPA (Single Page App)
 
 
 constructor( // client side dbUXClass - for a spa
+    dir    // user directory that database is in
 ){
     this.login        = new loginClass();
     this.proxy        = new proxyClass();
+    this.#url_dir     = dir;
+    this.#url         = `${dir}/_.json`;  // json file that contains meta data for databases
+    this.tableUX      = null;     // object contains one tableUXClass attribute for each table, init when user chooses database to open
+    this.table_active = "";  
   }
 
 
-async main(
-  dir    // user directory that database is in
-  ){ 
+async main(){ // client side dbUXClass - for a spa
   document.getElementById("footer").innerHTML = ""    ;   // get rid of footer
-  this.#url_dir     = dir;
-  this.#url         = `${dir}/_.json`;  // json file that contains meta data for databases
-  document.getElementById("db_url").innerHTML = this.#url;
-  this.tableUX      = undefined;     // object contains one tableUXClass attribute for each table, init when user chooses database to open
-  this.table_active = "";  
 
   if (await app.login.getStatus()) {
 		// user logged in
@@ -68,9 +66,9 @@ async main(
 
 menu_db_list() {
   // show list of databases
+  const db = this.db.get_database_list();    // is an array of database names
   let html = `<select size="4" onclick="app.spa.database_select(this)">`;
   // build list of databases to choose
-  const db = this.db.get_database_list();    // is an array of database names
   for(let i=0; i<db.length; i++ ) {
     html += `<option value="${db[i]}">${db[i]}</option>`;
   }
@@ -367,12 +365,12 @@ async new(){  // client side dbUXClass - for a spa
   }
 
 
+
 remove(){
     // delete table
 
   }
 
-  
 copy2record(   // client side dbUXClass
   ux  // "1" or "2"
   ){
@@ -503,5 +501,5 @@ show_changes(){ // client side dbUXClass - for a spa
 
 export {dbUXClass};
 
-app.spa = new dbUXClass();  
-app.spa.main(app.urlParams.get('url'));
+app.spa = new dbUXClass("/users/database");  
+app.spa.main();
