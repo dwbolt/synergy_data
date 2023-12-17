@@ -40,7 +40,7 @@ async main(
   this.#url         = `${dir}/_.json`;  // json file that contains meta data for databases
   document.getElementById("db_url").innerHTML = this.#url;
   this.tableUX      = undefined;     // object contains one tableUXClass attribute for each table, init when user chooses database to open
-  this.table_active = "";  
+  this.table_active = undefined;  
 
   if (await app.login.getStatus()) {
 		// user logged in
@@ -90,7 +90,7 @@ async database_select( // client side dbUXClass
   dom  //  dom.value is database name user clicked on.
 ) {
 
-  this.table_active = "";  // have not yet selected a table
+  this.table_active = {active:{name:"", pk:""}, "1":{name:"", pk:""}, "2":{name:"", pk:""}};  // have not yet selected a table
   // make sure user is logged in
   if (! await app.login.getStatus()) {
     alert("please log before using the database")
@@ -130,9 +130,9 @@ display_db_tables(// dbClass - client-side
   // create menu of tables to display, and tableUX for each table
    domID        // where to output menu
 ) {
-   //   this.db.displayMenu("",""); // display tables in database
   // build menu list
-  let html_menu     = `<select size="9" onclick="app.spa.table_select(this,'table1UX')">`;
+  const action = "app.spa.table_select(this,'table1UX')";
+  let html_menu     = `<select id="database_tables" size="9" onclick="${action}" oninput="${action}">`;
   let html_tableUX  = "";
   let html_recordUX = "";
   this.tableUX  = {}; // init
@@ -193,16 +193,24 @@ relation_init(  // client side dbUXClass
     this.relation_index[table_name1] = {};
   }
 
-  if (
-    this.relation_index[table_name1][table_name_pk1] === undefined) {
+  if (this.relation_index[table_name1][table_name_pk1] === undefined) {
     // create empty array
-    this.relation_index[table_name1][table_name_pk1] = [];
+    this.relation_index[table_name1][table_name_pk1] = {};
   }
-    this.relation_index[table_name1][table_name_pk1].push([pk, table_name2 ,table_name_pk2]);
+
+  if (this.relation_index[table_name1][table_name_pk1][table_name2] === undefined) {
+    // create empty array
+    this.relation_index[table_name1][table_name_pk1][table_name2] = {};
+  }
+
+  if (this.relation_index[table_name1][table_name_pk1][table_name2][table_name_pk2] === undefined) {
+    // create empty array
+    this.relation_index[table_name1][table_name_pk1][table_name2][table_name_pk2]  = pk;  // pk for relation
+  }
 }
 
-database_dialog(  // client side dbUXClass
 
+database_dialog(  // client side dbUXClass
 ){
   document.getElementById('menu_dialog').innerHTML = `
   <table><tr><td>
@@ -310,9 +318,19 @@ table_process(  // client side dbUXClass - for a spa
       this.show_changes();
       return;
 
+    case "columns":
+      document.getElementById('dialog_detail').innerHTML = `<p>edit columns not implemented
+      <input type='button' value="Save" onclick='app.spa.save();'></p><p id="changes"></p>`;
+      //this.show_changes();
+      return;
+
     default:
       // code block
-      detail = `Error, file="synergyData/spa/database/_.js}" method="table_process" dom="${dom.value}" `
+      detail = `
+file="synergyData/spa/database/_.js" 
+method="table_process" 
+dom.value="${dom.value}"
+not implemented`
     }
 
     document.getElementById('dialog_detail').innerHTML = detail;
@@ -376,8 +394,39 @@ remove(){
 copy2record(   // client side dbUXClass
   ux  // "1" or "2"
   ){
-  // get html for record_data
-  document.getElementById(`record${ux}`).innerHTML = document.getElementById(`tableUX_${this.table_active}_record_data`).innerHTML;
+  
+  // copy active record to table1 or table 2 
+  document.getElementById(`record${ux}`).innerHTML = document.getElementById(`tableUX_${this.table_active.active.name}_record_data`).innerHTML;
+  this.show('relations');  // let user see copied data
+  
+
+  this.table_active[ux].name = this.table_active.active.name;                                  // rember table name
+  this.table_active[ux].pk   = this.tableUX[this.table_active.active.name].recordUX.get_pk();  // rember pk
+
+  if        (ux==="1") {
+    return;
+  } else if (ux==="2") {
+    // see if there is already a relation and display it
+    let pk;
+    try {
+      // get relation pk
+      let select = document.getElementById("database_tables");
+      select.value = "relations";
+      select.click();
+      pk = this.relation_index[this.table_active["1"].name][this.table_active["1"].pk][this.table_active["2"].name][this.table_active["2"].pk]
+      if (pk) {
+        this.tableUX.relations.recordUX.show(`"${pk}"`);
+      }
+    } catch (error) {
+      alert(`file="synergyData/spa/database/_.js"
+method="copy2record"
+error="${error}"`)
+    }
+  } else {
+    alert(`file="synergyData/spa/database/_.js"
+method="copy2record:
+ux="${ux}"`)
+  }
 }
 
 
@@ -385,7 +434,7 @@ table_select(   // client side dbUXClass
   // user clicked on a table - so display it
    DOM       // DOM.value is table user clicked on
   ) { 
-    if (this.table_active === "") {
+    if (this.table_active.active.name === "") {
       // first table is selected, so add more options
       document.getElementById("table_operations").innerHTML += `
       <option value="save"    >Save</option>
@@ -393,7 +442,7 @@ table_select(   // client side dbUXClass
       <option value="columns" >Column</option>
       `
     }
-    this.table_active = DOM.value;  // remember active table - (safari does not suport style="display:none;" on optons tag, )
+    this.table_active.active.name = DOM.value;  // remember active table - (safari does not suport style="display:none;" on optons tag, )
 
 
     // hide all tables and records
@@ -469,7 +518,7 @@ loadLocalCSV( // client side dbUXClass - for a spa
 async save( // client side dbUXClass - for a spa
   // user clicked on save table button 
   ){
-  const msg = await this.db.save_table(this.table_active); 
+  const msg = await this.db.save_table(this.table_active.active.name); 
   //this.show_changes();
 }
 
@@ -484,7 +533,7 @@ async saveDB( // client side dbUXClass - for a spa
 
 show_changes(){ // client side dbUXClass - for a spa
   let html = "";
-  const table        = this.db.getTable(this.table_active);  // get tableClass being displayed
+  const table        = this.db.getTable(this.table_active.active.name);  // get tableClass being displayed
   const changes      = table.changes_get();
   const primary_keys = Object.keys(changes);
   for(var i=0; i<primary_keys.length; i++) {
