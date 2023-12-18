@@ -415,7 +415,7 @@ copy2record(   // client side dbUXClass
       select.click();
       pk = this.relation_index[this.table_active["1"].name][this.table_active["1"].pk][this.table_active["2"].name][this.table_active["2"].pk]
       if (pk) {
-        this.tableUX.relations.recordUX.show(`"${pk}"`);
+        this.tableUX.relations.recordUX.show(pk);
       }
     } catch (error) {
       alert(`file="synergyData/spa/database/_.js"
