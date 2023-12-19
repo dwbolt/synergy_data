@@ -413,9 +413,19 @@ copy2record(   // client side dbUXClass
       let select = document.getElementById("database_tables");
       select.value = "relations";
       select.click();
-      pk = this.relation_index[this.table_active["1"].name][this.table_active["1"].pk][this.table_active["2"].name][this.table_active["2"].pk]
-      if (pk) {
+      try { pk = this.relation_index[this.table_active["1"].name][this.table_active["1"].pk][this.table_active["2"].name][this.table_active["2"].pk];
+      } catch (error) {pk = undefined;}
+      if (pk != undefined) {
+        // edit relation
         this.tableUX.relations.recordUX.show(pk);
+      } else {
+        // create new relation
+        this.tableUX.relations.recordUX.new();
+        // prefill in table and pk  -- bridle code, will break if order of edit fields changes;
+        document.getElementById(`edit-1`).value = this.table_active["1"].pk;
+        document.getElementById(`edit-2`).value = this.table_active["1"].name;
+        document.getElementById(`edit-6`).value = this.table_active["2"].pk;
+        document.getElementById(`edit-7`).value = this.table_active["2"].name;
       }
     } catch (error) {
       alert(`file="synergyData/spa/database/_.js"
