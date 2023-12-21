@@ -89,14 +89,14 @@ async database_select( // client side dbUXClass
   // user clicked on a database - show tables inside database
   dom  //  dom.value is database name user clicked on.
 ) {
-
-  this.table_active = {active:{name:"", pk:""}, "1":{name:"", pk:""}, "2":{name:"", pk:""}};  // have not yet selected a table
   // make sure user is logged in
   if (! await app.login.getStatus()) {
     alert("please log before using the database")
     window.location.replace("app.html?p=logInOut");
     return;
   }
+
+  this.table_active = {active:{name:"", pk:""}, "1":{name:"", pk:""}, "2":{name:"", pk:""}};  // have not yet selected a table
 
   // load the database
   await this.db.load(dom.value);  
