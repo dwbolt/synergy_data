@@ -12,7 +12,7 @@ class dbUXClass { // client side dbUXClass - SPA (Single Page App)
 
   /*
 
- supports RDBMS in users space
+ user interface to add/edit databases,tables.records RDBMS in users space
 
   */
 
@@ -32,15 +32,20 @@ constructor( // client side dbUXClass - for a spa
   }
 
 
-async main(
-  dir    // user directory that database is in
+async main( // client side dbUXClass - for a spa
+  dir    // user directory that list of databases are in
   ){ 
-  document.getElementById("footer").innerHTML = ""    ;   // get rid of footer
-  this.#url_dir     = dir;
-  this.#url         = `${dir}/_.json`;  // json file that contains meta data for databases
-  document.getElementById("db_url").innerHTML = this.#url;
-  this.tableUX      = undefined;     // object contains one tableUXClass attribute for each table, init when user chooses database to open
-  this.table_active = undefined;  
+  this.url_dir      = dir;
+  this.url_meta     = `${dir}/_meta.json`;   // json file that contains meta data for databases
+  this.meta         = undefined              // where 
+  this.db           = new dbClass();         // will hold selected database
+  this.menu         = new menuClass("menu_page"); // where is puturl_meta
+  this.tableUX      = undefined;             // object contains one tableUXClass attribute for each table, init when user chooses database to open
+  this.table_active = undefined;             // name of table that is active in open database
+
+
+  document.getElementById("footer").innerHTML = ""          ;   // get rid of footer
+  document.getElementById("db_url").innerHTML = this.url_dir;   // show user were the list of databases is coming from
 
   if (await app.login.getStatus()) {
 		// user logged in
@@ -54,23 +59,52 @@ async main(
 	}
 
   // user opened database app
-  this.db        = new dbClass();
-  if(!await this.db.load_db_list(this.#url)) {
+  if(!await this.load_db_list()) {
      // error no need to go furter
     return; 
   }
-  this.menu      = new menuClass("menu_page");
-
+  
   // create menu and tableUX's
   this.menu_db_list();
 }
 
 
-menu_db_list() {
+async load_db_list(  // dbClass - client-side
+  // load list of databases 
+  ) {
+
+  // load list of tables in database
+  const obj = await app.proxy.getJSONwithError(this.url_meta);   // get list of tables;
+  if(obj.status === 404) {
+    alert(`missing url="${this.url_meta}"
+creating from template
+file="db_module.js" 
+method="load_db_list"`);
+this.meta   = 
+{
+  "meta":{
+      "comment":"works with db_module.js"
+      ,"databases": {
+           "import"   : {"location":"/users/database/import" }
+          ,"synergy"  : {"location":"/users/database/synergy"}
+          ,"play"     : {"location":"/users/database/play"   }
+      }
+    }
+}
+    // now save it
+    const msg = await app.proxy.RESTpost(JSON.stringify(this.meta), this.url_meta );
+  } else {
+    this.meta   = obj.json; 
+  }
+  return true;
+}
+
+
+menu_db_list() {  // dbClass - client-side
   // show list of databases
   let html = `<select size="4" onclick="app.spa.database_select(this)">`;
   // build list of databases to choose
-  const db = this.db.get_database_list();    // is an array of database names
+  const db = Object.keys(this.meta.databases);    // is an array of database names
   for(let i=0; i<db.length; i++ ) {
     html += `<option value="${db[i]}">${db[i]}</option>`;
   }
@@ -79,9 +113,20 @@ menu_db_list() {
   // display menu
   this.menu.init();
   this.menu.add(`
-    Databases<br>
-    ${html}
-    `);
+  click on database to view it's tables<br>
+  <b>Databases</b><br>
+  ${html}
+  <br>
+  <input type="button" value="Database Menu" onclick="app.spa.id_show('database_dialog')"> 
+  <p id="database_dialog" style="display:none">
+  <b>Database Operation</b><br>
+  <select size="4" onclick="app.spa.database_dialog_process(this)">
+  <option value="new">New</option>
+  <option value="delete">Delete</option>
+  <option value="cancel">Cancel</option>
+  </select>
+  
+  </p>`);
 }
 
 
@@ -99,7 +144,15 @@ async database_select( // client side dbUXClass
   this.table_active = {active:{name:"", pk:""}, "1":{name:"", pk:""}, "2":{name:"", pk:""}};  // have not yet selected a table
 
   // load the database
-  await this.db.load(dom.value);  
+  try {
+    const dir_db = this.meta.databases[dom.value].location;
+    await this.db.load(dir_db);  
+  } catch (error) {
+    alert(`file="spa/database/_.js"
+method="database_select"
+error="${error}"`);
+  }
+  
 
   // display table menu
   this.menu.deleteTo(1);   // remove menues to the right of database memnu
@@ -210,24 +263,18 @@ relation_init(  // client side dbUXClass
 }
 
 
-database_dialog(  // client side dbUXClass
-){
-  document.getElementById('menu_dialog').innerHTML = `
-  <table><tr><td>
-  <b>Database Operation</b><br>
-  <select size="4" onclick="app.spa.database_dialog_process(this)">
-  <option value="new">New</option>
-  <option value="delete">Delete</option>
-  <option value="cancel">Cancel</option>
-  </select></td>
-  <td id='dialog_detail'></td>
-  </tr>
-  </table>`;
+id_show(id){  // client side dbUXClass - for a spa
+  const element = document.getElementById(id);
+  element.style.display = "block";  // will cause problem if element is inline rather than block
 }
 
+id_hide(id){  // client side dbUXClass - for a spa
+  const element = document.getElementById(id);
+  element.style.display = "none";
+}
 
-toggle(
-  section_name  // client side dbUXClass - for a spa
+toggle( // client side dbUXClass - for a spa
+  section_name  // used to show/hide major section.  If hiden the section shows in the top level menu so the user can later show it.  
 ) {
   const section = document.getElementById(section_name);
   const menu    = document.getElementById(section_name+"_menu");
@@ -238,13 +285,15 @@ toggle(
     menu.style.display    = section.style.display === "none" ? "inline" : "none";
   } else {
     // error
-    alert(`error file="dbUXClass.js method="toggle" section_name="${section_name}"`);
+    alert(`file="spa/database/_.js"
+method="toggle" 
+section_name="${section_name}"`);
   }
 }
 
 
-show(
-  section_name  // client side dbUXClass - for a spa
+show(  // client side dbUXClass - for a spa
+  section_name  // force the section to show, remove from menu
 ) {
   const section = document.getElementById(section_name);
   const menu    = document.getElementById(section_name+"_menu");
@@ -255,7 +304,9 @@ show(
     menu.style.display    = section.style.display === "none" ? "inline" : "none";
   } else {
     // error
-    alert(`error file="dbUXClass.js method="show" section_name="${section_name}"`);
+    alert(`file="dbUXClass.js
+method="show"
+section_name="${section_name}"`);
   }
 }
 
@@ -264,17 +315,17 @@ database_dialog_process(  // client side dbUXClass - for a spa
   dom
   ){
   switch(dom.value) {
-    case "cancel":
+    case "new":
       // code block
-      document.getElementById('menu_dialog').innerHTML = "";
+      alert("new not implemented");
       break;
 
     case "delete":
-      // code block
-      //break;
+      alert("new not implemented");
+      break;
 
-    case "delete":
-      // code block
+    case "cancel":
+      this.id_hide("database_dialog");
       //break;      
 
     default:
@@ -309,19 +360,18 @@ table_process(  // client side dbUXClass - for a spa
     case "remove":
       // table
       detail = `<p>remove database link to table.  Table will not be deleted.
-      <input type='button' onclick='app.spa.remove();'></p>`;
+      <input type='button' value="Remove" onclick='app.spa.remove();'></p>`;
       break;
 
-    case "save":
-      document.getElementById('dialog_detail').innerHTML = `<p>Changes will be saved.
-      <input type='button' value="Save" onclick='app.spa.save();'></p><p id="changes"></p>`;
-      this.show_changes();
+    case "merge":
+      document.getElementById('dialog_detail').innerHTML = `<p>columns will be saved, and a new change file started.
+      Need to decide where pk_max is stored, currently it is in meta.json 
+      <input type='button' value="Merge" onclick='app.spa.merge();'></p><p id="changes"></p>`;
       return;
 
     case "columns":
       document.getElementById('dialog_detail').innerHTML = `<p>edit columns not implemented
-      <input type='button' value="Save" onclick='app.spa.save();'></p><p id="changes"></p>`;
-      //this.show_changes();
+      <input type='button' value="Columns" onclick='alert("not implemented")'></p><p id="changes"></p>`;
       return;
 
     default:
@@ -336,58 +386,31 @@ not implemented`
     document.getElementById('dialog_detail').innerHTML = detail;
   }
 
+async merge(){
+  alert("not fully implemented, resolve pk_max issue before turninng on")
+  return; 
+  const msg = await this.db.table_merge(this.table_active.active.name); 
+}
+  
 
 async new(){  // client side dbUXClass - for a spa
-  // add table template
-  const table = `
-{
-"meta" : {
-  "fields" : {
-     "pk"        : {"header" : "PK"         , "type" : "pk"     , "location" : "column"  }
-    ,"label"     : {"header" : "Label"      , "type" : "string" , "location" : "column"  }
-    ,"display"   : {"header" : "Display"    , "type" : "string" , "location" : "column"  }
-    ,"comment"   : {"header" : "Commement"  , "type" : "string" , "location" : "column"  }
-    ,"relations" : {"header" : "Relations"  , "type" : "string" , "location" : "relation"}
-  }
-  ,"select"  : ["pk","label","display","comment","relations"]
-  ,"PK"      : {}
-  ,"PK_max"  : 0
-  ,"index"   : []
-  ,"deleted" : {}
-  }
-
-,"columns" : {
-   "pk"          : {}
-  ,"label"       : {}
-  ,"display"     : {}
-  ,"comment"     : {}
-  ,"description" : {}
-  }
-,"relation":{}
-}
-`
-  const name = document.getElementById("new_table_name").value;
-  if (name === "") {
+  // update database metadata
+  const name = document.getElementById("new_table_name").value;  // get name of table from user
+  if (name==="") {
     alert("must enter name of table");
     return;
   }
-  const url = `${this.db.dir}/${name}/_.json`
-  const msg = await app.proxy.RESTpost(table, url);
-  alert(`save 
-  success = ${msg.success}
-  msg     = ${msg.message} 
-  url     = ${url}`);
-  
-  if (!msg.success){return;}
-  // update database metadata
-  this.db.tableAdd(name);
+  // add code to force unique 
+  const table = this.db.tableAdd(name);
+  table.merge(); // save empty table to server
 
+  // save 
   }
 
 
 remove(){
     // delete table
-
+    alert("remove not implemented")
   }
 
   
@@ -447,7 +470,7 @@ table_select(   // client side dbUXClass
     if (this.table_active.active.name === "") {
       // first table is selected, so add more options
       document.getElementById("table_operations").innerHTML += `
-      <option value="save"    >Save</option>
+      <option value="merge"   >Merge</option>
       <option value="remove"  >Remove</option>
       <option value="columns" >Column</option>
       `
@@ -511,7 +534,7 @@ loadLocalCSV( // client side dbUXClass - for a spa
       const table   = this.db.tableAdd(name);                    // create table and add to db
       const csv     = new csvClass(table);                       // create instace of CSV object
       csv.parse_CSV(this.fr.result, "msg");                      // parse loaded CSV file and put into table
-      table.save2file();                                         // save import
+      table.merge(`${this.url_dir}/${name}`);                                             // save import
       this.display_db_tables();
 
       this.i ++ // process next file import
@@ -522,14 +545,6 @@ loadLocalCSV( // client side dbUXClass - for a spa
 
     this.i = 0;
     this.fr.readAsText( element.files[this.i] ); // read first file
-}
-
-
-async save( // client side dbUXClass - for a spa
-  // user clicked on save table button 
-  ){
-  const msg = await this.db.save_table(this.table_active.active.name); 
-  //this.show_changes();
 }
 
 
