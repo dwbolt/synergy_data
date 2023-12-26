@@ -16,19 +16,12 @@ class dbUXClass { // client side dbUXClass - SPA (Single Page App)
 
   */
 
-  #url          // points to db json file
-  #url_dir      // directory json file is in
-  #json_db      // loaded file
-  #DOMid_db     // where database is selected
-  #DOMid_table  // where table is selected
   #primary_key_value
-  #edit_type          // true -> table       false -> buffer
-
 
 constructor( // client side dbUXClass - for a spa
 ){
-    this.login        = new loginClass();
-    this.proxy        = new proxyClass();
+  this.login        = new loginClass();
+  this.proxy        = new proxyClass();
   }
 
 
@@ -36,6 +29,7 @@ async main( // client side dbUXClass - for a spa
   dir    // user directory that list of databases are in
   ){ 
   this.url_dir      = dir;
+  this.db_name      = undefined;
   this.url_meta     = `${dir}/_meta.json`;   // json file that contains meta data for databases
   this.meta         = undefined              // where 
   this.db           = new dbClass();         // will hold selected database
@@ -79,20 +73,18 @@ async load_db_list(  // dbClass - client-side
     alert(`missing url="${this.url_meta}"
 creating from template
 file="db_module.js" 
-method="load_db_list"`);
-this.meta   = 
-{
-  "meta":{
-      "comment":"works with db_module.js"
-      ,"databases": {
-           "import"   : {"location":"/users/database/import" }
-          ,"synergy"  : {"location":"/users/database/synergy"}
-          ,"play"     : {"location":"/users/database/play"   }
-      }
+method="load_db_list"`
+    );
+
+    this.meta   = 
+    {
+      "meta":{
+          "comment":"works with db_module.js"
+          ,"databases": {}
+        }
     }
-}
     // now save it
-    const msg = await app.proxy.RESTpost(JSON.stringify(this.meta), this.url_meta );
+    let msg = await app.proxy.RESTpost(JSON.stringify(this.meta), this.url_meta );
   } else {
     this.meta   = obj.json; 
   }
@@ -126,6 +118,7 @@ menu_db_list() {  // dbClass - client-side
   <option value="cancel">Cancel</option>
   </select>
   
+  <div id="database_dialog_detail"></div>
   </p>`);
 }
 
@@ -146,7 +139,8 @@ async database_select( // client side dbUXClass
   // load the database
   try {
     const dir_db = this.meta.databases[dom.value].location;
-    await this.db.load(dir_db);  
+    this.db_name = dom.value;
+    await this.db.load(dir_db);
   } catch (error) {
     alert(`file="spa/database/_.js"
 method="database_select"
@@ -181,7 +175,6 @@ error="${error}"`);
 
 display_db_tables(// dbClass - client-side
   // create menu of tables to display, and tableUX for each table
-   domID        // where to output menu
 ) {
   // build menu list
   const action = "app.spa.table_select(this,'table1UX')";
@@ -317,20 +310,61 @@ database_dialog_process(  // client side dbUXClass - for a spa
   switch(dom.value) {
     case "new":
       // code block
-      alert("new not implemented");
+      this.database_detail_new()
       break;
 
     case "delete":
-      alert("new not implemented");
+      this.database_delete();
       break;
 
     case "cancel":
       this.id_hide("database_dialog");
-      //break;      
+      break;      
 
     default:
       document.getElementById('dialog_detail').innerHTML = `"${dom.value}" not yet implemented for database`
   }
+}
+
+
+async database_delete(){ // client side dbUXClass - for a spa
+  await this.db.delete();  // delete database
+
+  // delet from list of databases
+  delete this.meta.databases[this.db_name];
+  const msg = await app.proxy.RESTpost(JSON.stringify(this.meta),`${this.url_dir}/_meta.json`); // save meta data
+  this.menu_db_list();    //
+}
+
+
+database_detail_new(){ // client side dbUXClass - for a spa
+  document.getElementById("database_dialog_detail").innerHTML = `
+  create a new database<br>
+  <input type="text" id="new_database_name" placeholder="Enter Database Name"><br>
+  <input type="button" value="Create New Database" onclick="app.spa.database_new();">
+  `
+}
+
+
+async database_new(){ // client side dbUXClass - for a spa
+  const name = document.getElementById("new_database_name").value;
+  if (name==="") {
+    alert("must enter database name to create");
+    return;
+  }
+  
+  if (this.meta.databases[name] != undefined) {
+    // test for existance add to list of databases
+    alert(`database "${name}" already exists`);
+    return;
+  }
+
+  const url = `${this.url_dir}/${name}`;
+  this.meta.databases[name] = {"location": url};                          // add database name to meta data
+  const msg = await app.proxy.RESTpost(JSON.stringify(this.meta),`${this.url_dir}/_meta.json`); // save meta data
+
+  await this.db.new(url);  // create database 
+  this.menu_db_list();    // show new database in menu
 }
 
 
@@ -354,13 +388,13 @@ table_process(  // client side dbUXClass - for a spa
     case "new":
       detail = `create a new table<br>
       <input type="text" id="new_table_name" placeholder="Enter Table Name"><br>
-      <input type="button" value="New" onclick="app.spa.new();">`
+      <input type="button" value="New" onclick="app.spa.table_new();">`
       break;
 
-    case "remove":
+    case "delete":
       // table
-      detail = `<p>remove database link to table.  Table will not be deleted.
-      <input type='button' value="Remove" onclick='app.spa.remove();'></p>`;
+      detail = `<p>Delete selected table.
+      <input type='button' value="Delete" onclick='app.spa.table_delete();'></p>`;
       break;
 
     case "merge":
@@ -393,7 +427,7 @@ async merge(){
 }
   
 
-async new(){  // client side dbUXClass - for a spa
+async table_new(){  // client side dbUXClass - for a spa
   // update database metadata
   const name = document.getElementById("new_table_name").value;  // get name of table from user
   if (name==="") {
@@ -401,16 +435,25 @@ async new(){  // client side dbUXClass - for a spa
     return;
   }
   // add code to force unique 
-  const table = this.db.tableAdd(name);
-  table.merge(); // save empty table to server
 
-  // save 
+  // create table in database
+  const table = this.db.tableAdd(name);
+  await this.db.meta_save();                 // save database meta data changes
+  await table.create("synergy");
+  await table.merge(); // save empty table to server
+
+  // update table list
+  this.display_db_tables()
   }
 
 
-remove(){
-    // delete table
-    alert("remove not implemented")
+async table_delete(){
+  // delete table
+  const table = this.db.getTable(this.table_active.active.name); 
+  await table.delete();
+  
+  // update table list
+  this.display_db_tables()
   }
 
   
@@ -471,7 +514,7 @@ table_select(   // client side dbUXClass
       // first table is selected, so add more options
       document.getElementById("table_operations").innerHTML += `
       <option value="merge"   >Merge</option>
-      <option value="remove"  >Remove</option>
+      <option value="delete"  >delete</option>
       <option value="columns" >Column</option>
       `
     }
