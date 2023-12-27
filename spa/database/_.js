@@ -1,4 +1,4 @@
-/*  database spa (single page app) */
+/*  database spa (single page app) works on a collection of databases */
 
 import {csvClass    } from '/_lib/db/csv_module.js'     ;
 import {dbClass     } from '/_lib/db/db_module.js'      ;
@@ -167,13 +167,12 @@ error="${error}"`);
   <div id='dialog_detail' style="margin:10px 10px 10px 10px;"></div>
   </div>`);
 
-  // create relation index
-  this.display_db_tables();
-  this.relation_creat_index();
+  this.db_tables_display();
+  this.relation_creat_index();   // create relation index
   }
 
 
-display_db_tables(// dbClass - client-side
+db_tables_display(// dbClass - client-side
   // create menu of tables to display, and tableUX for each table
 ) {
   // build menu list
@@ -379,7 +378,7 @@ table_process(  // client side dbUXClass - for a spa
     case "import":
       detail = `
       <p><b>import csv file</b><br>
-      <input type='file' accept='.csv' multiple="multiple" onchange='app.spa.loadLocalCSV(this)' ><br>
+      <input type='file' accept='.csv' multiple="multiple" onchange='app.spa.Local_CSV_load(this)' ><br>
       <textarea id='msg'></textarea>
       </p>
       <p>imported CSV file will appear in above table list</p>`;
@@ -443,17 +442,18 @@ async table_new(){  // client side dbUXClass - for a spa
   await table.merge(); // save empty table to server
 
   // update table list
-  this.display_db_tables()
+  this.db_tables_display()
   }
 
 
 async table_delete(){
-  // delete table
-  const table = this.db.getTable(this.table_active.active.name); 
-  await table.delete();
+  const table_name = this.table_active.active.name;  // get table to delete
+  this.table_active.active.name = "";
+
+  let msg = await this.db.table_delete(table_name); // have database delete table
   
-  // update table list
-  this.display_db_tables()
+  delete this.db.tables[table_name];                // delete from database loaded tables
+  this.db_tables_display();                         // update table list
   }
 
   
@@ -563,7 +563,7 @@ displayIndex(// client side dbUXClass
 }
 
 
-loadLocalCSV( // client side dbUXClass - for a spa
+Local_CSV_load( // client side dbUXClass - for a spa
     // user selected a new CSV file from their local drive, load it into memory and add it to the table menu
     element  // DOM
     ) {
@@ -578,7 +578,7 @@ loadLocalCSV( // client side dbUXClass - for a spa
       const csv     = new csvClass(table);                       // create instace of CSV object
       csv.parse_CSV(this.fr.result, "msg");                      // parse loaded CSV file and put into table
       table.merge(`${this.url_dir}/${name}`);                                             // save import
-      this.display_db_tables();
+      this.db_tables_display();
 
       this.i ++ // process next file import
       if (this.i < element.files.length) {
