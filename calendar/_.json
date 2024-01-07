@@ -1,7 +1,7 @@
 {
 "headTitle":"Synergy"
 ,"heading1": "Calendar"
-,"updated": "2023-11-22"
+,"updated": "2024-01-07"
 
 ,"lists": {"rows": ["weeks"]}
 
@@ -11,7 +11,7 @@
   "text":[
      ["","","<p id='weeks' class='calendar'></p>"]
     ,["","","<div class='popUpForm' id='popUpForm' hidden></div>"]
-    ,["link"  ,"","/synergyData/calendar/page.css"]
+    ,["link"  ,"","/_lib/UX/calendar.css"]
     ,["script","","/synergyData/calendar/page_module.js"]
   ]
 
