@@ -70,10 +70,10 @@ async load_db_list(  // dbClass - client-side
   // load list of tables in database
   const obj = await app.proxy.getJSONwithError(this.url_meta);   // get list of tables;
   if(obj.status === 404) {
-    alert(`missing url="${this.url_meta}"
-creating from template
-file="db_module.js" 
-method="load_db_list"`
+    alert(`file="syneryData/spa/database/_.js" 
+method="load_db_list"
+missing url="${this.url_meta}"
+creating from template`
     );
 
     this.meta   = 
@@ -296,7 +296,7 @@ show(  // client side dbUXClass - for a spa
     menu.style.display    = section.style.display === "none" ? "inline" : "none";
   } else {
     // error
-    alert(`file="dbUXClass.js
+    alert(`file="spa/database/_.js
 method="show"
 section_name="${section_name}"`);
   }
@@ -420,7 +420,9 @@ not implemented`
   }
 
 async merge(){
-  alert("not fully implemented, resolve pk_max issue before turninng on")
+  alert(`"file="spa/database/_.js
+  method="merge"
+  not fully implemented, resolve pk_max issue before turninng on"`)
   return; 
   const msg = await this.db.table_merge(this.table_active.active.name); 
 }
