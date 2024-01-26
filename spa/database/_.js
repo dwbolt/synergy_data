@@ -367,7 +367,7 @@ async database_new(){ // client side dbUXClass - for a spa
 }
 
 
-table_process(  // client side dbUXClass - for a spa
+async table_process(  // client side dbUXClass - for a spa
     dom
     ){
     let detail;
@@ -402,9 +402,13 @@ table_process(  // client side dbUXClass - for a spa
       <input type='button' value="Merge" onclick='app.spa.merge();'></p><p id="changes"></p>`;
       return;
 
-    case "columns":
-      document.getElementById('dialog_detail').innerHTML = `<p>edit columns not implemented
-      <input type='button' value="Columns" onclick='alert("not implemented")'></p><p id="changes"></p>`;
+    case "meta":
+      document.getElementById('dialog_detail').innerHTML = `<p>edit meta
+      <input type='button' value="Save" onclick='app.spa.meta_save()'></p><textarea id="meta" rows="20" cols="90"></textarea>`;
+      let msg = await app.proxy.RESTget( this.db.getTable(this.table_active.active.name).dir + "/_meta.json");  // get as text file so we can edit it
+      if (msg.ok) {
+        document.getElementById('meta').innerHTML = msg.value;
+      }
       return;
 
     default:
@@ -421,12 +425,21 @@ not implemented`
 
 async merge(){
   alert(`"file="spa/database/_.js
-  method="merge"
-  not fully implemented, resolve pk_max issue before turninng on"`)
+method="merge"
+not fully implemented, resolve pk_max issue before turninng on"`)
   return; 
   const msg = await this.db.table_merge(this.table_active.active.name); 
 }
   
+async meta_save() {
+  const text = document.getElementById("meta").value;
+  const msg = await app.proxy.RESTpost(text, this.db.getTable(this.table_active.active.name).dir + "/_meta.json");
+  if (msg.success) {
+    document.getElementById('meta').innerHTML = "save compete"
+  } else {
+    document.getElementById('meta').innerHTML = "error"
+  }
+}
 
 async table_new(){  // client side dbUXClass - for a spa
   // update database metadata
@@ -515,9 +528,9 @@ table_select(   // client side dbUXClass
     if (this.table_active.active.name === "") {
       // first table is selected, so add more options
       document.getElementById("table_operations").innerHTML += `
-      <option value="merge"   >Merge</option>
-      <option value="delete"  >delete</option>
-      <option value="columns" >Column</option>
+      <option value="merge"  >Merge</option>
+      <option value="delete" >Delete</option>
+      <option value="meta"   >Meta</option>
       `
     }
     this.table_active.active.name = DOM.value;  // remember active table - (safari does not suport style="display:none;" on optons tag, )
