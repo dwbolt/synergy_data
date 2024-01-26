@@ -96,10 +96,14 @@ menu_db_list() {  // dbClass - client-side
   // show list of databases
   let html = `<select size="4" onclick="app.spa.database_select(this)">`;
   // build list of databases to choose
+  if (this.meta.databases === undefined) { 
+    this.meta.databases = {}; // this should not be needed, if 
+  }
   const db = Object.keys(this.meta.databases);    // is an array of database names
   for(let i=0; i<db.length; i++ ) {
     html += `<option value="${db[i]}">${db[i]}</option>`;
   }
+
   html += "</select>"
 
   // display menu
@@ -352,18 +356,32 @@ async database_new(){ // client side dbUXClass - for a spa
     return;
   }
   
-  if (this.meta.databases[name] != undefined) {
+  if ( !this.meta.databases[name] === undefined) {
     // test for existance add to list of databases
     alert(`database "${name}" already exists`);
     return;
   }
 
-  const url = `${this.url_dir}/${name}`;
-  this.meta.databases[name] = {"location": url};                          // add database name to meta data
-  const msg = await app.proxy.RESTpost(JSON.stringify(this.meta),`${this.url_dir}/_meta.json`); // save meta data
-
-  await this.db.new(url);  // create database 
+  // add database name to meta data
+  const url_db   = `${this.url_dir}/${name}`;
+  const url_meta = `${this.url_dir}/_meta.json`      
+  this.meta.databases[name] = {"location": url_db};   
+                 
+  const msg = await app.proxy.RESTpost(JSON.stringify(this.meta),url_meta); // save meta data
+  if (!msg.success) {
+    alert(`file="/synergydata/spa/database_.js
+method="database_new"
+url_meta="${url_meta}"
+RESTpost failed to save`);
+  }
+  await this.db.new(url_db);  // create database 
   this.menu_db_list();    // show new database in menu
+}
+
+
+table_structure(dom){ // client side dbUXClass - for a spa
+  // set name of table to be structure, user can change it
+  document.getElementById("new_table_name").value = dom.value;
 }
 
 
@@ -386,8 +404,18 @@ async table_process(  // client side dbUXClass - for a spa
     
     case "new":
       detail = `create a new table<br>
+      <select id="table_meta" onChange="app.spa.table_structure(this)">
+      <option value="addresses" >addresses</option>
+      <option value="calendar"  >calendar</option>
+      <option value="default"   selected>default</option>
+      <option value="groups"    >groups</option>
+      <option value="people"    >people</option>
+      <option value="phones"    >phones</option>
+      <option value="relations" >relations</option>
+      <option value="tasks"     >tasks</option>
+      </select> Select table structure<br>
       <input type="text" id="new_table_name" placeholder="Enter Table Name"><br>
-      <input type="button" value="New" onclick="app.spa.table_new();">`
+      <input type="button" value="Create New Table" onclick="app.spa.table_new();">`
       break;
 
     case "delete":
@@ -448,13 +476,24 @@ async table_new(){  // client side dbUXClass - for a spa
     alert("must enter name of table");
     return;
   }
-  // add code to force unique 
+
+  // get structure of table
+  const meta_name = document.getElementById("table_meta").value;  // stucture user selected
+  const url       = `/_lib/db/tables_meta/${meta_name}.json`;
+  let msg = await app.proxy.RESTget(url);
+  if (!msg.ok) {
+    alert(`file="/synergyData/spa/database_js"
+method="table_new"
+url="${url}"
+RESTget failed`);
+    return;
+  }
 
   // create table in database
   const table = this.db.tableAdd(name);
-  await this.db.meta_save();                 // save database meta data changes
-  await table.create("synergy");
-  await table.merge(); // save empty table to server
+  await this.db.meta_save()    ;  // save database meta data changes
+  await table.create(msg.value);  // save meta data
+  await table.merge()          ;  // save empty table to server
 
   // update table list
   this.db_tables_display()
@@ -636,4 +675,4 @@ show_changes(){ // client side dbUXClass - for a spa
 export {dbUXClass};
 
 app.spa = new dbUXClass();  
-app.spa.main(app.urlParams.get('url'));
+await app.spa.main(app.urlParams.get('url'));
