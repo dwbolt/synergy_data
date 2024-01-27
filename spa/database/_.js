@@ -476,23 +476,12 @@ async table_new(){  // client side dbUXClass - for a spa
     alert("must enter name of table");
     return;
   }
-
-  // get structure of table
-  const meta_name = document.getElementById("table_meta").value;  // stucture user selected
-  const url       = `/_lib/db/tables_meta/${meta_name}.json`;
-  let msg = await app.proxy.RESTget(url);
-  if (!msg.ok) {
-    alert(`file="/synergyData/spa/database_js"
-method="table_new"
-url="${url}"
-RESTget failed`);
-    return;
-  }
+  const meta_name = document.getElementById("table_meta").value;  // get name of table from user
 
   // create table in database
   const table = this.db.tableAdd(name);
   await this.db.meta_save()    ;  // save database meta data changes
-  await table.create(msg.value);  // save meta data
+  await table.create(name,meta_name);  // save meta data
   await table.merge()          ;  // save empty table to server
 
   // update table list
