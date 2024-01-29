@@ -508,7 +508,6 @@ copy2record(   // client side dbUXClass
   document.getElementById(`record${ux}`).innerHTML = document.getElementById(`tableUX_${this.table_active.active.name}_record_data`).innerHTML;
   this.show('relations');  // let user see copied data
   
-
   this.table_active[ux].name = this.table_active.active.name;                                  // rember table name
   this.table_active[ux].pk   = this.tableUX[this.table_active.active.name].recordUX.get_pk();  // rember pk
 
@@ -531,10 +530,11 @@ copy2record(   // client side dbUXClass
         // create new relation
         this.tableUX.relations.recordUX.new();
         // prefill in table and pk  -- bridle code, will break if order of edit fields changes;
-        document.getElementById(`edit-1`).value = this.table_active["1"].pk;
-        document.getElementById(`edit-2`).value = this.table_active["1"].name;
-        document.getElementById(`edit-6`).value = this.table_active["2"].pk;
-        document.getElementById(`edit-7`).value = this.table_active["2"].name;
+        document.getElementById("tableUX_relations_record_data_pk_1"   ).value = this.table_active["1"].pk;
+        document.getElementById("tableUX_relations_record_data_table_1").value = this.table_active["1"].name;
+
+        document.getElementById("tableUX_relations_record_data_pk_2"   ).value = this.table_active["2"].pk;
+        document.getElementById("tableUX_relations_record_data_table_2").value = this.table_active["2"].name;
       }
     } catch (error) {
       alert(`file="synergyData/spa/database/_.js"
