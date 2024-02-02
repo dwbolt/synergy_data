@@ -578,7 +578,7 @@ table_select(   // client side dbUXClass
 
     this.show("tables"   );  // show the tables section
     this.show("records"  );  // show record section
-    ux.recordUX.createUX();  // create recordStructure if not already there
+    ux.recordUX.html_create();  // create recordStructure if not already there
 }
 
 
