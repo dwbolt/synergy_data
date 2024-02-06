@@ -413,6 +413,7 @@ async table_process(  // client side dbUXClass - for a spa
       <option value="phones"    >phones</option>
       <option value="relations" >relations</option>
       <option value="tasks"     >tasks</option>
+      <option value="urls"      >urls</option>
       </select> Select table structure<br>
       <input type="text" id="new_table_name" placeholder="Enter Table Name"><br>
       <input type="button" value="Create New Table" onclick="app.spa.table_new();">`
