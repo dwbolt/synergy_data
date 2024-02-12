@@ -34,8 +34,8 @@ async main( // client side dbUXClass - for a spa
   this.meta         = undefined              // where 
   this.db           = new dbClass();         // will hold selected database
   this.menu         = new menuClass("menu_page"); // where is puturl_meta
-  this.tableUX      = undefined;             // object contains one tableUXClass attribute for each table, init when user chooses database to open
-  this.tableUX_rel  = undefined;             // object contains one tableUXClass attribute for each table, used to display relations to an object/record
+  this.tableUX      = {};                    // object contains one tableUXClass attribute for each table, init when user chooses database to open
+  this.tableUX_rel  = {};                    // object contains one tableUXClass attribute for each table, used to display relations to an object/record
   this.table_active = undefined;             // name of table that is active in open database
 
   document.getElementById("footer").innerHTML = ""          ;   // get rid of footer
@@ -185,7 +185,6 @@ db_tables_display(// dbClass - client-side
   let html_tableUX   = "";
   let html_recordUX  = "";
   let html_relations = `<h3><a onclick="app.spa.toggle('relations')"> - </a> Add Relations</h3>`;
-  this.tableUX  = {}; // init
   Object.keys(this.db.tables).forEach((table, i) => {
     html_menu          += `<option value="${table}">${table}</option>`;
     html_tableUX       +=  `<div id="tableUX_${table}"></div>`        ;
