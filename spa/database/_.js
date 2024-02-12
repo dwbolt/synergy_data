@@ -35,8 +35,8 @@ async main( // client side dbUXClass - for a spa
   this.db           = new dbClass();         // will hold selected database
   this.menu         = new menuClass("menu_page"); // where is puturl_meta
   this.tableUX      = undefined;             // object contains one tableUXClass attribute for each table, init when user chooses database to open
+  this.tableUX_rel  = undefined;             // object contains one tableUXClass attribute for each table, used to display relations to an object/record
   this.table_active = undefined;             // name of table that is active in open database
-
 
   document.getElementById("footer").innerHTML = ""          ;   // get rid of footer
   document.getElementById("db_url").innerHTML = this.url_dir;   // show user were the list of databases is coming from
@@ -181,22 +181,29 @@ db_tables_display(// dbClass - client-side
 ) {
   // build menu list
   const action = "app.spa.table_select(this,'table1UX')";
-  let html_menu     = `<select id="database_tables" size="9" onclick="${action}" oninput="${action}">`;
-  let html_tableUX  = "";
-  let html_recordUX = "";
+  let html_menu = `<select id="database_tables" size="9" onclick="${action}" oninput="${action}">`;
+  let html_tableUX   = "";
+  let html_recordUX  = "";
+  let html_relations = `<h3><a onclick="app.spa.toggle('relations')"> - </a> Add Relations</h3>`;
   this.tableUX  = {}; // init
   Object.keys(this.db.tables).forEach((table, i) => {
     html_menu          += `<option value="${table}">${table}</option>`;
-    html_tableUX       +=  `<div id="tableUX_${table}"></div>`
-    html_recordUX      +=  `<div id="tableUX_${table}_record"></div>`
-    this.tableUX[table] = new tableUxClass(`tableUX_${table}`,`app.spa.tableUX['${table}']`);
-    this.tableUX[table].setModel(this.db,table);
+    html_tableUX       +=  `<div id="tableUX_${table}"></div>`        ;
+    html_recordUX      +=  `<div id="tableUX_${table}_record"></div>` ;
+    html_relations     +=  `<div id="tableUX_${table}_rel"></div>`    ;
+
+    this.tableUX[table] = new tableUxClass(`tableUX_${table}`,`app.spa.tableUX['${table}']`);  // create table viewer
+    this.tableUX[table].setModel(this.db,table);                                               // attach model to viewer
+
+    this.tableUX_rel[table] = new tableUxClass(`tableUX_${table}_rel`,`app.spa.tableUX['${table}']`);  // create table viewer
+    this.tableUX_rel[table].setModel(this.db,table);                                               // attach model to viewer
   });
   html_menu += `</select>`;
 
-  document.getElementById("menu_page_tables").innerHTML = html_menu;     // add table menu to dom
-  document.getElementById("tableUXs"        ).innerHTML = html_tableUX;  // add place to display each table in dom
-  document.getElementById("recordUXs"       ).innerHTML = html_recordUX; // add place to display a record for each table in dom
+  document.getElementById("menu_page_tables").innerHTML = html_menu;      // add table menu to dom
+  document.getElementById("tableUXs"        ).innerHTML = html_tableUX;   // add place to display each table in dom
+  document.getElementById("recordUXs"       ).innerHTML = html_recordUX;  // add place to display a record for each table in 
+  document.getElementById("relations"       ).innerHTML = html_relations; // add place to display a record for each table in dom
 }
 
 
@@ -236,19 +243,18 @@ relation_init(  // client side dbUXClass
   ,table_name2       // 
   ,table_name_pk2    // primary key of table
 ){
-  if (
-    this.relation_index[table_name1] === undefined) {
+  if (this.relation_index[table_name1] === undefined) {
     // create empty object
     this.relation_index[table_name1] = {};
   }
 
   if (this.relation_index[table_name1][table_name_pk1] === undefined) {
-    // create empty array
+    // create empty object
     this.relation_index[table_name1][table_name_pk1] = {};
   }
 
   if (this.relation_index[table_name1][table_name_pk1][table_name2] === undefined) {
-    // create empty array
+    // create empty object
     this.relation_index[table_name1][table_name_pk1][table_name2] = {};
   }
 
