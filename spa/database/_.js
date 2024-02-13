@@ -184,11 +184,11 @@ db_tables_display(// dbClass - client-side
   let html_menu = `<select id="database_tables" size="9" onclick="${action}" oninput="${action}">`;
   let html_tableUX   = "";
   let html_recordUX  = "";
-  let html_relations = `<h3><a onclick="app.spa.toggle('relations')"> - </a> Add Relations</h3>`;
+  let html_relations = `<h3><a onclick="app.spa.toggle('relations')"> - </a> Relations</h3>`;
   Object.keys(this.db.tables).forEach((table, i) => {
     html_menu          += `<option value="${table}">${table}</option>`;
     html_tableUX       +=  `<div id="tableUX_${table}"></div>`        ;
-    html_recordUX      +=  `<div id="tableUX_${table}_record"></div>` ;
+    html_recordUX      +=  `<div id="tableUX_${table}_record" class="border"></div>` ;
     html_relations     +=  `<div id="tableUX_${table}_rel"></div>`    ;
 
     this.tableUX[table] = new tableUxClass(`tableUX_${table}`,`app.spa.tableUX['${table}']`);  // create table viewer
@@ -199,10 +199,10 @@ db_tables_display(// dbClass - client-side
   });
   html_menu += `</select>`;
 
-  document.getElementById("menu_page_tables").innerHTML = html_menu;      // add table menu to dom
-  document.getElementById("tableUXs"        ).innerHTML = html_tableUX;   // add place to display each table in dom
-  document.getElementById("recordUXs"       ).innerHTML = html_recordUX;  // add place to display a record for each table in 
-  document.getElementById("relations"       ).innerHTML = html_relations; // add place to display a record for each table in dom
+  document.getElementById("menu_page_tables").innerHTML  = html_menu;      // add table menu to dom
+  document.getElementById("tableUXs"        ).innerHTML  = html_tableUX;   // add place to display each table in dom
+  document.getElementById("recordUXs"       ).innerHTML += html_recordUX;  // add place to display a record for each table in 
+  document.getElementById("relations"       ).innerHTML  = html_relations; // add place to display a record for each table in dom
 }
 
 
@@ -506,17 +506,16 @@ async table_delete(){
   }
 
   
-copy2record(   // client side dbUXClass
-  ux  // "1" or "2"
+copy2record_1(   // client side dbUXClass
   ){
   
   // copy active record to table1 or table 2 
-  document.getElementById(`record${ux}`).innerHTML = document.getElementById(`tableUX_${this.table_active.active.name}_record_data`).innerHTML;
-  this.show('relations');  // let user see copied data
+  document.getElementById(`record_1`).innerHTML = document.getElementById(`tableUX_${this.table_active.active.name}_record_data`).innerHTML;
+  //this.show('relations');  // let user see copied data
   
-  this.table_active[ux].name = this.table_active.active.name;                                  // rember table name
-  this.table_active[ux].pk   = this.tableUX[this.table_active.active.name].recordUX.get_pk();  // rember pk
-
+  this.table_active[1].name = this.table_active.active.name;                                  // rember table name
+  this.table_active[1].pk   = this.tableUX[this.table_active.active.name].recordUX.get_pk();  // rember pk
+/*
   if        (ux==="1") {
     return;
   } else if (ux==="2") {
@@ -552,6 +551,7 @@ error="${error}"`)
 method="copy2record:
 ux="${ux}"`)
   }
+  */
 }
 
 

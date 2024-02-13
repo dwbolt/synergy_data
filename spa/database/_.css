@@ -14,3 +14,9 @@
 .changed { /* back ground color for changed values */
 	background-color: yellow;
 }
+
+.border {
+  margin: 10px 10px 10px 10px;
+  border-style: solid;
+  padding: 10px 10px 10px 10px;
+}
