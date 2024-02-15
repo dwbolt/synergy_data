@@ -20,3 +20,8 @@
   border-style: solid;
   padding: 10px 10px 10px 10px;
 }
+
+.record {
+  display: grid; 
+  grid-template-columns: 20px 100px 300px;
+}

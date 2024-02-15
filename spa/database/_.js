@@ -8,8 +8,9 @@ import {menuClass   } from '/_lib/UX/menu_module.js'    ;
 import {loginClass  } from '/_lib/UX/login_module.js'   ;
 import {proxyClass  } from '/_lib/proxy/proxy_module.js';
 
-class dbUXClass { // client side dbUXClass - SPA (Single Page App)
+import {relation_class} from './relation_module.js';
 
+class dbUXClass { // client side dbUXClass - SPA (Single Page App)
   /*
 
  user interface to add/edit databases,tables.records RDBMS in users space
@@ -22,6 +23,7 @@ constructor( // client side dbUXClass - for a spa
 ){
   this.login        = new loginClass();
   this.proxy        = new proxyClass();
+  this.relation     = new relation_class();
   }
 
 
@@ -172,7 +174,7 @@ error="${error}"`);
   </div>`);
 
   this.db_tables_display();
-  this.relation_creat_index();   // create relation index
+  this.relation.creat_index();
   }
 
 
@@ -198,69 +200,14 @@ db_tables_display(// dbClass - client-side
     this.tableUX_rel[table].setModel(this.db,table);                                               // attach model to viewer
   });
   html_menu += `</select>`;
-
-  document.getElementById("menu_page_tables").innerHTML  = html_menu;      // add table menu to dom
-  document.getElementById("tableUXs"        ).innerHTML  = html_tableUX;   // add place to display each table in dom
-  document.getElementById("recordUXs"       ).innerHTML += html_recordUX;  // add place to display a record for each table in 
-  document.getElementById("relations"       ).innerHTML  = html_relations; // add place to display a record for each table in dom
-}
-
-
-relation_creat_index( // client side dbUXClass
-){
-  /* walk relation_table
-  this.relation_index = {
-    "table1":{
-      "pk1":{table?:[[relation pk,table pk], ....]
-             tableN:{list of pks}}
-      ...
-      "pkN":[list of pks into relation ]
-
-     }
-    ,"tableN":{...}
-  }
-  */
-  this.relation_index = {};
-  const relations = this.db.getTable("relations");
-  if (relations === undefined) {
-    return // this database does not have a relation table.
-  }
-  const pks       = relations.get_PK();    // array of PK keys for entire table;
-  for(let i=0; i< pks.length; i++) {
-    let pk = pks[i];
-    let relation = relations.get_object(pk);  // row as a json object
-    this.relation_init(pk, relation.table_1, relation.pk_1, relation.table_2, relation.pk_2);
-    this.relation_init(pk, relation.table_2, relation.pk_2, relation.table_1, relation.pk_1);
-  }
-}
-
-
-relation_init(  // client side dbUXClass
-   pk                // relation pk
-  ,table_name1       // 
-  ,table_name_pk1    // 
-  ,table_name2       // 
-  ,table_name_pk2    // primary key of table
-){
-  if (this.relation_index[table_name1] === undefined) {
-    // create empty object
-    this.relation_index[table_name1] = {};
-  }
-
-  if (this.relation_index[table_name1][table_name_pk1] === undefined) {
-    // create empty object
-    this.relation_index[table_name1][table_name_pk1] = {};
-  }
-
-  if (this.relation_index[table_name1][table_name_pk1][table_name2] === undefined) {
-    // create empty object
-    this.relation_index[table_name1][table_name_pk1][table_name2] = {};
-  }
-
-  if (this.relation_index[table_name1][table_name_pk1][table_name2][table_name_pk2] === undefined) {
-    // create empty array
-    this.relation_index[table_name1][table_name_pk1][table_name2][table_name_pk2]  = pk;  // pk for relation
-  }
+  html_recordUX += `
+  <div id="record_relation" class="border record"></div>
+  <div id="record_1"        class="border record"></div>
+  `;
+  document.getElementById("menu_page_tables").innerHTML = html_menu;      // add table menu to dom
+  document.getElementById("tableUXs"        ).innerHTML = html_tableUX;   // add place to display each table in dom
+  document.getElementById("recordUXs"       ).innerHTML = html_recordUX;  // add place to display a record for each table in 
+  document.getElementById("relations"       ).innerHTML = html_relations; // add place to display a record for each table in dom
 }
 
 
@@ -508,50 +455,12 @@ async table_delete(){
   
 copy2record_1(   // client side dbUXClass
   ){
-  
   // copy active record to table1 or table 2 
   document.getElementById(`record_1`).innerHTML = document.getElementById(`tableUX_${this.table_active.active.name}_record_data`).innerHTML;
   //this.show('relations');  // let user see copied data
   
   this.table_active[1].name = this.table_active.active.name;                                  // rember table name
   this.table_active[1].pk   = this.tableUX[this.table_active.active.name].recordUX.get_pk();  // rember pk
-/*
-  if        (ux==="1") {
-    return;
-  } else if (ux==="2") {
-    // see if there is already a relation and display it
-    let pk;
-    try {
-      // get relation pk
-      let select = document.getElementById("database_tables");
-      select.value = "relations";
-      select.click();
-      try { pk = this.relation_index[this.table_active["1"].name][this.table_active["1"].pk][this.table_active["2"].name][this.table_active["2"].pk];
-      } catch (error) {pk = undefined;}
-      if (pk != undefined) {
-        // edit relation
-        this.tableUX.relations.recordUX.show(pk);
-      } else {
-        // create new relation
-        this.tableUX.relations.recordUX.new();
-        // prefill in table and pk  -- bridle code, will break if order of edit fields changes;
-        document.getElementById("tableUX_relations_record_data_pk_1"   ).value = this.table_active["1"].pk;
-        document.getElementById("tableUX_relations_record_data_table_1").value = this.table_active["1"].name;
-
-        document.getElementById("tableUX_relations_record_data_pk_2"   ).value = this.table_active["2"].pk;
-        document.getElementById("tableUX_relations_record_data_table_2").value = this.table_active["2"].name;
-      }
-    } catch (error) {
-      alert(`file="synergyData/spa/database/_.js"
-method="copy2record"
-error="${error}"`)
-    }
-  } else {
-    alert(`file="synergyData/spa/database/_.js"
-method="copy2record:
-ux="${ux}"`)
-  }
-  */
 }
 
 
