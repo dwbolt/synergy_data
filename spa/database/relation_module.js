@@ -21,7 +21,7 @@ constructor( // client side relation_class - for a spa
 
 creat_index( // client side relation_class
 ){
-  this.index = {};kk
+  this.index = {};
   
   const relations = app.spa.db.getTable("relations");
   if (relations === undefined) {
