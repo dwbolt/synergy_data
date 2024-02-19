@@ -1,8 +1,9 @@
 /*  database spa (single page app) works on a collection of databases */
 
-import {csvClass    } from '/_lib/db/csv_module.js'     ;
-import {dbClass     } from '/_lib/db/db_module.js'      ;
-import {tableUxClass} from '/_lib/db/tableUx_module.js' ;
+import {csvClass    }  from '/_lib/db/csv_module.js'     ;
+import {dbClass     }  from '/_lib/db/db_module.js'      ;
+import {tableUxClass}  from '/_lib/db/tableUx_module.js' ;
+import {recordUxClass} from '/_lib/db/recordUx_module.js';
 
 import {menuClass   } from '/_lib/UX/menu_module.js'    ;
 import {loginClass  } from '/_lib/UX/login_module.js'   ;
@@ -38,7 +39,10 @@ async main( // client side dbUXClass - for a spa
   this.menu         = new menuClass("menu_page"); // where is puturl_meta
   this.tableUX      = {};                    // object contains one tableUXClass attribute for each table, init when user chooses database to open
   this.tableUX_rel  = {};                    // object contains one tableUXClass attribute for each table, used to display relations to an object/record
-  this.table_active = undefined;             // name of table that is active in open database
+
+  this.table_active;             // name of table that is active in open databas
+  this.record_1;                 // ux for record_1
+  this.record_relation;          // ux for record_relation;
 
   document.getElementById("footer").innerHTML = ""          ;   // get rid of footer
   document.getElementById("db_url").innerHTML = this.url_dir;   // show user were the list of databases is coming from
@@ -179,7 +183,7 @@ error="${error}"`);
 
 
 db_tables_display(// dbClass - client-side
-  // create menu of tables to display, and tableUX for each table
+  // create menu of tables to display, and tableUX and recordUX for each table
 ) {
   // build menu list
   const action = "app.spa.table_select(this,'table1UX')";
@@ -193,11 +197,11 @@ db_tables_display(// dbClass - client-side
     html_recordUX      +=  `<div id="tableUX_${table}_record" class="border"></div>` ;
     html_relations     +=  `<div id="tableUX_${table}_rel"></div>`    ;
 
-    this.tableUX[table] = new tableUxClass(`tableUX_${table}`,`app.spa.tableUX['${table}']`);  // create table viewer
-    this.tableUX[table].setModel(this.db,table);                                               // attach model to viewer
+    this.tableUX[table] = new tableUxClass(    `tableUX_${table}`,     `app.spa.tableUX['${table}']`, this.db.getTable(table));  // create table viewer
+   // this.tableUX[table].setModel(this.db,table);                                               // attach model to viewer
 
-    this.tableUX_rel[table] = new tableUxClass(`tableUX_${table}_rel`,`app.spa.tableUX['${table}']`);  // create table viewer
-    this.tableUX_rel[table].setModel(this.db,table);                                               // attach model to viewer
+    this.tableUX_rel[table] = new tableUxClass(`tableUX_${table}_rel`, `app.spa.tableUX['${table}']`, this.db.getTable(table));  // create table viewer
+   // this.tableUX_rel[table].setModel(this.db,table);                                               // attach model to viewer
   });
   html_menu += `</select>`;
   html_recordUX += `
@@ -208,6 +212,13 @@ db_tables_display(// dbClass - client-side
   document.getElementById("tableUXs"        ).innerHTML = html_tableUX;   // add place to display each table in dom
   document.getElementById("recordUXs"       ).innerHTML = html_recordUX;  // add place to display a record for each table in 
   document.getElementById("relations"       ).innerHTML = html_relations; // add place to display a record for each table in dom
+
+  // create records for record_1 and record_relation
+  //this.record_1        = new recordUxClass(this.tableUX);
+  //this.record_1.globalName_set();
+
+  this.record_relation = new recordUxClass(this.tableUX.relations);   // create ux for create/edit relations
+  this.record_relation.globalName_set("app.spa.record_relation");    // this is a seprate from record associated with this.tableUX.relation
 }
 
 
