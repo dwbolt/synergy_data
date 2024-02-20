@@ -205,7 +205,7 @@ db_tables_display(// dbClass - client-side
   });
   html_menu += `</select>`;
   html_recordUX += `
-  <div id="record_relation" class="border record"></div>
+  <div id="relation_record" class="border"></div>
   <div id="record_1"        class="border record"></div>
   `;
   document.getElementById("menu_page_tables").innerHTML = html_menu;      // add table menu to dom
@@ -218,7 +218,9 @@ db_tables_display(// dbClass - client-side
   //this.record_1.globalName_set();
 
   this.record_relation = new recordUxClass(this.tableUX.relations);   // create ux for create/edit relations
-  this.record_relation.globalName_set("app.spa.record_relation");    // this is a seprate from record associated with this.tableUX.relation
+  this.record_relation.globalName_set("app.spa.record_relation"  );   // this is a seprate from record associated with this.tableUX.relation
+  this.record_relation.dom_ids_set("relation"                    );   // override default dom locations
+  this.record_relation.html_create(                              );   // create 
 }
 
 
