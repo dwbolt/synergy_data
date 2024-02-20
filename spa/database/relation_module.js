@@ -72,18 +72,32 @@ pk_relation   = "${pk_relation}"`)
 }
 
 
-pk_get( // client side relation_class
+edit( // client side relation_class
     table_1
     ,pk_1
     ,table_2
     ,pk_2
 ) {
-    // return pk for relation, or undefine if does not exist
-    if (this.index[table_1]                 === undefined) {return undefined;}
-    if (this.index[table_1][pk_1]           === undefined) {return undefined;}
-    if (this.index[table_1][pk_1][table_2]  === undefined) {return undefined;}
+  // user has clicked on Relation-T1 and a second table link, allow user to add or edit the relation that exists between to two records
 
-    return this.index[table_1][pk_1][table_2][pk_2];  // will be relation pk or undefined
+  // return pk for relation, or undefine if does not exist
+  this.pk = undefined;
+  if (this.index[table_1] && this.index[table_1][pk_1] && this.index[table_1][pk_1][table_2]) {
+    this.pk =  this.index[table_1][pk_1][table_2][pk_2]; // may still be undefined
+  }
+
+  // will be relation pk or undefined
+  app.spa.record_relation.set_pk(this.pk);
+  app.spa.record_relation.edit();
+
+  if (this.pk === undefined) {
+    // add table1 and table 2 values
+    document.getElementById("relation_record_data_table_1").value = table_1;
+    document.getElementById("relation_record_data_pk_1"   ).value = pk_1 ;  
+
+    document.getElementById("relation_record_data_table_2").value = table_2;
+    document.getElementById("relation_record_data_pk_2"   ).value = pk_2  ;
+  }
 }
 
 
