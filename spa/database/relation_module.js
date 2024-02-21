@@ -16,24 +16,30 @@ constructor( // client side relation_class - for a spa
     ,"tableN":{...}
   }
 */
-  }
+}
 
 
-creat_index( // client side relation_class
+create_index( // client side relation_class
 ){
   this.index = {};
   
-  const relations = app.spa.db.getTable("relations");
-  if (relations === undefined) {
+  this.relations = app.spa.db.getTable("relations");
+  if (this.relations === undefined) {
     return // this database does not have a relation table.
   }
-  const pks       = relations.get_PK();    // array of PK keys for entire table;
+  const pks       = this.relations.get_PK();    // array of PK keys for entire table;
   for(let i=0; i< pks.length; i++) {
-    let pk = pks[i];
-    let relation = relations.get_object(pk);  // row as a json object
-    this.init(pk, relation.table_1, relation.pk_1, relation.table_2, relation.pk_2);
-    this.init(pk, relation.table_2, relation.pk_2, relation.table_1, relation.pk_1);
+    this.pk_index(pks[i]);
   }
+}
+
+
+pk_index(  // client side relation_class
+  pk  // of relation to index
+) {
+  let relation = this.relations.get_object(pk);  // row as a json object
+  this.init(pk, relation.table_1, relation.pk_1, relation.table_2, relation.pk_2);
+  this.init(pk, relation.table_2, relation.pk_2, relation.table_1, relation.pk_1);
 }
 
 
@@ -104,4 +110,3 @@ edit( // client side relation_class
 } // end of class relation_class
 
 export {relation_class};
-

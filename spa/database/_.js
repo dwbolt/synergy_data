@@ -178,7 +178,7 @@ error="${error}"`);
   </div>`);
 
   this.db_tables_display();
-  this.relation.creat_index();
+  this.relation.create_index();
   }
 
 
