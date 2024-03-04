@@ -10,6 +10,7 @@ import {loginClass  } from '/_lib/UX/login_module.js'   ;
 import {proxyClass  } from '/_lib/proxy/proxy_module.js';
 
 import {relation_class} from './relation_module.js';
+import {stack_class   } from './stack_module.js'   ;
 
 class dbUXClass { // client side dbUXClass - SPA (Single Page App)
   /*
@@ -22,9 +23,10 @@ class dbUXClass { // client side dbUXClass - SPA (Single Page App)
 
 constructor( // client side dbUXClass - for a spa
 ){
-  this.login        = new loginClass();
-  this.proxy        = new proxyClass();
-  this.relation     = new relation_class();
+  this.login     = new loginClass();
+  this.proxy     = new proxyClass();
+  this.relation  = new relation_class();
+  this.stack     = new stack_class();
   }
 
 
@@ -41,7 +43,6 @@ async main( // client side dbUXClass - for a spa
   this.tableUX_rel  = {};                    // object contains one tableUXClass attribute for each table, used to display relations to an object/record
 
   this.table_active;             // name of table that is active in open databas
-  this.record_1;                 // ux for record_1
   this.record_relation;          // ux for record_relation;
 
   document.getElementById("footer").innerHTML = ""          ;   // get rid of footer
@@ -197,29 +198,20 @@ db_tables_display(// dbClass - client-side
     html_recordUX      +=  `<div id="tableUX_${table}_record" class="border"></div>` ;
     html_relations     +=  `<div id="tableUX_${table}_rel"></div>`    ;
 
-    this.tableUX[table] = new tableUxClass(    `tableUX_${table}`,     `app.spa.tableUX['${table}']`, this.db.getTable(table));  // create table viewer
-   // this.tableUX[table].setModel(this.db,table);                                               // attach model to viewer
-
-    this.tableUX_rel[table] = new tableUxClass(`tableUX_${table}_rel`, `app.spa.tableUX['${table}']`, this.db.getTable(table));  // create table viewer
-   // this.tableUX_rel[table].setModel(this.db,table);                                               // attach model to viewer
+    this.tableUX[    table] = new tableUxClass(`tableUX_${table}`,     `app.spa.tableUX['${table}']`, this.db.getTable(table));  // create table viewer, displayed when user clicks on talbe
+    this.tableUX_rel[table] = new tableUxClass(`tableUX_${table}_rel`, `app.spa.tableUX['${table}']`, this.db.getTable(table));  // create table viewer, displays relations of a selected record
   });
   html_menu += `</select>`;
-  html_recordUX += `
-  <div id="relation_record" class="border"></div>
-  <div id="record_1"        class="border record"></div>
-  `;
+  html_recordUX += `<div id="relation_record" class="border"></div>`;  // where user edit/create relation between table recrod and displayed stack record
+
   document.getElementById("menu_page_tables").innerHTML = html_menu;      // add table menu to dom
   document.getElementById("tableUXs"        ).innerHTML = html_tableUX;   // add place to display each table in dom
   document.getElementById("recordUXs"       ).innerHTML = html_recordUX;  // add place to display a record for each table in 
   document.getElementById("relations"       ).innerHTML = html_relations; // add place to display a record for each table in dom
 
-  // create records for record_1 and record_relation
-  //this.record_1        = new recordUxClass(this.tableUX);
-  //this.record_1.globalName_set();
-
   this.record_relation = new recordUxClass(this.tableUX.relations);   // create ux for create/edit relations
   this.record_relation.globalName_set("app.spa.record_relation"  );   // this is a seprate from record associated with this.tableUX.relation
-  this.record_relation.dom_ids_set("relation"                    );   // override default dom locations
+  this.record_relation.dom_ids_set("relation_record"             );   // override default dom locations
   this.record_relation.html_create(                              );   // create 
 }
 
@@ -464,17 +456,6 @@ async table_delete(){
   delete this.db.tables[table_name];                // delete from database loaded tables
   this.db_tables_display();                         // update table list
   }
-
-  
-copy2record_1(   // client side dbUXClass
-  ){
-  // copy active record to table1 or table 2 
-  document.getElementById(`record_1`).innerHTML = document.getElementById(`tableUX_${this.table_active.active.name}_record_data`).innerHTML;
-  //this.show('relations');  // let user see copied data
-  
-  this.table_active[1].name = this.table_active.active.name;                                  // rember table name
-  this.table_active[1].pk   = this.tableUX[this.table_active.active.name].recordUX.get_pk();  // rember pk
-}
 
 
 table_select(   // client side dbUXClass
