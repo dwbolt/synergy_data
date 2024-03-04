@@ -25,13 +25,27 @@ constructor( // client side stack_class - for a spa
 }
 
 
-stack( // client side stack_class - for a spa
-obj){
-  this.stack.push(obj);
-  this.display(this.stack.lenght-1);
+push( // client side stack_class - for a spa
+){
+  const obj    = {"name_table": this.table_active.name, "pk": this.table_active.pk}
+  const record = app.spa;
+  let name;
+
+  switch (this.table_active.name) {
+    case "people": name =`$` ; break;
   
-  this.table_active[1].name = this.table_active.active.name;                                  // rember table name
-  this.table_active[1].pk   = this.tableUX[this.table_active.active.name].recordUX.get_pk();  // rember pk
+    default:
+      alert(`file="stack_module.js"
+method="push"
+this.table_active.name="${this.table_active.name}"
+msg="case not handled"`);
+      name="not defined"
+      break;
+  }
+  obj.name = name;
+
+  this.stack.push(this.obj_get());
+  this.display(this.stack.lenght-1);
 }
 
 

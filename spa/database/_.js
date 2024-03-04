@@ -25,8 +25,8 @@ constructor( // client side dbUXClass - for a spa
 ){
   this.login     = new loginClass();
   this.proxy     = new proxyClass();
-  this.relation  = new relation_class();
-  this.stack     = new stack_class();
+  this.relation  = new relation_class();   // ux to view 
+  this.stack     = new stack_class();      // ux to view records in stack, and work with stack
   }
 
 
@@ -42,7 +42,7 @@ async main( // client side dbUXClass - for a spa
   this.tableUX      = {};                    // object contains one tableUXClass attribute for each table, init when user chooses database to open
   this.tableUX_rel  = {};                    // object contains one tableUXClass attribute for each table, used to display relations to an object/record
 
-  this.table_active;             // name of table that is active in open databas
+  this.table_active;             // will hold name of active table and pk of active record
   this.record_relation;          // ux for record_relation;
 
   document.getElementById("footer").innerHTML = ""          ;   // get rid of footer
@@ -144,8 +144,6 @@ async database_select( // client side dbUXClass
     window.location.replace("app.html?p=logInOut");
     return;
   }
-
-  this.table_active = {active:{name:"", pk:""}, "1":{name:"", pk:""}, "2":{name:"", pk:""}};  // have not yet selected a table
 
   // load the database
   try {
@@ -391,7 +389,7 @@ async table_process(  // client side dbUXClass - for a spa
     case "meta":
       document.getElementById('dialog_detail').innerHTML = `<p>edit meta
       <input type='button' value="Save" onclick='app.spa.meta_save()'></p><textarea id="meta" rows="20" cols="90"></textarea>`;
-      let msg = await app.proxy.RESTget( this.db.getTable(this.table_active.active.name).dir + "/_meta.json");  // get as text file so we can edit it
+      let msg = await app.proxy.RESTget( this.db.getTable(this.table_active.name).dir + "/_meta.json");  // get as text file so we can edit it
       if (msg.ok) {
         document.getElementById('meta').innerHTML = msg.value;
       }
@@ -414,12 +412,12 @@ async merge(){
 method="merge"
 not fully implemented, resolve pk_max issue before turninng on"`)
   return; 
-  const msg = await this.db.table_merge(this.table_active.active.name); 
+  const msg = await this.db.table_merge(this.table_active.name); 
 }
   
 async meta_save() {
   const text = document.getElementById("meta").value;
-  const msg = await app.proxy.RESTpost(text, this.db.getTable(this.table_active.active.name).dir + "/_meta.json");
+  const msg = await app.proxy.RESTpost(text, this.db.getTable(this.table_active.name).dir + "/_meta.json");
   if (msg.success) {
     document.getElementById('meta').innerHTML = "save compete"
   } else {
@@ -448,8 +446,8 @@ async table_new(){  // client side dbUXClass - for a spa
 
 
 async table_delete(){
-  const table_name = this.table_active.active.name;  // get table to delete
-  this.table_active.active.name = "";
+  const table_name = this.table_active.name;  // get table to delete
+  this.table_active.name = "";
 
   let msg = await this.db.table_delete(table_name); // have database delete table
   
@@ -462,7 +460,7 @@ table_select(   // client side dbUXClass
   // user clicked on a table - so display it
    DOM       // DOM.value is table user clicked on
   ) { 
-    if (this.table_active.active.name === "") {
+    if (this.table_active.name === "") {
       // first table is selected, so add more options
       document.getElementById("table_operations").innerHTML += `
       <option value="merge"  >Merge</option>
@@ -470,7 +468,7 @@ table_select(   // client side dbUXClass
       <option value="meta"   >Meta</option>
       `
     }
-    this.table_active.active.name = DOM.value;  // remember active table - (safari does not suport style="display:none;" on optons tag, )
+    this.table_active.name = DOM.value;  // remember active table - (safari does not suport style="display:none;" on optons tag, )
 
 
     // hide all tables and records
@@ -553,7 +551,7 @@ async saveDB( // client side dbUXClass - for a spa
 
 show_changes(){ // client side dbUXClass - for a spa
   let html = "";
-  const table        = this.db.getTable(this.table_active.active.name);  // get tableClass being displayed
+  const table        = this.db.getTable(this.table_active.name);  // get tableClass being displayed
   const changes      = table.changes_get();
   const primary_keys = Object.keys(changes);
   for(var i=0; i<primary_keys.length; i++) {
