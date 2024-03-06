@@ -27,12 +27,15 @@ constructor( // client side stack_class - for a spa
 
 push( // client side stack_class - for a spa
 ){
-  const obj    = {"name_table": this.table_active.name, "pk": this.table_active.pk}
-  const record = app.spa;
+  const table_name = app.spa.table_active.name;
+  const pk         = app.spa.tableUX[table_name].recordUX.get_pk();
+  const obj        = {"name_table": table_name, "pk": pk};
+  const record     = app.spa.tableUX[table_name].getModel.get_object(); 
+  
   let name;
 
-  switch (this.table_active.name) {
-    case "people": name =`$` ; break;
+  switch (table_name) {
+    case "people": name =`${record.name_last}, ${record.name_first}` ; break;
   
     default:
       alert(`file="stack_module.js"
@@ -42,18 +45,24 @@ msg="case not handled"`);
       name="not defined"
       break;
   }
-  obj.name = name;
 
-  this.stack.push(this.obj_get());
+  obj.name = name;
+  this.stack.push(obj);
   this.display(this.stack.lenght-1);
 }
 
 
 display(  // client side stack_class - for a spa
-  index  // of relation to index
+  index  // of relation to display
 ) {
   const obj = this.stack[index];
-  // now display
+
+  // now display stack list
+  let html = ""
+  for(let i=this.stack.lenght-1; 0<i; i--){
+    html += ``;
+  }
+  document.getElementById("").innerHTML = html;
 }
 
 

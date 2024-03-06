@@ -79,12 +79,17 @@ pk_relation   = "${pk_relation}"`)
 
 
 edit( // client side relation_class
-    table_1
-    ,pk_1
-    ,table_2
-    ,pk_2
+table_1  // from selected record 
+,pk_1   
 ) {
-  // user has clicked on Relation-T1 and a second table link, allow user to add or edit the relation that exists between to two records
+  if (0 === document.getElementById(`stack_record_data`).innerHTML.length) {
+    return; // there is nothing in the stack, so nothing to do;
+  }
+
+  // get table and pk from selected record  
+  const table_2 = {};
+  //const pk_2    = ;
+/*
 
   // return pk for relation, or undefine if does not exist
   this.pk = undefined;
@@ -104,6 +109,7 @@ edit( // client side relation_class
     document.getElementById("relation_record_data_table_2").value = table_2;
     document.getElementById("relation_record_data_pk_2"   ).value = pk_2  ;
   }
+  */
 }
 
 

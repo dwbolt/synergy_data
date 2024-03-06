@@ -42,8 +42,8 @@ async main( // client side dbUXClass - for a spa
   this.tableUX      = {};                    // object contains one tableUXClass attribute for each table, init when user chooses database to open
   this.tableUX_rel  = {};                    // object contains one tableUXClass attribute for each table, used to display relations to an object/record
 
-  this.table_active;             // will hold name of active table and pk of active record
-  this.record_relation;          // ux for record_relation;
+  this.table_active = {name:""};             // no active table yet
+  this.record_relation;                      // ux for record_relation;
 
   document.getElementById("footer").innerHTML = ""          ;   // get rid of footer
   document.getElementById("db_url").innerHTML = this.url_dir;   // show user were the list of databases is coming from
