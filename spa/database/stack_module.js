@@ -32,19 +32,20 @@ push( // client side stack_class - for a spa
   const obj        = {"name_table": table_name, "pk": pk};
   const record     = app.spa.tableUX[table_name].getModel().get_object(pk); 
   
-  let name = table_name;
+  let name = table_name + " : " ;
 
   switch (table_name) {
-    case "people": name += ` : ${record.name_last}, ${record.name_first}`                                           ; break;
-    case "phones": name += ` : ${record.label} ${record.country_code} (${record.area_code}) ${record.phone_number}` ; break;
-    case "groups": name += ` : ${record.name_short} ${record.name_full}`                                            ; break;
+    case "people": name += `${record.name_last}, ${record.name_first}`                                           ; break;
+    case "phones": name += `${record.label} ${record.country_code} (${record.area_code}) ${record.phone_number}` ; break;
+    case "groups": name += `${record.name_short} ${record.name_full}`                                            ; break;
 
     default:
+      /*
       alert(`file="stack_module.js"
 method="push"
 table_name="${table_name}"
-msg="case not handled"`);
-      name += "not defined";
+msg="case not handled"`);*/
+      name +=  `${record.label} ${record.display}`
       break;
   }
 
@@ -63,17 +64,17 @@ display(  // client side stack_class - for a spa
   this.stack_record.show(obj.pk);                                   // display the record
 
   // display stack list
-  let html = `<b>Stack</b><br><select size="10" onclick="app.spa.stack.select()">`
+  let html = `<b>Stack</b><br><select id="stack_list_select" size="10" onclick="app.spa.stack.select()">`
   for(let i=this.stack.length-1; -1 < i; i--){
     obj = this.stack[i];
-    html += `<option>${obj.name}</option>`;
+    html += `<option value="${i}">${obj.name}</option>`;
   }
   document.getElementById("stack_list").innerHTML = html + "</select>";
 
   // display stack buttons
   if (0 === document.getElementById("stack_buttons").innerHTML.length) {
     document.getElementById("stack_buttons").innerHTML =`
-    <input type="button" value="remove">
+    <input type="button" value="remove" onclick="app.spa.stack.remove()">
     `
   }
 }
@@ -91,8 +92,11 @@ clear(  // client side stack_class - for a spa
 
 
 remove(  // client side stack_class - for a spa
-index
+index // 
 ) {
+  if (index === undefined) {
+    index = document.getElementById("stack_list_select").;
+  }
  this.stack.remove(index);
   // now display
 }
@@ -121,8 +125,9 @@ index
 
 
 top(  // client side stack_class - for a spa
-index
 ) {
+  // get selected stack
+  const index = document.getElementById()
   const obj = this.stack[index];
   this.stack.remove[     index];
   this.stack.push(         obj);
@@ -132,7 +137,6 @@ index
 
 
 bottom(  // client side stack_class - for a spa
-index
 ) {
   const obj = this.stack[index];
   this.stack.remove[     index];
