@@ -39,14 +39,7 @@ push( // client side stack_class - for a spa
     case "phones": name += `${record.label} ${record.country_code} (${record.area_code}) ${record.phone_number}` ; break;
     case "groups": name += `${record.name_short} ${record.name_full}`                                            ; break;
 
-    default:
-      /*
-      alert(`file="stack_module.js"
-method="push"
-table_name="${table_name}"
-msg="case not handled"`);*/
-      name +=  `${record.label} ${record.display}`
-      break;
+    default      : name +=  `${record.label} ${record.display}`                                                  ; break;
   }
 
   obj.name = name;
@@ -63,87 +56,131 @@ display(  // client side stack_class - for a spa
   this.stack_record.table = app.spa.db.tables[obj.name_table]  // set model for record
   this.stack_record.show(obj.pk);                                   // display the record
 
-  // display stack list
-  let html = `<b>Stack</b><br><select id="stack_list_select" size="10" onclick="app.spa.stack.select()">`
-  for(let i=this.stack.length-1; -1 < i; i--){
-    obj = this.stack[i];
-    html += `<option value="${i}">${obj.name}</option>`;
-  }
-  document.getElementById("stack_list").innerHTML = html + "</select>";
+  // display stack
+  this.stack_display()
 
-  // display stack buttons
+  // create stack buttons if they do not exist
   if (0 === document.getElementById("stack_buttons").innerHTML.length) {
     document.getElementById("stack_buttons").innerHTML =`
-    <input type="button" value="remove" onclick="app.spa.stack.remove()">
+    <input type="button" value="top"    hidden="true" onclick="app.spa.stack.top()"><br>
+    <input type="button" value="bottom" hidden="true" onclick="app.spa.stack.bottom()"><br>
+    <input type="button" value="up"     hidden="true" onclick="app.spa.stack.up()"><br>
+    <input type="button" value="down"   hidden="true" onclick="app.spa.stack.down()"><br><br>
+    <input type="button" value="remove" hidden="true" onclick="app.spa.stack.remove()"><br>
+    <input type="button" value="Clear"  hidden="true" onclick="app.spa.stack.clear()">
     `
   }
 }
 
 
-select(){
+stack_display( // client side stack_class - for a spa
+){
+  // display stack list
+  let html = `<b>Stack</b><br><select id="stack_list_select" size="10" onclick="app.spa.stack.select()">`
+  for(let i=this.stack.length-1; -1 < i; i--){
+    let obj = this.stack[i];
+    html += `<option value="${i}">${obj.name}</option>`;
+  }
+  document.getElementById("stack_list").innerHTML = html + "</select>";
+}
+
+
+select(){ // client side stack_class - for a spa
+  // loop through all the buttons and display buttons 
+  let button = document.getElementById("stack_buttons").firstElementChild;
+  const index = parseInt(document.getElementById("stack_list_select").value);  // convert string to integer
+  do {
+    switch (button.value) {
+      case "up": case "top":
+        if (this.stack.length==1) {
+          button.hidden = true; 
+        } else {
+          button.hidden = (index === this.stack.length-1);
+        }
+        break;  // show button
+
+      case "down": case "bottom":
+        if (this.stack.length==1) {
+          button.hidden = true; 
+        } else {
+          button.hidden = !index;  // if index === 0 down will be hidden
+        }
+        break;
+
+      default:
+        button.hidden = false; // show 
+        break;
+    }
+  
+    button = button.nextSibling;
+  }while (button)
   
 }
 
+
 clear(  // client side stack_class - for a spa
 ) {
- this.stack =[];
-  // now display
+  this.stack =[];
+  this.stack_display();
 }
 
 
 remove(  // client side stack_class - for a spa
-index // 
 ) {
-  if (index === undefined) {
-    index = document.getElementById("stack_list_select").;
-  }
- this.stack.remove(index);
-  // now display
-}
-
-
-up(  // client side stack_class - for a spa
-index
-) {
-  const obj           = this.stack[index  ];
-  this.stack[index  ] = this.stack[index+1];
-  this.stack[index+1] = obj                ;
-  // now display
-
-}
-
-
-down(  // client side stack_class - for a spa
-index
-) {
-  const obj           = this.stack[index  ];
-  this.stack[index  ] = this.stack[index-1];
-  this.stack[index-1] = obj                ;
-  // now display
-
+  const index = document.getElementById("stack_list_select").value;
+  this.stack.splice(index,1);  // remove element
+  this.stack_display();
 }
 
 
 top(  // client side stack_class - for a spa
 ) {
   // get selected stack
-  const index = document.getElementById()
+  const index = document.getElementById("stack_list_select").value;
   const obj = this.stack[index];
-  this.stack.remove[     index];
-  this.stack.push(         obj);
-  // now display
+  this.stack.splice(index,1);  // remove element
 
+  this.stack.push(         obj);
+
+  this.stack_display();
 }
 
 
 bottom(  // client side stack_class - for a spa
 ) {
+  const index = document.getElementById("stack_list_select").value;
   const obj = this.stack[index];
-  this.stack.remove[     index];
-  this.stack.splice(0,0,obj);
-  // now display
+  this.stack.splice(index,1);  // remove element
 
+  this.stack.splice(0,0,obj);
+
+  this.stack_display();
 }
+
+
+up(  // client side stack_class - for a spa
+) {
+  const index         = parseInt(document.getElementById("stack_list_select").value);
+  const obj           = this.stack[index  ];
+
+  this.stack[index  ] = this.stack[index+1];
+  this.stack[index+1] = obj                ;
+
+  this.stack_display();
+}
+
+
+down(  // client side stack_class - for a spa
+) {
+  const index         = parseInt(document.getElementById("stack_list_select").value);
+  const obj           = this.stack[index  ];
+
+  this.stack[index  ] = this.stack[index-1];
+  this.stack[index-1] = obj                ;
+
+  this.stack_display();
+}
+
 
 } // end of class stack_class
 

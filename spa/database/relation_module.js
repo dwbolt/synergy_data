@@ -88,7 +88,7 @@ table_1  // from selected record
 
   // get table and pk from selected record  
   const table_2 = {};
-  //const pk_2    = ;
+  const pk_2    = ;
 /*
 
   // return pk for relation, or undefine if does not exist
