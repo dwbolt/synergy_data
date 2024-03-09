@@ -86,9 +86,12 @@ stack_display( // client side stack_class - for a spa
 
 
 select(){ // client side stack_class - for a spa
-  // loop through all the buttons and display buttons 
-  let button = document.getElementById("stack_buttons").firstElementChild;
+  // display record clicked on
   const index = parseInt(document.getElementById("stack_list_select").value);  // convert string to integer
+  this.display(index);
+
+  // display buttons that should be clickable
+  let button = document.getElementById("stack_buttons").firstElementChild;
   do {
     switch (button.value) {
       case "up": case "top":
@@ -114,7 +117,6 @@ select(){ // client side stack_class - for a spa
   
     button = button.nextSibling;
   }while (button)
-  
 }
 
 
