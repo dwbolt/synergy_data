@@ -89,7 +89,6 @@ table_1  // from selected record
   // get table and pk from selected record  
   const table_2 = {};
   const pk_2    = {};
-/*
 
   // return pk for relation, or undefine if does not exist
   this.pk = undefined;
@@ -109,7 +108,7 @@ table_1  // from selected record
     document.getElementById("relation_record_data_table_2").value = table_2;
     document.getElementById("relation_record_data_pk_2"   ).value = pk_2  ;
   }
-  */
+
 }
 
 
