@@ -9,7 +9,7 @@
 ]
 
 ,"lists": {
-   "sites"  : ["sites"]
+   "sites"  : ["sites","digital_ocean"]
   ,"server"  : ["overview","server","directory"]
   ,"dev"    : ["dev"]
   ,"plan"   : ["plan"]
@@ -24,8 +24,17 @@
 
   ,"u_urls": [
   ]
-
 }
+
+,"digital_ocean":{
+  "text":[
+    ["load","","/synergyData/developer/digital_ocean.html"]
+  ]
+
+  ,"u_urls": [
+  ]
+}
+
 
 ,"overview":{
   "text":[
