@@ -1,0 +1,5 @@
+
+.changedData {  /* General-purpose formatting for showing that any element contains data which has been changed since last save */
+	background-color: yellow;
+	fill: yellow !important;
+}

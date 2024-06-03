@@ -1,0 +1,58 @@
+<body>
+<h1 style="text-align:center;">JSON Viewer/Editor</h1>
+<p>Testing JSON Editor.  After you login, you can edit any json file in your private area.<br>
+<br>?path=/user/&name=_.json can set path and file name in url</br>
+
+<a href="https://docs.google.com/document/d/1JayB5mgf2hz8Yz8e9mtyCDjA2666uTpcc6Ns5lRizFg/edit" target="_blank">Google Doc of status</a>
+</p>
+
+
+<h2>Login</h2>
+<p id='loginX'></p>
+
+<div id="load">
+       <h2>Load JSON</h2>
+       <p>
+       Path: <input id="path" value = "/users/" size=50><br>
+       File: <input id="name" value = "test.json"><br>
+       <input type="button" value="Load" onclick="app.spa.loadJSON()"><br>
+       </p>
+</div>
+
+<div id="edit">
+       <h2 id="jsonURL">Edit JSON</h2>
+
+       <h2>Navigate JSON object</h2>
+
+       <div id="menu" style="display:flex; flex-wrap: wrap;"></div>
+       <div>
+       <input type="button" value="delete" onclick="app.spa.attribute_delete()">
+       name <input id="attribute_name" type="text" size="15"> 
+       <select     id="attribute_type">
+              <option value="``">string</option>
+              <option value="0">number</option>
+              <option value="true">boolean</option>
+              <option value="[]">array</option>
+              <option value="{}">object</option>
+              <option>?</option>
+              <option>?</option>
+       </select>
+       <input type="button" value="add attribute" onclick="app.spa.attribute_add()">
+       </div>
+
+       <h2>Compact, all newlines removed</h2>
+       <textarea id="value"         rows="5" cols="200"></textarea>
+       <br><input id="save2Memory"   type="button"   value="Save to Memory" onclick="app.spa.save2Memory()" style="visibility:hidden">
+
+       <h2>Changes not saved to server</h2>
+       <p>
+       <textarea id="changes"         rows="20" cols="200"></textarea>
+       <br><input id="save2Server"   type="button"   value="Save to Server" onclick="app.spa.save2Server()" style="visibility:hidden">
+              <input id="format" type="checkbox" value="Format" > Add newline before each attribute
+       </p>
+
+       <h2>formated with newline for each attribute</h2>
+       <textarea id="valueFormated" rows="20" cols="200"></textarea>
+</div>
+
+<p>end of page</p>
