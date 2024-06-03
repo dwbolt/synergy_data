@@ -31,13 +31,13 @@ do I want to support all the database type
 */
 
 constructor() {  // json_edit_class - clientside
-  this.json    = {}; // data we are view/edit
-  this.changes = ""; // list of changes since last save
-  this.proxy   = new proxyClass(); // async load server files, json and html fragments
-  this.format  = new formatClass();
-  this.login   = new loginClass();
-  this.menu    = new menuClass("menu");
-  this.changeLog = {};  // will contain change long, one
+  this.json      = {}; // data we are view/edit
+  this.changes   = ""; // list of changes since last save
+  this.proxy     = new proxyClass(); // async load server files, json and html fragments
+  this.format    = new formatClass();
+  this.login     = new loginClass();
+  this.menu      = new menuClass("menu");
+  this.changeLog = "";  // will contain change log
 }
 
 main() {  // json_edit_class - clientside
@@ -68,8 +68,7 @@ attribute_add() { // json_edit_class - clientside
 
 
 attribute_delete(){ // json_edit_class - clientside
-  // delete selecct attribute
-  this.statement("delete app.spa.json","");
+  this.statement("delete app.spa.json",""); // delete selecct attribute
 }
 
 
@@ -79,8 +78,8 @@ statement(stm_start,stm_end){ // json_edit_class - clientside
   for(var i=0; i<this.path.length; i++) {
     statment +=  `.${this.path[i]}`;
   }
-  eval(statment+stm_end);      // do not like using eval, need to find another way
-  this.displayDetail(); // redisplay, selected attibute should be deleted
+  eval(statment+stm_end);  // do not like using eval, need to find another way
+  this.displayDetail(  ); // redisplay, selected attibute should be deleted
 }
 
 
@@ -157,7 +156,7 @@ async save2Server(// json_edit_class - clientside
   ,"data":`${obj}`
   }
 
-  const resp = await app.proxy.postJSON(JSON.stringify(msg));  // save
+  const resp = await app.proxy.RESTpatch(JSON.stringify(msg));  // save
   alert(JSON.stringify(resp));   // was it succussful
   location.reload();
   this.windowActive = false;
@@ -167,10 +166,13 @@ async save2Server(// json_edit_class - clientside
 }
 
 
+/*
 dataChanged(element){
   alert(element.innerHTML);
   alert(element.value);
 }
+*/
+
 
 displayDetail(  // json_edit_class - clientside
   element  // DOM element clicked on
