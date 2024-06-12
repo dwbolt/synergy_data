@@ -16,6 +16,16 @@ class dbUXClass { // client side dbUXClass - SPA (Single Page App)
   /*
 
  user interface to add/edit databases,tables.records RDBMS in users space
+select Database/Table
+Selected Table
+Selected Record  - relation between slected record and stack 
+Stack
+Relations - display relation of Selected Record
+Table 1
+records - clicking should display in Stack
+...
+Table N
+record
 
   */
 
@@ -200,7 +210,7 @@ db_tables_display(// dbClass - client-side
     this.tableUX_rel[table] = new tableUxClass(`tableUX_${table}_rel`, `app.spa.tableUX['${table}']`, this.db.getTable(table));  // create table viewer, displays relations of a selected record
   });
   html_menu += `</select>`;
-  html_recordUX += `<div id="relation_record" class="border"></div>`;  // where user edit/create relation between table recrod and displayed stack record
+  //html_recordUX += `<div id="relation_record" class="border"></div>`;  // where user edit/create relation between table recrod and displayed stack record
 
   document.getElementById("menu_page_tables").innerHTML = html_menu;      // add table menu to dom
   document.getElementById("tableUXs"        ).innerHTML = html_tableUX;   // add place to display each table in dom
@@ -209,7 +219,7 @@ db_tables_display(// dbClass - client-side
 
   this.record_relation = new recordUxClass(this.tableUX.relations);   // create ux for create/edit relations
   this.record_relation.globalName_set("app.spa.record_relation"  );   // this is a seprate from record associated with this.tableUX.relation
-  this.record_relation.dom_ids_set("relation_record"             );   // override default dom locations
+  //this.record_relation.dom_ids_set("relation_record"             );   // override default dom locations
   this.record_relation.html_create(                              );   // create 
 }
 
