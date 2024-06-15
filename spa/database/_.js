@@ -206,8 +206,9 @@ db_tables_display(// dbClass - client-side
     html_recordUX      +=  `<div id="tableUX_${table}_record" class="border"></div>` ;
     html_relations     +=  `<div id="tableUX_${table}_rel"></div>`    ;
 
-    this.tableUX[    table] = new tableUxClass(`tableUX_${table}`,     `app.spa.tableUX['${table}']`, this.db.getTable(table));  // create table viewer, displayed when user clicks on talbe
-    this.tableUX_rel[table] = new tableUxClass(`tableUX_${table}_rel`, `app.spa.tableUX['${table}']`, this.db.getTable(table));  // create table viewer, displays relations of a selected record
+    this.tableUX[    table] = new tableUxClass(`tableUX_${table}`,     `app.spa.tableUX['${table}']`    , this.db.getTable(table));  // create table viewer, displayed when user clicks on talbe
+    this.tableUX_rel[table] = new tableUxClass(`tableUX_${table}_rel`, `app.spa.tableUX_rel['${table}']`, this.db.getTable(table));  // create table viewer, displays relations of a selected record
+    this.tableUX_rel[table].recordUX = this.stack.stack_record; // all relations display record here
   });
   html_menu += `</select>`;
   //html_recordUX += `<div id="relation_record" class="border"></div>`;  // where user edit/create relation between table recrod and displayed stack record

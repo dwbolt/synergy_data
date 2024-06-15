@@ -86,7 +86,7 @@ table_1  // from selected record
     return; // there is nothing in the stack, so nothing to do;
   }
 
-  // get table and pk from selected record  
+  // get table and pk from stack record  
   const table_2 = {};
   const pk_2    = {};
 
