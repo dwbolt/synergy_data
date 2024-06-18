@@ -61,7 +61,7 @@ async main( // client side dbUXClass - for a spa
   if (await app.login.getStatus()) {
 		// user logged in
 		document.getElementById("navigation").innerHTML = await this.proxy.getText(`/synergyData/spa/${app.pageName}/menu.html`) ;
-		document.getElementById("userName"  ).innerHTML = `User: ${localStorage.nameFirst} ${localStorage.nameLast}`
+		document.getElementById("user_loggedin"  ).innerHTML = `${localStorage.nameFirst} ${localStorage.nameLast}`
 	} else {
 		// user not logged in
 		document.getElementById("navigation").innerHTML = await this.proxy.getText("./menu.html");
