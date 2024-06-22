@@ -10,7 +10,7 @@
 "weeks":{
   "text":[
      ["","","<p id='weeks' class='calendar'></p>"]
-    ,["","","<div class='popUpForm' id='popUpForm' hidden></div>"]
+    ,["","","<div class='popUpForm' id='popUpForm'></div>"]
     ,["link"  ,"","/_lib/UX/calendar.css"]
     ,["script","","/synergyData/calendar/page_module.js"]
   ]
