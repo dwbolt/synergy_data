@@ -2,7 +2,7 @@
 
 import {csvClass    }  from '/_lib/db/csv_module.js'     ;
 import {dbClass     }  from '/_lib/db/db_module.js'      ;
-import {tableUxClass}  from '/_lib/db/tableUx_module.js' ;
+
 import {recordUxClass} from '/_lib/db/recordUx_module.js';
 
 import {menuClass   } from '/_lib/UX/menu_module.js'    ;
@@ -11,6 +11,10 @@ import {proxyClass  } from '/_lib/proxy/proxy_module.js';
 
 import {relation_class} from './relation_module.js';
 import {stack_class   } from './stack_module.js'   ;
+
+// web components that are used in this module
+import {table_sfc_class} from '/_lib/db/table-sfc/_.mjs';  //<table-sfc></table-sfc> 
+
 
 class dbUXClass { // client side dbUXClass - SPA (Single Page App)
   /*
@@ -161,7 +165,8 @@ async database_select( // client side dbUXClass
     this.db_name = dom.value;
     await this.db.load(dir_db);
   } catch (error) {
-    alert(`file="spa/database/_.js"
+    alert(`
+file="spa/database/_.js"
 method="database_select"
 error="${error}"`);
   }
@@ -202,13 +207,14 @@ db_tables_display(// dbClass - client-side
   let html_relations = `<h3><a onclick="app.spa.toggle('relations')"> - </a> Relations</h3>`;
   Object.keys(this.db.tables).forEach((table, i) => {
     html_menu          += `<option value="${table}">${table}</option>`;
-    html_tableUX       +=  `<div id="tableUX_${table}"></div>`        ;
-    html_recordUX      +=  `<div id="tableUX_${table}_record" class="border"></div>` ;
-    html_relations     +=  `<div id="tableUX_${table}_rel"></div>`    ;
+    //html_tableUX       +=  `<div id="tableUX_${table}"></div>`        ;
+    html_tableUX       +=  `<table-sfc id="table_${table}"></table-sfc>`        ;
+    html_recordUX      +=  `<div id="table_${table}_record" class="border"></div>` ;
+    //html_relations     +=  `<div id="tableUX_${table}_rel"></div>`    ;
+    html_relations     +=  `<table-sfc id="table_${table}_rel"></table-sfc>`    ;
 
-    this.tableUX[    table] = new tableUxClass(`tableUX_${table}`,     `app.spa.tableUX['${table}']`    , this.db.getTable(table));  // create table viewer, displayed when user clicks on talbe
-    this.tableUX_rel[table] = new tableUxClass(`tableUX_${table}_rel`, `app.spa.tableUX_rel['${table}']`, this.db.getTable(table));  // create table viewer, displays relations of a selected record
-    this.tableUX_rel[table].recordUX = this.stack.stack_record; // all relations display record here
+    //this.tableUX[    table] = new tableUxClass(`tableUX_${table}`,     `app.spa.tableUX['${table}']`    , this.db.getTable(table));  // create table viewer, displayed when user clicks on talbe
+    //this.tableUX_rel[table] = new tableUxClass(`tableUX_${table}_rel`, `app.spa.tableUX_rel['${table}']`, this.db.getTable(table));  // create table viewer, displays relations of a selected record
   });
   html_menu += `</select>`;
   //html_recordUX += `<div id="relation_record" class="border"></div>`;  // where user edit/create relation between table recrod and displayed stack record
@@ -221,7 +227,13 @@ db_tables_display(// dbClass - client-side
   this.record_relation = new recordUxClass(this.tableUX.relations);   // create ux for create/edit relations
   this.record_relation.globalName_set("app.spa.record_relation"  );   // this is a seprate from record associated with this.tableUX.relation
   //this.record_relation.dom_ids_set("relation_record"             );   // override default dom locations
-  this.record_relation.html_create(                              );   // create 
+  //this.record_relation.html_create(                              );   // create 
+
+  // attach model to viewer
+  Object.keys(this.db.tables).forEach((table, i) => {
+    document.getElementById(`table_${table}`).set_model(this.db.getTable(table),table);
+  });
+  //  refactor this - this.tableUX_rel[table].recordUX = this.stack.stack_record; // all relations display record here
 }
 
 
@@ -484,19 +496,21 @@ table_select(   // client side dbUXClass
 
     // hide all tables and records
     this.db.get_table_names().forEach((table, i) => {
-      document.getElementById(`tableUX_${table}`       ).style.display = "none";
-      document.getElementById(`tableUX_${table}_record`).style.display = "none";
+      document.getElementById(`table_${table}`       ).style.display = "none";
+      document.getElementById(`table_${table}_record`).style.display = "none";
     })
 
     // show table & record clicked on
-    document.getElementById(`tableUX_${DOM.value}`       ).style.display = "block";
-    document.getElementById(`tableUX_${DOM.value}_record`).style.display = "block";
-    const ux = this.tableUX[DOM.value];
-    ux.display();  // display table
-
+    document.getElementById(`table_${DOM.value}`       ).style.display = "block";
+    document.getElementById(`table_${DOM.value}_record`).style.display = "block";
+    //const ux = this.tableUX[DOM.value];
+    
+    document.getElementById(`table_${DOM.value}`       ).display();  // display table
     this.show("tables"   );  // show the tables section
+
+    document.getElementById(`table_${DOM.value}`       ).recordUX.html_create();  // create recordStructure if not already there
     this.show("records"  );  // show record section
-    ux.recordUX.html_create();  // create recordStructure if not already there
+   
 }
 
 
