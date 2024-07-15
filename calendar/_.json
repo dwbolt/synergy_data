@@ -9,10 +9,8 @@
 
 "weeks":{
   "text":[
-     ["","","<p id='weeks' class='calendar'></p>"]
-    ,["","","<dialog-sfc id='popUpForm'></dialog-sfc>"]
-    ,["link"  ,"","/_lib/UX/calendar.css"]
-    ,["script","","/synergyData/calendar/page_module.js"]
+     ["","","<calendar-sfc id='calendar' class='content'></calendar-sfc>"]
+    ,["script","","/synergyData/calendar/page_module.mjs"]
   ]
 
   ,"u_urls": [
