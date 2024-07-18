@@ -9,7 +9,7 @@
 
 "weeks":{
   "text":[
-     ["","","<calendar-sfc id='calendar' class='content'></calendar-sfc>"]
+     ["","","<calendar-sfc id='calendar' class='content'/>"]
     ,["script","","/synergyData/calendar/page_module.mjs"]
   ]
 
