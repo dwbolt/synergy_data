@@ -3,18 +3,16 @@
 import {csvClass    }  from '/_lib/db/csv_module.js'     ;
 import {dbClass     }  from '/_lib/db/db_module.js'      ;
 
-import {recordUxClass} from '/_lib/db/recordUx_module.js';
-
 import {menuClass   } from '/_lib/UX/menu_module.js'    ;
 import {loginClass  } from '/_lib/UX/login_module.js'   ;
 import {proxyClass  } from '/_lib/proxy/proxy_module.js';
 
 import {relation_class} from './relation_module.js';
-import {stack_class   } from './stack_module.js'   ;
+import {stack_class   } from './stack_module.js'   ;  // convert to component
 
 // web components that are used in this module
-import {table_sfc_class} from '/_lib/db/table-sfc/_.mjs';  //<table-sfc></table-sfc> 
-
+import {table_sfc_class} from '/_lib/db/table-sfc/_.mjs'  ;  //<table-sfc>
+import {record_sfc_class} from '/_lib/db/record-sfc/_.mjs';  //<record-sfc>
 
 class dbUXClass { // client side dbUXClass - SPA (Single Page App)
   /*
@@ -40,7 +38,7 @@ constructor( // client side dbUXClass - for a spa
   this.login     = new loginClass();
   this.proxy     = new proxyClass();
   this.relation  = new relation_class();   // ux to view 
-  this.stack     = new stack_class();      // ux to view records in stack, and work with stack
+  //this.stack     = new stack_class();      // ux to view records in stack, and work with stack
   }
 
 
@@ -207,11 +205,9 @@ db_tables_display(// dbClass - client-side
   let html_relations = `<h3><a onclick="app.spa.toggle('relations')"> - </a> Relations</h3>`;
   Object.keys(this.db.tables).forEach((table, i) => {
     html_menu          += `<option value="${table}">${table}</option>`;
-    //html_tableUX       +=  `<div id="tableUX_${table}"></div>`        ;
-    html_tableUX       +=  `<table-sfc id="table_${table}"></table-sfc>`        ;
-    html_recordUX      +=  `<div id="table_${table}_record" class="border"></div>` ;
-    //html_relations     +=  `<div id="tableUX_${table}_rel"></div>`    ;
-    html_relations     +=  `<table-sfc id="table_${table}_rel"></table-sfc>`    ;
+    html_tableUX       += `<table-sfc id="table_${table}"></table-sfc>`        ;
+    html_recordUX      += `<record-sfc id="table_${table}_record" class="border"/></record-sfc>` ; 
+    html_relations     += `<table-sfc id="table_${table}_rel"></table-sfc>`    ;
 
     //this.tableUX[    table] = new tableUxClass(`tableUX_${table}`,     `app.spa.tableUX['${table}']`    , this.db.getTable(table));  // create table viewer, displayed when user clicks on talbe
     //this.tableUX_rel[table] = new tableUxClass(`tableUX_${table}_rel`, `app.spa.tableUX_rel['${table}']`, this.db.getTable(table));  // create table viewer, displays relations of a selected record
@@ -224,8 +220,8 @@ db_tables_display(// dbClass - client-side
   document.getElementById("recordUXs"       ).innerHTML = html_recordUX;  // add place to display a record for each table in 
   document.getElementById("relations"       ).innerHTML = html_relations; // add place to display a record for each table in dom
 
-  this.record_relation = new recordUxClass(this.tableUX.relations);   // create ux for create/edit relations
-  this.record_relation.globalName_set("app.spa.record_relation"  );   // this is a seprate from record associated with this.tableUX.relation
+  //this.record_relation = new recordUxClass(this.tableUX.relations);   // create ux for create/edit relations
+  //this.record_relation.globalName_set("app.spa.record_relation"  );   // this is a seprate from record associated with this.tableUX.relation
   //this.record_relation.dom_ids_set("relation_record"             );   // override default dom locations
   //this.record_relation.html_create(                              );   // create 
 
@@ -508,7 +504,7 @@ table_select(   // client side dbUXClass
     document.getElementById(`table_${DOM.value}`       ).display();  // display table
     this.show("tables"   );  // show the tables section
 
-    document.getElementById(`table_${DOM.value}`       ).recordUX.html_create();  // create recordStructure if not already there
+    //document.getElementById(`table_${DOM.value}`       ).recordUX.html_create();  // create recordStructure if not already there
     this.show("records"  );  // show record section
    
 }

@@ -1,4 +1,4 @@
-import {recordUxClass} from '/_lib/db/recordUx_module.js';
+import {record_sfc_class} from '/_lib/db/record-sfc/_.mjs';  // web componet <record-sfc>
 
 class stack_class {
 
