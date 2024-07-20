@@ -79,6 +79,8 @@ stack_display( // client side stack_class - for a spa
 
 
 select(){ // client side stack_class - for a spa
+  // user selected record in the stack
+  
   // display record clicked on
   const index = parseInt(document.getElementById("stack_list_select").value);  // convert string to integer
   this.display(index);

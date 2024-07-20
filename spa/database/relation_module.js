@@ -4,7 +4,8 @@ class relation_class {
 constructor( // client side relation_class - for a spa
 ){
   this.index;
-
+  this.element = document.getElementById("relation_record");  // 
+  this.stack   = document.getElementById("stack_record"   );  //
   /*this.index = {
     "table1":{
       "pk1":{table1:{pk1: "pk_edge", pk2":"pk_edge"}
@@ -87,9 +88,8 @@ table_1  // from selected record
     return; // there is nothing in the stack, so nothing to do;
   }
 
-  // get table and pk from stack record  
-  const table_2 = {};
-  const pk_2    = {};
+  const table_2 = this.stack.table.name ;
+  const pk_2    = this.stack.get_pk();
 
   // return pk for relation, or undefine if does not exist
   this.pk = undefined;
@@ -98,18 +98,17 @@ table_1  // from selected record
   }
 
   // will be relation pk or undefined
-  app.spa.record_relation.set_pk(this.pk);
-  app.spa.record_relation.edit();
+  this.element.set_pk(this.pk);
+  this.element.edit();
 
   if (this.pk === undefined) {
     // add table1 and table 2 values
-    document.getElementById("relation_record_data_table_1").value = table_1;
-    document.getElementById("relation_record_data_pk_1"   ).value = pk_1 ;  
+    this.element.shadow_by_id("pk_1"   ).value = pk_1 ;  
+    this.element.shadow_by_id("table_1").value = table_1;
 
-    document.getElementById("relation_record_data_table_2").value = table_2;
-    document.getElementById("relation_record_data_pk_2"   ).value = pk_2  ;
+    this.element.shadow_by_id("pk_2"   ).value =  pk_2;
+    this.element.shadow_by_id("table_2").value =  table_2
   }
-
 }
 
 

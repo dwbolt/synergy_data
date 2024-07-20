@@ -206,7 +206,7 @@ db_tables_display(// dbClass - client-side
   Object.keys(this.db.tables).forEach((table, i) => {
     html_menu          += `<option value="${table}">${table}</option>`;
     html_tableUX       += `<table-sfc id="table_${table}"></table-sfc>`        ;
-    html_recordUX      += `<record-sfc id="table_${table}_record" class="border"/></record-sfc>` ; 
+    html_recordUX      += `<record-sfc id="table_${table}_record"/></record-sfc>` ; 
     html_relations     += `<table-sfc id="table_${table}_rel"></table-sfc>`    ;
 
     //this.tableUX[    table] = new tableUxClass(`tableUX_${table}`,     `app.spa.tableUX['${table}']`    , this.db.getTable(table));  // create table viewer, displayed when user clicks on talbe
@@ -226,8 +226,10 @@ db_tables_display(// dbClass - client-side
   document.getElementById("recordUXs"       ).innerHTML = html_recordUX;  // add place to display a record for each table in 
 
 
+  document.getElementById("relation_record").table_set(this.db.getTable("relations"));   // this is a seprate from record associated with this.tableUX.relation
+
+
   //this.record_relation = new recordUxClass(this.tableUX.relations);   // create ux for create/edit relations
-  //this.record_relation.globalName_set("app.spa.record_relation"  );   // this is a seprate from record associated with this.tableUX.relation
   //this.record_relation.dom_ids_set("relation_record"             );   // override default dom locations
   //this.record_relation.html_create(                              );   // create 
   //  refactor this - this.tableUX_rel[table].recordUX = this.stack.stack_record; // all relations display record here
