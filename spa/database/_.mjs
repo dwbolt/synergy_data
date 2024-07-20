@@ -38,7 +38,7 @@ constructor( // client side dbUXClass - for a spa
   this.login     = new loginClass();
   this.proxy     = new proxyClass();
   this.relation  = new relation_class();   // ux to view 
-  //this.stack     = new stack_class();      // ux to view records in stack, and work with stack
+  this.stack     = new stack_class();      // ux to view records in stack, and work with stack
   }
 
 
@@ -191,7 +191,7 @@ error="${error}"`);
 
   this.db_tables_display();
   this.relation.create_index();
-  }
+}
 
 
 db_tables_display(// dbClass - client-side
@@ -217,18 +217,19 @@ db_tables_display(// dbClass - client-side
 
   document.getElementById("menu_page_tables").innerHTML = html_menu;      // add table menu to dom
   document.getElementById("tableUXs"        ).innerHTML = html_tableUX;   // add place to display each table in dom
-  document.getElementById("recordUXs"       ).innerHTML = html_recordUX;  // add place to display a record for each table in 
   document.getElementById("relations"       ).innerHTML = html_relations; // add place to display a record for each table in dom
+  // attach model to viewers
+  Object.keys(this.db.tables).forEach((table, i) => {
+    document.getElementById(`table_${table}`    ).set_model(this.db.getTable(table),table);
+    document.getElementById(`table_${table}_rel`).set_model(this.db.getTable(table),table);
+  });
+  document.getElementById("recordUXs"       ).innerHTML = html_recordUX;  // add place to display a record for each table in 
+
 
   //this.record_relation = new recordUxClass(this.tableUX.relations);   // create ux for create/edit relations
   //this.record_relation.globalName_set("app.spa.record_relation"  );   // this is a seprate from record associated with this.tableUX.relation
   //this.record_relation.dom_ids_set("relation_record"             );   // override default dom locations
   //this.record_relation.html_create(                              );   // create 
-
-  // attach model to viewer
-  Object.keys(this.db.tables).forEach((table, i) => {
-    document.getElementById(`table_${table}`).set_model(this.db.getTable(table),table);
-  });
   //  refactor this - this.tableUX_rel[table].recordUX = this.stack.stack_record; // all relations display record here
 }
 
@@ -515,7 +516,7 @@ display_relations(   // client side dbUXClass
     // user clicked on table, so show it.
    // this.tableUXRelations.setColumnFormat(   0, 'onclick="app.spa.recordShow(this)"');  // assume primary key is 0 -  needs to be done in code
     this.tableUXRelations.setColumnTransform(0, this.displayIndex                );  // style it like a hyper link so it will get clicked on.
-    this.tableUXRelations.setModel(this.db,  "relations"                             );  // attach data to viewer
+    this.tableUXRelations.setModel(this.db,  "relations"                         );  // attach data to viewer
     const table = this.tableUXRelations.getModel();
     // get list of relations from relation_index
     const table_name = this[this.tableUX].tableName;

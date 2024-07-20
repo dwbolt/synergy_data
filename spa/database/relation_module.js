@@ -82,7 +82,8 @@ edit( // client side relation_class
 table_1  // from selected record 
 ,pk_1   
 ) {
-  if (0 === document.getElementById(`stack_record_data`).innerHTML.length) {
+  const body = document.getElementById(`stack_record`).shadow_by_id("body");
+  if (0 === body.innerHTML.length) {
     return; // there is nothing in the stack, so nothing to do;
   }
 

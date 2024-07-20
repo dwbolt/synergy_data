@@ -14,23 +14,16 @@ menu of operations for user to apply to record displayed or entire stack (clear 
 constructor( // client side stack_class - for a spa
 ){
   this.stack = [];   // top of the stack is highest number, so display in reverse order,  contains obects of the form {name:"", name_talbe:"", pk:""}
-
-  /////
-  this.stack_record;             // ux to display stack record,
-
-  this.stack_record = new recordUxClass()                   ;   // create ux for create/edit relations
-  this.stack_record.globalName_set("app.spa.stack_record"  );   // this is a seprate from record associated with this.tableUX.relation
-  this.stack_record.dom_ids_set(   "stack_record"          );   // override default dom locations
-  this.stack_record.html_create(                           );   // create 
+  this.stack_record = document.getElementById("stack_record")                 ;   // create ux for create/edit relations
 }
 
 
 push( // client side stack_class - for a spa
 ){
   const table_name = app.spa.table_active.name;
-  const pk         = app.spa.tableUX[table_name].recordUX.get_pk();
+  const pk         = document.getElementById(`table_${table_name}_record`).get_pk();
   const obj        = {"name_table": table_name, "pk": pk};
-  const record     = app.spa.tableUX[table_name].getModel().get_object(pk); 
+  const record     = document.getElementById(`table_${table_name}`).getModel().get_object(pk); 
   
   let name = table_name + " : " ;
 
