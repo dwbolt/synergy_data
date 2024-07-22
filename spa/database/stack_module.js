@@ -122,62 +122,6 @@ clear(  // client side stack_class - for a spa
 }
 
 
-remove(  // client side stack_class - for a spa
-) {
-  const index = document.getElementById("stack_list_select").value;
-  this.stack.splice(index,1);  // remove element
-  this.stack_display();
-}
-
-
-top(  // client side stack_class - for a spa
-) {
-  // get selected stack
-  const index = document.getElementById("stack_list_select").value;
-  const obj = this.stack[index];
-  this.stack.splice(index,1);  // remove element
-
-  this.stack.push(         obj);
-
-  this.stack_display();
-}
-
-
-bottom(  // client side stack_class - for a spa
-) {
-  const index = document.getElementById("stack_list_select").value;
-  const obj = this.stack[index];
-  this.stack.splice(index,1);  // remove element
-
-  this.stack.splice(0,0,obj);
-
-  this.stack_display();
-}
-
-
-up(  // client side stack_class - for a spa
-) {
-  const index         = parseInt(document.getElementById("stack_list_select").value);
-  const obj           = this.stack[index  ];
-
-  this.stack[index  ] = this.stack[index+1];
-  this.stack[index+1] = obj                ;
-
-  this.stack_display();
-}
-
-
-down(  // client side stack_class - for a spa
-) {
-  const index         = parseInt(document.getElementById("stack_list_select").value);
-  const obj           = this.stack[index  ];
-
-  this.stack[index  ] = this.stack[index-1];
-  this.stack[index-1] = obj                ;
-
-  this.stack_display();
-}
-
 
 } // end of class stack_class
 

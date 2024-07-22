@@ -8,11 +8,11 @@ import {loginClass  } from '/_lib/UX/login_module.js'   ;
 import {proxyClass  } from '/_lib/proxy/proxy_module.js';
 
 import {relation_class} from './relation_module.js';
-import {stack_class   } from './stack_module.js'   ;  // convert to component
 
 // web components that are used in this module
-import {table_sfc_class} from '/_lib/db/table-sfc/_.mjs'  ;  //<table-sfc>
-import {record_sfc_class} from '/_lib/db/record-sfc/_.mjs';  //<record-sfc>
+import {table_sfc_class   } from '/_lib/db/table-sfc/_.mjs'                  ;  // <table-sfc>
+import {record_sfc_class  } from '/_lib/db/record-sfc/_.mjs'                 ;  // <record-sfc>
+import {select_order_class} from '/_lib/web_componets/select-order-sfc/_.mjs';  // <select-order-sfc>
 
 class dbUXClass { // client side dbUXClass - SPA (Single Page App)
   /*
@@ -38,7 +38,7 @@ constructor( // client side dbUXClass - for a spa
   this.login     = new loginClass();
   this.proxy     = new proxyClass();
   this.relation  = new relation_class();   // ux to view 
-  this.stack     = new stack_class();      // ux to view records in stack, and work with stack
+  //this.stack     = new stack_class();      // ux to view records in stack, and work with stack
   }
 
 
@@ -56,6 +56,7 @@ async main( // client side dbUXClass - for a spa
 
   this.table_active = {name:""};             // no active table yet
   this.record_relation;                      // ux for record_relation;
+  this.stack_list          = document.getElementById("stack_list");
 
   document.getElementById("footer").innerHTML = ""          ;   // get rid of footer
   document.getElementById("db_url").innerHTML = this.url_dir;   // show user were the list of databases is coming from
@@ -161,7 +162,7 @@ async database_select( // client side dbUXClass
   try {
     const dir_db = this.meta.databases[dom.value].location;
     this.db_name = dom.value;
-    await this.db.load(dir_db);
+    await this.db.load(dir_db); // load database and tables into memory
   } catch (error) {
     alert(`
 file="spa/database/_.js"
@@ -195,44 +196,59 @@ error="${error}"`);
 
 
 db_tables_display(// dbClass - client-side
-  // create menu of tables to display, and tableUX and recordUX for each table
+  // create menu of tables to display, and <table-sfc> and <record-sfc> web component for each table
 ) {
-  // build menu list
+  // build table menu list and create web componet viewers
   const action = "app.spa.table_select(this,'table1UX')";
   let html_menu = `<select id="database_tables" size="9" onclick="${action}" oninput="${action}">`;
   let html_tableUX   = "";
   let html_recordUX  = "";
   let html_relations = `<h3><a onclick="app.spa.toggle('relations')"> - </a> Relations</h3>`;
   Object.keys(this.db.tables).forEach((table, i) => {
-    html_menu          += `<option value="${table}">${table}</option>`;
-    html_tableUX       += `<table-sfc id="table_${table}"></table-sfc>`        ;
-    html_recordUX      += `<record-sfc id="table_${table}_record"/></record-sfc>` ; 
-    html_relations     += `<table-sfc id="table_${table}_rel"></table-sfc>`    ;
-
-    //this.tableUX[    table] = new tableUxClass(`tableUX_${table}`,     `app.spa.tableUX['${table}']`    , this.db.getTable(table));  // create table viewer, displayed when user clicks on talbe
-    //this.tableUX_rel[table] = new tableUxClass(`tableUX_${table}_rel`, `app.spa.tableUX_rel['${table}']`, this.db.getTable(table));  // create table viewer, displays relations of a selected record
+    html_menu          += `<option value="${table}">${table}</option>`           ;
+    html_tableUX       += `<table-sfc  id="table_${table}"></table-sfc>`          ;
+    html_recordUX      += `<record-sfc id="table_${table}_record"/></record-sfc>`; 
+    html_relations     += `<table-sfc id="table_${table}_rel"></table-sfc>`      ;
   });
   html_menu += `</select>`;
-  //html_recordUX += `<div id="relation_record" class="border"></div>`;  // where user edit/create relation between table recrod and displayed stack record
-
   document.getElementById("menu_page_tables").innerHTML = html_menu;      // add table menu to dom
   document.getElementById("tableUXs"        ).innerHTML = html_tableUX;   // add place to display each table in dom
   document.getElementById("relations"       ).innerHTML = html_relations; // add place to display a record for each table in dom
-  // attach model to viewers
-  Object.keys(this.db.tables).forEach((table, i) => {
-    document.getElementById(`table_${table}`    ).set_model(this.db.getTable(table),table);
-    document.getElementById(`table_${table}_rel`).set_model(this.db.getTable(table),table);
-  });
   document.getElementById("recordUXs"       ).innerHTML = html_recordUX;  // add place to display a record for each table in 
+ 
+  // attach table model to viewers & record views to tables
+  Object.keys(this.db.tables).forEach((table_name, i) => {
+    let model = this.db.getTable(table_name);
+    document.getElementById(`table_${table_name}`    ).set_model(model, table_name);  // model to table viewer
 
+    document.getElementById(`table_${table_name}_rel`).set_model(model, table_name);  // model to relation table viewer
+  });
 
   document.getElementById("relation_record").table_set(this.db.getTable("relations"));   // this is a seprate from record associated with this.tableUX.relation
 
-
   //this.record_relation = new recordUxClass(this.tableUX.relations);   // create ux for create/edit relations
-  //this.record_relation.dom_ids_set("relation_record"             );   // override default dom locations
   //this.record_relation.html_create(                              );   // create 
   //  refactor this - this.tableUX_rel[table].recordUX = this.stack.stack_record; // all relations display record here
+}
+
+
+stack_push( // client side dbUXClass - for a spa
+record_sfc // user click stack on a record, so add it to the stack
+){
+  const table  = record_sfc.table;
+  const pk     = record_sfc.get_pk();
+  const record = table.get_object(pk);
+
+  let display  = table.name + " : " ;
+  switch (table.name) {
+    case "people": display += `${record.name_last}, ${record.name_first}`                                           ; break;
+    case "phones": display += `${record.label} ${record.country_code} (${record.area_code}) ${record.phone_number}` ; break;
+    case "groups": display += `${record.name_short} ${record.name_full}`                                            ; break;
+
+    default      : nadisplayme +=  `${record.label} ${record.display}`                                              ; break;
+  }
+
+  this.stack_list.push([display, table.name, pk]);
 }
 
 
