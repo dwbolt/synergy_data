@@ -35,10 +35,11 @@ record
 
 constructor( // client side dbUXClass - for a spa
 ){
-  this.login     = new loginClass();
-  this.proxy     = new proxyClass();
-  this.relation  = new relation_class();   // ux to view 
-  //this.stack     = new stack_class();      // ux to view records in stack, and work with stack
+  this.login        = new loginClass();
+  this.proxy        = new proxyClass();
+  this.relation     = new relation_class();   // ux to view 
+
+  this.stack_record = document.getElementById("stack_record");      // ux to view records in stack, and work with stack
   }
 
 
@@ -52,11 +53,12 @@ async main( // client side dbUXClass - for a spa
   this.db           = new dbClass();         // will hold selected database
   this.menu         = new menuClass("menu_page"); // where is puturl_meta
   this.tableUX      = {};                    // object contains one tableUXClass attribute for each table, init when user chooses database to open
-  this.tableUX_rel  = {};                    // object contains one tableUXClass attribute for each table, used to display relations to an object/record
+  this.tableUX_rel  = {};                    // object contains one tableUXClass attribute for each table, used to display relationstack_pushs to an object/record
 
   this.table_active = {name:""};             // no active table yet
   this.record_relation;                      // ux for record_relation;
   this.stack_list          = document.getElementById("stack_list");
+  this.stack_array         = [];
 
   document.getElementById("footer").innerHTML = ""          ;   // get rid of footer
   document.getElementById("db_url").innerHTML = this.url_dir;   // show user were the list of databases is coming from
@@ -228,7 +230,6 @@ db_tables_display(// dbClass - client-side
 
   //this.record_relation = new recordUxClass(this.tableUX.relations);   // create ux for create/edit relations
   //this.record_relation.html_create(                              );   // create 
-  //  refactor this - this.tableUX_rel[table].recordUX = this.stack.stack_record; // all relations display record here
 }
 
 
@@ -248,7 +249,11 @@ record_sfc // user click stack on a record, so add it to the stack
     default      : nadisplayme +=  `${record.label} ${record.display}`                                              ; break;
   }
 
-  this.stack_list.push([display, table.name, pk]);
+  this.stack_array.unshift([display, table.name, pk])  // add to first position of arra
+  this.stack_list.choices_add(this.stack_array);       // display choices
+
+  this.stack_record.table_set(this.db.getTable(table.name));  // set the model
+  this.stack_record.show(pk);                                 // display record with pk
 }
 
 
