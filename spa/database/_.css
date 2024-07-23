@@ -6,10 +6,7 @@
   display: none
 }
 
-.link { /* back ground color for table1 */
-	color: blue;
-  text-decoration-line: underline;
-}
+
 
 .changed { /* back ground color for changed values */
 	background-color: yellow;
