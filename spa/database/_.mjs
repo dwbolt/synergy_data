@@ -39,8 +39,21 @@ constructor( // client side dbUXClass - for a spa
   this.proxy        = new proxyClass();
   this.relation     = new relation_class();   // ux to view 
 
-  this.stack_record = document.getElementById("stack_record");      // ux to view records in stack, and work with stack
-  }
+  this.stack_record     = document.getElementById("stack_record");      // ux to view records in stack, and work with stack
+
+  this.stack_list       = document.getElementById("stack_list");
+  this.stack_list.multi_set(false);                                           // hide selected, work with array directly
+  this.stack_list.choices_click_custom = this.choices_click_custom.bind(this);
+}
+
+
+choices_click_custom(event){
+  // display slection in stack record
+  const index = event.target.value;
+  const obj   = this.stack_array[index];
+  this.stack_record.table_set( this.db.getTable(obj[1]) );    // set table
+  this.stack_record.show(obj[2]);                             // show record with pk
+}
 
 
 async main( // client side dbUXClass - for a spa
@@ -57,7 +70,7 @@ async main( // client side dbUXClass - for a spa
 
   this.table_active = {name:""};             // no active table yet
   this.record_relation;                      // ux for record_relation;
-  this.stack_list          = document.getElementById("stack_list");
+  
   this.stack_array         = [];
 
   document.getElementById("footer").innerHTML = ""          ;   // get rid of footer
@@ -245,8 +258,7 @@ record_sfc // user click stack on a record, so add it to the stack
     case "people": display += `${record.name_last}, ${record.name_first}`                                           ; break;
     case "phones": display += `${record.label} ${record.country_code} (${record.area_code}) ${record.phone_number}` ; break;
     case "groups": display += `${record.name_short} ${record.name_full}`                                            ; break;
-
-    default      : nadisplayme +=  `${record.label} ${record.display}`                                              ; break;
+    default      : display += `${record.label} ${record.display}`                                                   ; break;
   }
 
   this.stack_array.unshift([display, table.name, pk])  // add to first position of arra
