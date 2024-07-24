@@ -1,4 +1,4 @@
-/*  database spa (single page app) works on a collection of databases */
+/*  database spa (single page app) allows users to work on a collection of databases */
 
 import {csvClass    }  from '/_lib/db/csv_module.js'     ;
 import {dbClass     }  from '/_lib/db/db_module.js'      ;
@@ -31,7 +31,7 @@ record
 
   */
 
-  #primary_key_value
+//#primary_key_value   // private 
 
 constructor( // client side dbUXClass - for a spa
 ){
@@ -39,11 +39,11 @@ constructor( // client side dbUXClass - for a spa
   this.proxy        = new proxyClass();
   this.relation     = new relation_class();   // ux to view 
 
-  this.stack_record     = document.getElementById("stack_record");      // ux to view records in stack, and work with stack
+  this.stack_record     = document.getElementById("stack_record");      // <record-sfc>
 
-  this.stack_list       = document.getElementById("stack_list");
-  this.stack_list.multi_set(false);                                           // hide selected, work with array directly
-  this.stack_list.choices_click_custom = this.choices_click_custom.bind(this);
+  this.stack_list       = document.getElementById("stack_list");                //  <select-order-sfc>
+  this.stack_list.multi_set(false);                                             // hide selected, work with array directly
+  this.stack_list.choices_click_custom = this.choices_click_custom.bind(this);  // set custom_click
 }
 
 
@@ -233,16 +233,18 @@ db_tables_display(// dbClass - client-side
  
   // attach table model to viewers & record views to tables
   Object.keys(this.db.tables).forEach((table_name, i) => {
-    let model = this.db.getTable(table_name);
-    document.getElementById(`table_${table_name}`    ).set_model(model, table_name);  // model to table viewer
+    let model  = this.db.getTable(table_name);
+    let viewer = document.getElementById(`table_${table_name}`    );
+    viewer.set_model(model, table_name);                                        // attach model to <table-sfc> main table area
+    viewer.record_sfc = document.getElementById(`table_${table_name}_record`);  // attach <record-sfc> to  <table-sfc> 
+    viewer.record_sfc.table_set(model);
 
-    document.getElementById(`table_${table_name}_rel`).set_model(model, table_name);  // model to relation table viewer
+    viewer = document.getElementById(`table_${table_name}_rel`);
+    viewer.set_model(model, table_name);                                        // attach model to <table-sfc> relation tables to selected records
+    viewer.record_sfc = document.getElementById("stack_record");                // attach <record-sfc> to  <table-sfc> 
   });
 
-  document.getElementById("relation_record").table_set(this.db.getTable("relations"));   // this is a seprate from record associated with this.tableUX.relation
-
-  //this.record_relation = new recordUxClass(this.tableUX.relations);   // create ux for create/edit relations
-  //this.record_relation.html_create(                              );   // create 
+  document.getElementById("relation_record").table_set(this.db.getTable("relations"));   // <record_sfc> displays relation record between selected record and stack record 
 }
 
 
@@ -545,7 +547,7 @@ table_select(   // client side dbUXClass
    
 }
 
-
+/*
 display_relations(   // client side dbUXClass
   ) {  
     // user clicked on table, so show it.
@@ -562,7 +564,7 @@ display_relations(   // client side dbUXClass
     }
     this.tableUXRelations.display( array);   // display table
 }
-
+*/
 
 displayIndex(// client side dbUXClass
   value) {    
