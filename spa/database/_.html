@@ -22,21 +22,21 @@
 
 <div id="tables"  style="display:none;">
     <h3><a onclick="app.spa.toggle('tables')"> - </a>Selected Table</h3>
-    <div id="tableUXs"></div>
+    <sfc-db-tables id="sfc-db-tables"></sfc-db-tables>
 </div>
 
 <div id="records"  style="display:none;">
     <h3><a onclick="app.spa.toggle('records')"> - </a>Records</h3>
     <div style="display:flex; flex-wrap: wrap;">
         <div><h3>Selected Record</h3>           <div id="recordUXs">      </div></div>
-        <div><h3>Relation with Stack record</h3><record-sfc  id="relation_record" style="display: block;"></record-sfc ></div>
+        <div><h3>Relation with Stack record</h3><sfc-record  id="relation_record" style="display: block;"></sfc-record ></div>
         <div><h3>Stack</h3>
             <div id="stack" style="display:flex; flex-wrap: wrap;">    
-                <record-sfc id="stack_record"></record-sfc>
+                <sfc-record id="stack_record"></sfc-record>
                 <select-order-sfc id="stack_list"></select-order-sfc>
             </div>
         </div>
     </div>
 </div>
 
-<div id="relations"></div>
+<sfc-record-relations id="sfc-record-relations"></sfc-record-relations> 

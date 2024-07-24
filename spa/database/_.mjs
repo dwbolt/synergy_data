@@ -7,12 +7,12 @@ import {menuClass   } from '/_lib/UX/menu_module.js'    ;
 import {loginClass  } from '/_lib/UX/login_module.js'   ;
 import {proxyClass  } from '/_lib/proxy/proxy_module.js';
 
-import {relation_class} from './relation_module.js';
-
 // web components that are used in this module
-import {table_sfc_class   } from '/_lib/db/table-sfc/_.mjs'                  ;  // <table-sfc>
-import {record_sfc_class  } from '/_lib/db/record-sfc/_.mjs'                 ;  // <record-sfc>
-import {select_order_class} from '/_lib/web_componets/select-order-sfc/_.mjs';  // <select-order-sfc>
+import {sfc_db_tables_class}        from '/_lib/db/sfc-db-tables/_.mjs'              ;  // <sfc-db-tables>
+import {sfc_record_relations_class} from '/_lib/db/sfc-record-relations/_.mjs'       ;  // <sfc-record-relations>
+import {sfc_table_class    }        from '/_lib/db/sfc-table/_.mjs'                  ;  // <sfc-table>
+import {sfc_record_class   }        from '/_lib/db/sfc-record/_.mjs'                 ;  // <sfc-record>
+import {select_order_class }        from '/_lib/web_componets/select-order-sfc/_.mjs';  // <select-order-sfc>
 
 class dbUXClass { // client side dbUXClass - SPA (Single Page App)
   /*
@@ -37,9 +37,11 @@ constructor( // client side dbUXClass - for a spa
 ){
   this.login        = new loginClass();
   this.proxy        = new proxyClass();
-  this.relation     = new relation_class();   // ux to view 
-
-  this.stack_record     = document.getElementById("stack_record");      // <record-sfc>
+  
+  this.recordUXs            = document.getElementById("recordUXs");           //  one <sfc-record> for each table
+  this.stack_record         = document.getElementById("stack_record");        // <sfc-record>
+  this.sfc_db_tables        = document.getElementById("sfc-db-tables");       // <sfc-db-tables>
+  this.sfc_record_relations = document.getElementById("sfc-record-relations");// <sfc-record-relation>
 
   this.stack_list       = document.getElementById("stack_list");                //  <select-order-sfc>
   this.stack_list.multi_set(false);                                             // hide selected, work with array directly
@@ -129,7 +131,7 @@ creating from template`
 
 menu_db_list() {  // dbClass - client-side
   // show list of databases
-  let html = `<select size="4" onclick="app.spa.database_select(this)">`;
+  let html = `<select size="4" onclick="app.spa.database_select(this.value)">`;
   // build list of databases to choose
   if (this.meta.databases === undefined) { 
     this.meta.databases = {}; // this should not be needed, if 
@@ -164,8 +166,10 @@ menu_db_list() {  // dbClass - client-side
 
 async database_select( // client side dbUXClass
   // user clicked on a database - show tables inside database
-  dom  //  dom.value is database name user clicked on.
+  database_name  //  user clicked on
 ) {
+  this.db_name = database_name;
+
   // make sure user is logged in
   if (! await app.login.getStatus()) {
     alert("please log before using the database")
@@ -175,8 +179,7 @@ async database_select( // client side dbUXClass
 
   // load the database
   try {
-    const dir_db = this.meta.databases[dom.value].location;
-    this.db_name = dom.value;
+    const dir_db = this.meta.databases[database_name].location;
     await this.db.load(dir_db); // load database and tables into memory
   } catch (error) {
     alert(`
@@ -185,7 +188,6 @@ method="database_select"
 error="${error}"`);
   }
   
-
   // display table menu
   this.menu.deleteTo(1);   // remove menues to the right of database memnu
   this.menu.add(`
@@ -206,12 +208,11 @@ error="${error}"`);
   </div>`);
 
   this.db_tables_display();
-  this.relation.create_index();
 }
 
 
 db_tables_display(// dbClass - client-side
-  // create menu of tables to display, and <table-sfc> and <record-sfc> web component for each table
+  // create menu of tables to display, and <sfc-table> and <sfc-record> web component for each table
 ) {
   // build table menu list and create web componet viewers
   const action = "app.spa.table_select(this,'table1UX')";
@@ -221,27 +222,28 @@ db_tables_display(// dbClass - client-side
   let html_relations = `<h3><a onclick="app.spa.toggle('relations')"> - </a> Relations</h3>`;
   Object.keys(this.db.tables).forEach((table, i) => {
     html_menu          += `<option value="${table}">${table}</option>`           ;
-    html_tableUX       += `<table-sfc  id="table_${table}"></table-sfc>`          ;
-    html_recordUX      += `<record-sfc id="table_${table}_record"/></record-sfc>`; 
-    html_relations     += `<table-sfc id="table_${table}_rel"></table-sfc>`      ;
+    html_recordUX      += `<sfc-record id="${table}"/></sfc-record>`; 
   });
   html_menu += `</select>`;
   document.getElementById("menu_page_tables").innerHTML = html_menu;      // add table menu to dom
-  document.getElementById("tableUXs"        ).innerHTML = html_tableUX;   // add place to display each table in dom
-  document.getElementById("relations"       ).innerHTML = html_relations; // add place to display a record for each table in dom
+
+         this.sfc_db_tables.db_set(this.db);   // create shadow dom for web component
+  this.sfc_record_relations.db_set(this.db);   // create shadow dom for web component
+
   document.getElementById("recordUXs"       ).innerHTML = html_recordUX;  // add place to display a record for each table in 
  
   // attach table model to viewers & record views to tables
   Object.keys(this.db.tables).forEach((table_name, i) => {
     let model  = this.db.getTable(table_name);
-    let viewer = document.getElementById(`table_${table_name}`    );
-    viewer.set_model(model, table_name);                                        // attach model to <table-sfc> main table area
-    viewer.record_sfc = document.getElementById(`table_${table_name}_record`);  // attach <record-sfc> to  <table-sfc> 
-    viewer.record_sfc.table_set(model);
+    let viewer = this.sfc_db_tables.shadow.getElementById(table_name);    // get table viewer
+    viewer.set_model(model, table_name);                                  // attach model to <sfc-table> main table area
+    viewer.record_sfc = document.getElementById(table_name);              // attach <sfc-record> to  <sfc-table> 
+    viewer.record_sfc.table_set(model);                                   // attach table        to <sfc-record>
+    viewer.relations = this.sfc_record_relations;                         // display relations with record
 
-    viewer = document.getElementById(`table_${table_name}_rel`);
-    viewer.set_model(model, table_name);                                        // attach model to <table-sfc> relation tables to selected records
-    viewer.record_sfc = document.getElementById("stack_record");                // attach <record-sfc> to  <table-sfc> 
+    viewer = viewer.record_sfc;                                           // get record viewer
+    viewer.table_set(model);                                              // attach table to <sfc-record> relation tables to selected records
+    viewer.record_sfc = document.getElementById("stack_record");          // attach <sfc-record> to  <sfc-table> 
   });
 
   document.getElementById("relation_record").table_set(this.db.getTable("relations"));   // <record_sfc> displays relation record between selected record and stack record 
@@ -517,6 +519,8 @@ table_select(   // client side dbUXClass
   // user clicked on a table - so display it
    DOM       // DOM.value is table user clicked on
   ) { 
+    const table_name = DOM.value;
+    
     if (this.table_active.name === "") {
       // first table is selected, so add more options
       document.getElementById("table_operations").innerHTML += `
@@ -527,25 +531,17 @@ table_select(   // client side dbUXClass
     }
     this.table_active.name = DOM.value;  // remember active table - (safari does not suport style="display:none;" on optons tag, )
 
-
-    // hide all tables and records
     this.db.get_table_names().forEach((table, i) => {
-      document.getElementById(`table_${table}`       ).style.display = "none";
-      document.getElementById(`table_${table}_record`).style.display = "none";
+      document.getElementById(table).style.display = "none";  // records
     })
 
-    // show table & record clicked on
-    document.getElementById(`table_${DOM.value}`       ).style.display = "block";
-    document.getElementById(`table_${DOM.value}_record`).style.display = "block";
-    //const ux = this.tableUX[DOM.value];
+    this.sfc_db_tables.show(table_name);                              // hide all tables but table_name
+    document.getElementById(table_name).style.display = "block";      // show record
     
-    document.getElementById(`table_${DOM.value}`       ).display();  // display table
     this.show("tables"   );  // show the tables section
-
-    //document.getElementById(`table_${DOM.value}`       ).recordUX.html_create();  // create recordStructure if not already there
     this.show("records"  );  // show record section
-   
 }
+
 
 /*
 display_relations(   // client side dbUXClass

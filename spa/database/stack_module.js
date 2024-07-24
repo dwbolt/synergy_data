@@ -1,4 +1,4 @@
-import {record_sfc_class} from '/_lib/db/record-sfc/_.mjs';  // web componet <record-sfc>
+import {sfc_record_class} from '/_lib/db/sfc-record/_.mjs';  // web componet <sfc-record>
 
 class stack_class {
 
