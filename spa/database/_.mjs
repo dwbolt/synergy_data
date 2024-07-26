@@ -235,15 +235,22 @@ db_tables_display(// dbClass - client-side
   // attach table model to viewers & record views to tables
   Object.keys(this.db.tables).forEach((table_name, i) => {
     let model  = this.db.getTable(table_name);
+
+    // set up <sfc-table>  inside <sfc-db-tablses
     let viewer = this.sfc_db_tables.shadow.getElementById(table_name);    // get table viewer
     viewer.set_model(model, table_name);                                  // attach model to <sfc-table> main table area
+
+    // set up <sfc-record> used by above table
     viewer.record_sfc = document.getElementById(table_name);              // attach <sfc-record> to  <sfc-table> 
     viewer.record_sfc.table_set(model);                                   // attach table        to <sfc-record>
     viewer.relations = this.sfc_record_relations;                         // display relations with record
 
+    // setup
     viewer = viewer.record_sfc;                                           // get record viewer
     viewer.table_set(model);                                              // attach table to <sfc-record> relation tables to selected records
     viewer.record_sfc = document.getElementById("stack_record");          // attach <sfc-record> to  <sfc-table> 
+
+
   });
 
   document.getElementById("relation_record").table_set(this.db.getTable("relations"));   // <record_sfc> displays relation record between selected record and stack record 
