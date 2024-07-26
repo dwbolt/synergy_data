@@ -39,11 +39,13 @@ constructor( // client side dbUXClass - for a spa
   this.proxy        = new proxyClass();
   
   this.recordUXs            = document.getElementById("recordUXs");           //  one <sfc-record> for each table
-  this.stack_record         = document.getElementById("stack_record");        // <sfc-record>
   this.sfc_db_tables        = document.getElementById("sfc-db-tables");       // <sfc-db-tables>
   this.sfc_record_relations = document.getElementById("sfc-record-relations");// <sfc-record-relation>
 
-  this.stack_list       = document.getElementById("stack_list");                //  <select-order-sfc>
+  this.relation_record       = document.getElementById("relation_record");
+
+  this.stack_record         = document.getElementById("stack_record");        // <sfc-record>
+  this.stack_list           = document.getElementById("stack_list");                //  <select-order-sfc>
   this.stack_list.multi_set(false);                                             // hide selected, work with array directly
   this.stack_list.choices_click_custom = this.choices_click_custom.bind(this);  // set custom_click
 }
@@ -217,40 +219,42 @@ db_tables_display(// dbClass - client-side
   // build table menu list and create web componet viewers
   const action = "app.spa.table_select(this,'table1UX')";
   let html_menu = `<select id="database_tables" size="9" onclick="${action}" oninput="${action}">`;
-  let html_tableUX   = "";
   let html_recordUX  = "";
-  let html_relations = `<h3><a onclick="app.spa.toggle('relations')"> - </a> Relations</h3>`;
   Object.keys(this.db.tables).forEach((table, i) => {
-    html_menu          += `<option value="${table}">${table}</option>`           ;
-    html_recordUX      += `<sfc-record id="${table}"/></sfc-record>`; 
+    html_menu          += `<option value="${table}">${table}</option>`  ;
+    html_recordUX      += `<sfc-record id="${table}"/></sfc-record>`    ; 
   });
   html_menu += `</select>`;
   document.getElementById("menu_page_tables").innerHTML = html_menu;      // add table menu to dom
+  this.recordUXs.innerHTML = html_recordUX;  // add place to display a record for each table in 
+
+  // add function to edit relation for all <sfc-records> in this.recordUXs.children
+  const children = this.recordUXs.children;
+  for(let i=0; i<children.length; i++) {
+    children[i].show_custom = this.relation_edit.bind(this);
+  };
+  // add function to edit relation for stack_record 
+  this.stack_record.show_custom = this.relation_edit.bind(this);
 
          this.sfc_db_tables.db_set(this.db);   // create shadow dom for web component
   this.sfc_record_relations.db_set(this.db);   // create shadow dom for web component
 
-  document.getElementById("recordUXs"       ).innerHTML = html_recordUX;  // add place to display a record for each table in 
- 
   // attach table model to viewers & record views to tables
   Object.keys(this.db.tables).forEach((table_name, i) => {
     let model  = this.db.getTable(table_name);
 
     // set up <sfc-table>  inside <sfc-db-tablses
-    let viewer = this.sfc_db_tables.shadow.getElementById(table_name);    // get table viewer
-    viewer.set_model(model, table_name);                                  // attach model to <sfc-table> main table area
+    let viewer = this.sfc_db_tables.shadow.getElementById(table_name);    // get table viewer  <sfc-table> 
+    viewer.relations = this.sfc_record_relations;                         // display relations with record
+    viewer.record_sfc = document.getElementById(table_name);              // attach <sfc-record> to  <sfc-table> 
 
     // set up <sfc-record> used by above table
-    viewer.record_sfc = document.getElementById(table_name);              // attach <sfc-record> to  <sfc-table> 
-    viewer.record_sfc.table_set(model);                                   // attach table        to <sfc-record>
-    viewer.relations = this.sfc_record_relations;                         // display relations with record
+    viewer = viewer.record_sfc;                                           // get record viewer  <sfc-record> 
+    viewer.table_set(model);                                              // attach table    to <sfc-record>
 
-    // setup
-    viewer = viewer.record_sfc;                                           // get record viewer
-    viewer.table_set(model);                                              // attach table to <sfc-record> relation tables to selected records
-    viewer.record_sfc = document.getElementById("stack_record");          // attach <sfc-record> to  <sfc-table> 
-
-
+    // setup sfc-record-relations
+    viewer = this.sfc_record_relations.shadow.getElementById(table_name); //  
+    viewer.record_sfc = this.stack_record;                                // attach <sfc-record> to  <sfc-table> 
   });
 
   document.getElementById("relation_record").table_set(this.db.getTable("relations"));   // <record_sfc> displays relation record between selected record and stack record 
@@ -543,7 +547,8 @@ table_select(   // client side dbUXClass
     })
 
     this.sfc_db_tables.show(table_name);                              // hide all tables but table_name
-    document.getElementById(table_name).style.display = "block";      // show record
+    this.record_selected = document.getElementById(table_name)
+    this.record_selected.style.display = "block";      // show record
     
     this.show("tables"   );  // show the tables section
     this.show("records"  );  // show record section
@@ -627,6 +632,47 @@ show_changes(){ // client side dbUXClass - for a spa
   }
   document.getElementById("changes").innerHTML = html
 }
+
+
+relation_edit( // client side relation_class
+  ) {
+    if (0 === this.stack_record.shadow_by_id("body").innerHTML.length) {
+      this.relation_record.hidden = true;
+      return; // there is nothing in the stack, so nothing to do;
+    }
+
+    if (0 === this.record_selected.shadow_by_id("body").innerHTML.length) {
+      this.relation_record.hidden = true;
+      return; // there is no record selected
+    }
+
+    const  table_1 = this.record_selected.table.name; // from selected record 
+    const  pk_1    = this.record_selected.get_pk();   
+
+    const table_2 = this.stack_record.table.name ;  // from stack_record
+    const pk_2    = this.stack_record.get_pk();
+  
+    // return pk for relation, or undefine if does not exist
+    this.pk = undefined;
+    const index = this.sfc_record_relations.index;
+    if (index[table_1] && index[table_1][pk_1] && index[table_1][pk_1][table_2]) {
+      this.pk =  index[table_1][pk_1][table_2][pk_2]; // may still be undefined
+    }
+  
+    // will be relation pk or undefined
+    this.relation_record.hidden = false;
+    this.relation_record.set_pk(this.pk);
+    this.relation_record.edit();
+  
+    if (this.pk === undefined) {
+      // add table1 and table 2 values, so new relation can be saved
+      this.relation_record.shadow_by_id("pk_1"   ).value = pk_1 ;  
+      this.relation_record.shadow_by_id("table_1").value = table_1;
+  
+      this.relation_record.shadow_by_id("pk_2"   ).value =  pk_2;
+      this.relation_record.shadow_by_id("table_2").value =  table_2
+    }
+  }
 
 }
 

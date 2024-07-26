@@ -80,36 +80,36 @@ pk_relation   = "${pk_relation}"`)
 
 
 edit( // client side relation_class
-table_1  // from selected record 
-,pk_1   
-) {
-  const body = document.getElementById(`stack_record`).shadow_by_id("body");
-  if (0 === body.innerHTML.length) {
-    return; // there is nothing in the stack, so nothing to do;
+  table_1  // from selected record 
+  ,pk_1   
+  ) {
+    const body = document.getElementById(`stack_record`).shadow_by_id("body");
+    if (0 === body.innerHTML.length) {
+      return; // there is nothing in the stack, so nothing to do;
+    }
+  
+    const table_2 = this.stack.table.name ;
+    const pk_2    = this.stack.get_pk();
+  
+    // return pk for relation, or undefine if does not exist
+    this.pk = undefined;
+    if (this.index[table_1] && this.index[table_1][pk_1] && this.index[table_1][pk_1][table_2]) {
+      this.pk =  this.index[table_1][pk_1][table_2][pk_2]; // may still be undefined
+    }
+  
+    // will be relation pk or undefined
+    this.element.set_pk(this.pk);
+    this.element.edit();
+  
+    if (this.pk === undefined) {
+      // add table1 and table 2 values
+      this.element.shadow_by_id("pk_1"   ).value = pk_1 ;  
+      this.element.shadow_by_id("table_1").value = table_1;
+  
+      this.element.shadow_by_id("pk_2"   ).value =  pk_2;
+      this.element.shadow_by_id("table_2").value =  table_2
+    }
   }
-
-  const table_2 = this.stack.table.name ;
-  const pk_2    = this.stack.get_pk();
-
-  // return pk for relation, or undefine if does not exist
-  this.pk = undefined;
-  if (this.index[table_1] && this.index[table_1][pk_1] && this.index[table_1][pk_1][table_2]) {
-    this.pk =  this.index[table_1][pk_1][table_2][pk_2]; // may still be undefined
-  }
-
-  // will be relation pk or undefined
-  this.element.set_pk(this.pk);
-  this.element.edit();
-
-  if (this.pk === undefined) {
-    // add table1 and table 2 values
-    this.element.shadow_by_id("pk_1"   ).value = pk_1 ;  
-    this.element.shadow_by_id("table_1").value = table_1;
-
-    this.element.shadow_by_id("pk_2"   ).value =  pk_2;
-    this.element.shadow_by_id("table_2").value =  table_2
-  }
-}
 
 
 } // end of class relation_class
