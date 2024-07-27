@@ -555,25 +555,6 @@ table_select(   // client side dbUXClass
 }
 
 
-/*
-display_relations(   // client side dbUXClass
-  ) {  
-    // user clicked on table, so show it.
-   // this.tableUXRelations.setColumnFormat(   0, 'onclick="app.spa.recordShow(this)"');  // assume primary key is 0 -  needs to be done in code
-    this.tableUXRelations.setColumnTransform(0, this.displayIndex                );  // style it like a hyper link so it will get clicked on.
-    this.tableUXRelations.setModel(this.db,  "relations"                         );  // attach data to viewer
-    const table = this.tableUXRelations.getModel();
-    // get list of relations from relation_index
-    const table_name = this[this.tableUX].tableName;
-    let array = [];
-    if(this.relation_index[table_name] && this.relation_index[table_name][this.#primary_key_value]) {
-      // convert undevined to empty array
-      array = this.relation_index[table_name][this.#primary_key_value];
-    }
-    this.tableUXRelations.display( array);   // display table
-}
-*/
-
 displayIndex(// client side dbUXClass
   value) {    
   return `<u style="color:blue;">${value}</u>`;  // style it like a hyper link so it will get clicked on.
