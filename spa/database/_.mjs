@@ -475,17 +475,19 @@ not implemented`
     }
 
     document.getElementById('dialog_detail').innerHTML = detail;
-  }
+}
 
-async merge(){
+
+async merge(){  // client side dbUXClass - for a s
   alert(`"file="spa/database/_.js
 method="merge"
 not fully implemented, resolve pk_max issue before turninng on"`)
-  return; 
+  //return; 
   const msg = await this.db.table_merge(this.table_active.name); 
 }
   
-async meta_save() {
+
+async meta_save() {  // client side dbUXClass - for a s
   const text = document.getElementById("meta").value;
   const msg = await app.proxy.RESTpost(text, this.db.getTable(this.table_active.name).dir + "/_meta.json");
   if (msg.success) {
@@ -568,14 +570,14 @@ Local_CSV_load( // client side dbUXClass - for a spa
     
     this.fr = new FileReader();
 
-    this.fr.onload =  () => {
+    this.fr.onload =  async () => {
       // call back function when file has finished loading
-      let name      = element.files[this.i].name;
-      name          = name.slice(0, name.length -4);             // get rid of .csv in table name
-      const table   = this.db.tableAdd(name);                    // create table and add to db
-      const csv     = new csvClass(table);                       // create instace of CSV object
-      csv.parse_CSV(this.fr.result, "msg");                      // parse loaded CSV file and put into table
-      table.merge(`${this.url_dir}/${name}`);                                             // save import
+      let table_name = element.files[this.i].name;
+      table_name     = table_name.slice(0, table_name.length -4);  // get rid of .csv in table name
+      const table    = this.db.tableAdd(table_name);               // create table and add to db
+      const csv      = new csvClass(table);                        // create instace of CSV object
+      csv.parse_CSV(this.fr.result, "msg");                        // parse loaded CSV file and put into table
+      await this.db.table_merge(table_name);                       // save import
       this.db_tables_display();
 
       this.i ++ // process next file import
