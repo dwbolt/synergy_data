@@ -542,12 +542,7 @@ table_select(   // client side dbUXClass
       <option value="meta"   >Meta</option>
       `
     }
-    this.table_active.name = DOM.value;  // remember active table - (safari does not suport style="display:none;" on optons tag, )
-
-    this.db.get_table_names().forEach((table, i) => {
-      document.getElementById(table).style.display = "none";  // records
-    })
-
+    this.table_active.name = table_name;  // remember active table - (safari does not suport style="display:none;" on optons tag, )
     this.sfc_db_tables.show(table_name);                              // hide all tables but table_name
     this.record_selected = document.getElementById(table_name)
     this.record_selected.style.display = "block";      // show record
