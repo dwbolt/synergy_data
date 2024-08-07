@@ -421,7 +421,7 @@ async table_process(  // client side dbUXClass - for a spa
     case "import":
       detail = `
       <p><b>import csv file</b><br>
-      <input type='file' accept='.csv' multiple="multiple" onchange='app.spa.Local_CSV_load(this)' ><br>
+      <input type='file' accept='.csv' multiple="multiple" onchange='app.spa.local_CSV_import(this)' ><br>
       <textarea id='msg'></textarea>
       </p>
       <p>imported CSV file will appear in above table list</p>`;
@@ -558,7 +558,7 @@ displayIndex(// client side dbUXClass
 }
 
 
-Local_CSV_load( // client side dbUXClass - for a spa
+local_CSV_import( // client side dbUXClass - for a spa
     // user selected a new CSV file from their local drive, load it into memory and add it to the table menu
     element  // DOM
     ) {
